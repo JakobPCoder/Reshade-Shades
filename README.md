@@ -61,6 +61,14 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 **CLAMP (`TFAA_RECTIFY_OP` 0)** — per-channel clamp to the neighborhood AABB. All **shape** columns use the **same** feasible set here (matches the preprocessor ignoring shape for clamp).
 
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<colgroup>
+  <col style="width:8%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+</colgroup>
 <tr>
 <th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th>
 </tr>
@@ -95,6 +103,14 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 **CLIP_NEAREST (`TFAA_RECTIFY_OP` 1)** — ray-clip from the **neighbor tap closest to history** in rectify space (Euclidean), after the 3×3 neighborhood is accumulated.
 
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<colgroup>
+  <col style="width:8%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+</colgroup>
 <tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
@@ -127,6 +143,14 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 **CLIP_MEAN (`TFAA_RECTIFY_OP` 2)** — ray-clip from the **nine-tap arithmetic mean** of the neighborhood in rectify space.
 
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<colgroup>
+  <col style="width:8%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+</colgroup>
 <tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
@@ -159,6 +183,14 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 **CLIP_CENTROID (`TFAA_RECTIFY_OP` 3)** — ray-clip from the per-channel **AABB midpoint** `(min+max)/2` in rectify space (not the nine-tap mean).
 
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<colgroup>
+  <col style="width:8%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+</colgroup>
 <tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
@@ -191,6 +223,14 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 **CLIP_CURRENT (`TFAA_RECTIFY_OP` 4)** — ray-clip from the **center tap** (current UV) toward history; this is the in-repo **default** (`TFAA_RECTIFY_OP` 4).
 
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<colgroup>
+  <col style="width:8%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+  <col style="width:18.4%" />
+</colgroup>
 <tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
