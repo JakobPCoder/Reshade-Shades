@@ -70,7 +70,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
   <col style="width:18.4%" />
 </colgroup>
 <tr>
-<th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th>
+<th></th><th>None</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th>
 </tr>
 <tr>
 <th scope="row">RGB</th>
@@ -111,7 +111,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
   <col style="width:18.4%" />
   <col style="width:18.4%" />
 </colgroup>
-<tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
+<tr><th></th><th>None</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
 <td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_norectify_dark.svg" alt="RGB no rectification" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
@@ -151,7 +151,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
   <col style="width:18.4%" />
   <col style="width:18.4%" />
 </colgroup>
-<tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
+<tr><th></th><th>None</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
 <td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_norectify_dark.svg" alt="RGB no rectification" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
@@ -191,7 +191,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
   <col style="width:18.4%" />
   <col style="width:18.4%" />
 </colgroup>
-<tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
+<tr><th></th><th>None</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
 <td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_norectify_dark.svg" alt="RGB no rectification" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
@@ -231,7 +231,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
   <col style="width:18.4%" />
   <col style="width:18.4%" />
 </colgroup>
-<tr><th></th><th>No rectification</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
+<tr><th></th><th>None</th><th>AABB</th><th>14-DOP</th><th>18-DOP</th><th>26-DOP</th></tr>
 <tr>
 <th scope="row">RGB</th>
 <td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_norectify_dark.svg" alt="RGB no rectification" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
