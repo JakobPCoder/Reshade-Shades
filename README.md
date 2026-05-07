@@ -2,7 +2,16 @@
 Shades is a collection of my updated Reshade shaders.
 ## **Installation**
 ### A. ReShade installer
+1. Run the ReShade installer.
+2. Select your target game.
+3. Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).
+4. If you already have Reshade installed for that game select: `Update ReShade and Effects`.
+5. Toggle the checkmark on `Shades`.
+6. Click on next or continue to install.
 ### B. Manual 
+If reshade is alredy installed for that game you can install the shaders manually by:
+1. Locating the games executable `.exe` file. Next to it you will find folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
+2. Download the whole repo and drop the `/Shaders` and `/Textures` folders into the `./reshade-shaders` folder.
 
 # Shaders *`.fx`*
 
@@ -44,11 +53,11 @@ Scatter diagrams under `misc/output/clip_vis/` are produced by `misc/generate.py
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
 <img src="./misc/output/clip_vis/key_neighborhood_dark.svg" alt="Neighborhood 3×3 sample grid" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_history_dark.svg" alt="History sample swatch" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
+<img src="./misc/output/clip_vis/key_clipped_clamp_dark.svg" alt="Rectified RGB swatches — CLAMP" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 </div>
 
 
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
-<img src="./misc/output/clip_vis/key_clipped_clamp_dark.svg" alt="Rectified RGB swatches — CLAMP" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_clipped_clip_nearest_dark.svg" alt="Rectified RGB swatches — CLIP_NEAREST" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_clipped_clip_mean_dark.svg" alt="Rectified RGB swatches — CLIP_MEAN" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_clipped_clip_centroid_dark.svg" alt="Rectified RGB swatches — CLIP_CENTROID" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
