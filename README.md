@@ -53,7 +53,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 <img src="./misc/output/clip_vis/key_clipped_clip_current_dark.svg" alt="Rectified RGB swatches — CLIP_CURRENT" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 </div>
 
-<p><small>Legend: each image is a separate asset (reorder or restyle in CSS). Neighborhood · history · then one matrix per <code>TFAA_RECTIFY_OP</code>. <strong>CLAMP</strong> uses one row: <em>None</em> (no rectification) plus <strong>RGB</strong>, <strong>YCbCr</strong>, and <strong>YCoCg</strong> clamp results (AABB; other shapes match clamp). <strong>CLIP</strong> ops use rows = rectify color space (<strong>YCoCg</strong> visible by default; <strong>YCbCr</strong> and <strong>RGB</strong> under <code>&lt;details&gt;</code>) and columns = AABB / 14-DOP / 18-DOP / 26-DOP. A stacked all-in-one graphic is still emitted as <code>key_clipped_&lt;theme&gt;.svg</code> for convenience.</small></p>
+<p><small>Legend: each image is a separate asset (reorder or restyle in CSS). Neighborhood · history · then one matrix per <code>TFAA_RECTIFY_OP</code>. <strong>CLAMP</strong> uses rows = <strong>YCoCg</strong>, <strong>YCbCr</strong>, <strong>RGB</strong> and a single <strong>AABB</strong> column (shape ignored for clamp). <strong>CLIP</strong> ops use rows = rectify color space (<strong>YCoCg</strong> visible by default; <strong>YCbCr</strong> and <strong>RGB</strong> under <code>&lt;details&gt;</code>) and columns = AABB / 14-DOP / 18-DOP / 26-DOP. A stacked all-in-one graphic is still emitted as <code>key_clipped_&lt;theme&gt;.svg</code> for convenience.</small></p>
 
 ---
 
