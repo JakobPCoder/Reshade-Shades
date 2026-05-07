@@ -1,0 +1,16 @@
+# Ignore everything under Reshade-Shades except the paths below (whitelist).
+*
+
+!.gitignore
+!/README.md
+!/LICENSE.md
+!/LICENSE
+!/LICENCE.md
+
+!/misc/
+misc/*
+!misc/output/
+misc/output/*
+!misc/output/clip_vis/
+misc/output/clip_vis/*
+!misc/output/clip_vis/*.svg
