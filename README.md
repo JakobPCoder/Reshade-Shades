@@ -38,15 +38,17 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 
 ### Color Rectification Visualization
 
+Scatter diagrams under `misc/output/clip_vis/` are produced by `misc/generate.py` from `misc/config.json`. Each plot includes a thin horizontal and vertical bar outside the axis frame: they show the display RGB sweep along that axis with other rectify components at neutral (normalized luma/chroma at 0.5; RGB channels at 0). Bar thickness and spacing use `plot_axis_gradient_bar_thickness` and `plot_axis_gradient_bar_gap`.
+
 
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
 <img src="./misc/output/clip_vis/key_neighborhood_dark.svg" alt="Neighborhood 3×3 sample grid" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_history_dark.svg" alt="History sample swatch" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
-<img src="./misc/output/clip_vis/key_clipped_clamp_dark.svg" alt="Rectified RGB swatches — CLAMP" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 </div>
 
 
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
+<img src="./misc/output/clip_vis/key_clipped_clamp_dark.svg" alt="Rectified RGB swatches — CLAMP" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_clipped_clip_nearest_dark.svg" alt="Rectified RGB swatches — CLIP_NEAREST" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_clipped_clip_mean_dark.svg" alt="Rectified RGB swatches — CLIP_MEAN" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_clipped_clip_centroid_dark.svg" alt="Rectified RGB swatches — CLIP_CENTROID" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
@@ -64,7 +66,7 @@ Per-channel clamp to the neighborhood **AABB** in the chosen rectify color space
 <tr>
 <th>None</th><th>RGB</th><th>YCbCr</th><th>YCoCg</th></tr>
 <tr>
-<td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/ycocg_norectify_dark.svg" alt="No rectification (baseline)" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
+<td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_norectify_dark.svg" alt="No rectification (baseline)" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
 <td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_aabb_clamp_dark.svg" alt="RGB rectify space clamp" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
 <td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/ycbcr_aabb_clamp_dark.svg" alt="YCbCr rectify space clamp" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
 <td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/ycocg_aabb_clamp_dark.svg" alt="YCoCg rectify space clamp" width="100%" style="max-width:100%;height:auto;display:block;" /></td>
