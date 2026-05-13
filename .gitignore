@@ -1,12 +1,24 @@
-# Ignore everything under Reshade-Shades except the paths below (whitelist).
+# Whitelist: ignore everything, then opt paths back in.
+# Git quirk: you must un-ignore each directory from repo root down to a file;
+# use "parent/*" between steps so only the branches you negate stay tracked.
+
 *
 
+# --- repo root ---
 !.gitignore
 !/README.md
 !/LICENSE.md
 !/LICENSE
 !/LICENCE.md
 
+# --- Shaders/Shades (all .fx / .fxh here) ---
+!/Shaders/
+Shaders/*
+!/Shaders/Shades/
+Shaders/Shades/*
+!Shaders/Shades/**
+
+# --- misc: only clip_vis SVGs (not scripts/config under misc/) ---
 !/misc/
 misc/*
 !misc/output/
