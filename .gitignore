@@ -12,7 +12,7 @@ __pycache__/
 misc/config.json
 misc/requirements.txt
 misc/sampling_example_images/
-misc/output/resample_vis/
+# (Note: misc/output/ is tracked for README images)
 
 # OS & IDE Trash
 .DS_Store
