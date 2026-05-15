@@ -72,3 +72,46 @@ float3 ycocg_norm_to_rgb(float3 ycocg_norm)
 {
     return ycocg_to_rgb(float3(ycocg_norm.x, ycocg_norm.y - 0.5, ycocg_norm.z - 0.5));
 }
+
+
+
+#define FSR_RCAS_LIMIT (0.25 - (1.0 / 16.0))
+
+float4 sample_rcas(sampler2D s, float2 uv, float sharpness)
+{
+    float2 texel = rcp(float2(tex2Dsize(s, 0)));
+
+    float3 b = tex2Dlod(s, float4(uv + float2( 0,-1)*texel, 0,0)).rgb;
+    float3 d = tex2Dlod(s, float4(uv + float2(-1, 0)*texel, 0,0)).rgb;
+    float3 e = tex2Dlod(s, float4(uv,                        0,0)).rgb;
+    float3 f = tex2Dlod(s, float4(uv + float2( 1, 0)*texel, 0,0)).rgb;
+    float3 h = tex2Dlod(s, float4(uv + float2( 0, 1)*texel, 0,0)).rgb;
+
+    float bL = b.g + 0.5*(b.r+b.b);
+    float dL = d.g + 0.5*(d.r+d.b);
+    float eL = e.g + 0.5*(e.r+e.b);
+    float fL = f.g + 0.5*(f.r+f.b);
+    float hL = h.g + 0.5*(h.r+h.b);
+
+    float nz = 0.25*(bL+dL+fL+hL) - eL;
+    nz = clamp(
+        abs(nz) / (max(max(bL,dL),max(eL,max(fL,hL))) - min(min(bL,dL),min(eL,min(fL,hL)))),
+        0.0, 1.0
+    );
+    nz = 1.0 - 0.5*nz;
+
+    float3 mn4 = min(b, min(f, h));
+    float3 mx4 = max(b, max(f, h));
+
+    float2 peakC   = float2(1.0, -4.0);
+    float3 hitMin  = mn4 / (4.0 * mx4);
+    float3 hitMax  = (peakC.x - mx4) / (4.0 * mn4 + peakC.y);
+    float3 lobeRGB = max(-hitMin, hitMax);
+    float  lobe    = max(-FSR_RCAS_LIMIT, min(max(lobeRGB.r, max(lobeRGB.g, lobeRGB.b)), 0.0))
+                     * exp2(-sharpness);
+
+    lobe *= nz;
+
+    return float4((lobe*(b+d+f+h) + e) / (4.0*lobe + 1.0), 1.0);
+}
+

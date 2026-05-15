@@ -6,9 +6,7 @@
     https://creativecommons.org/licenses/by-nc/4.0/legalcode
 =============================================================================*/
 
-#ifndef TFAA_SAMPLING_METHOD
-	#define TFAA_SAMPLING_METHOD 1
-#endif
+
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
@@ -22,6 +20,10 @@
 
 #ifndef TFAA_RECTIFY_COLOR_SPACE
 	#define TFAA_RECTIFY_COLOR_SPACE 2
+#endif
+
+#ifndef TFAA_SAMPLING_METHOD
+	#define TFAA_SAMPLING_METHOD 1
 #endif
 
 #ifndef TFAA_RECTIFY_OP
@@ -107,7 +109,7 @@ uniform float UI_TEMPORAL_FILTER_STRENGTH <
     ui_tooltip = "";
 > = 0.5;
 
-uniform float UI_POST_SHARPEN <
+uniform float UI_ADAPTIVE_SHARPEN <
     ui_type    = "slider";
     ui_min     = 0.0;
     ui_max     = 1.0;
@@ -117,7 +119,16 @@ uniform float UI_POST_SHARPEN <
     ui_tooltip = "";
 > = 0.5;
 
-#define UI_COLOR_CONVERSION_MODE 1
+uniform float UI_POST_SHARPEN <
+    ui_type    = "slider";
+    ui_min     = 0.0;
+    ui_max     = 1.0;
+    ui_step    = 0.01;
+    ui_label   = "Post Sharpening";
+    ui_category= "Temporal Filter";
+    ui_tooltip = "";
+> = 0.5;
+
 
 #if UI_DEBUG
 
@@ -237,6 +248,16 @@ float4 sampleHistory(sampler2D historySampler, float2 texcoord)
 {
 #if TFAA_SAMPLING_METHOD == 0
     return tex2Dlod(historySampler, texcoord, 0);
+#elif TFAA_SAMPLING_METHOD == 1
+    return sample_catmullrom_rgba(historySampler, texcoord);
+#elif TFAA_SAMPLING_METHOD == 2
+    return sample_lanczos2_rgba(historySampler, texcoord);
+#elif TFAA_SAMPLING_METHOD == 3
+    return sample_lanczos3_rgba(historySampler, texcoord);
+#elif TFAA_SAMPLING_METHOD == 4
+    return sample_lanczos4_rgba(historySampler, texcoord);
+#elif TFAA_SAMPLING_METHOD == 5
+    return sample_easu_same(historySampler, texcoord);
 #else
     return sample_catmullrom_rgba(historySampler, texcoord);
 #endif
@@ -293,6 +314,7 @@ float3 ClipRayKDOP(float3 history, float3 anchor, float minE[TFAA_KDOP_AXIS_LIMI
 }
 #endif
 
+
 namespace Deferred
 {
     texture MotionVectorsTex {
@@ -304,7 +326,10 @@ namespace Deferred
         Texture = MotionVectorsTex;
     };
 
-    float2 get_motion(float2 uv) { return tex2Dlod(sMotionVectorsTex, uv, 0).xy; }
+    float2 get_motion(float2 uv)
+    {
+        return tex2Dlod(sMotionVectorsTex, uv, 0).xy;
+    }
 }
 
 
@@ -453,8 +478,6 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
 
     float sharp = saturate(saturate(UI_TEMPORAL_FILTER_STRENGTH * pow(speed * 10, 0.5) * saturate(localContrast + 0.6) * depthMask) * 5);
 
-
-
     float3 return_value = blendedColor.rgb;
 
     #if UI_DEBUG
@@ -496,7 +519,7 @@ float4 PassSharp(float4 position : SV_Position, float2 texcoord : TEXCOORD ) : S
     float4 minBox = min(top, min(bottom, min(left, min(right, center))));
 
     float contrast = 0.7;
-    float sharpAmount = saturate(maxBox.a * 10 * UI_POST_SHARPEN);
+    float sharpAmount = saturate((maxBox.a * 20 * UI_ADAPTIVE_SHARPEN)) + (UI_POST_SHARPEN * 0.5);
 
     float4 crossWeight = -rcp(rsqrt(saturate(min(minBox, 1.0 - maxBox) * rcp(maxBox))) * (-3.0 * contrast + 8.0));
 
@@ -521,24 +544,28 @@ technique TFAA
         "TFAA_RECTIFY_COLOR_SPACE - Color space in which the history is rectified.\n"
 		"  0: RGB (identity; loosest bounds)\n"
 		"  1: YCbCr norm\n"
-		"  2: YCoCg norm (default)\n"
+		"  2: YCoCg norm[default]\n"
 		"---\n"
         "TFAA_RECTIFY_OP - rectification applied to historical color (0→4: generally stabler/softer clipping → sharper)\n"
-		"  0: CLAMP - always AABB in rectify space (per-channel min/max of the 3×3 neighborhood). TFAA_RECTIFY_SHAPE is ignored.\n"
-		"  1: CLIP_NEAREST - ray from neighbor sample closest to history in rectify space\n"
+		"  0: CLAMP - always AABB in rectify space (per-channel min/max of the 3x3 neighborhood). TFAA_RECTIFY_SHAPE is ignored.\n"
+		"  1: CLIP_NEAREST - ray from neighbor sample closest to history in rectify space [default]\n"
 		"  2: CLIP_MEAN - ray from nine-tap arithmetic mean in rectify space\n"
 		"  3: CLIP_CENTROID - ray from per-channel AABB midpoint (min+max)/2 in rectify space\n"
-		"  4: CLIP_CURRENT - ray from current pixel (center 3×3 tap)\n"
+		"  4: CLIP_CURRENT - ray from current pixel (center 3x3 tap)\n"
 		"---\n"
-		"TFAA_RECTIFY_SHAPE - k-DOP hull for CLIP ops (1–4) only; no effect when TFAA_RECTIFY_OP is 0 (CLAMP).\n"
+		"TFAA_RECTIFY_SHAPE - k-DOP hull for CLIP ops (1-4) only; no effect when TFAA_RECTIFY_OP is 0 (CLAMP).\n"
 		"  0: AABB - axis-aligned bounds (principal axes only)\n"
-		"  1: 14-DOP - seven axes box+corners (default)\n"
+		"  1: 14-DOP - seven axes box+corners [default]\n"
 		"  2: 18-DOP - nine axes box+edges\n"
 		"  3: 26-DOP - thirteen axes box+edges+corners\n"
         "---\n"
 		"TFAA_SAMPLING_METHOD - filter used when sampling reprojected history (LINEAR history sampler).\n"
-		"  0: bilinear - single tex2Dlod tap\n"
-		"  1: Catmull–Rom - sample_catmullrom_rgba\n"
+		"  0: bilinear - (1 tap) tex2Dlod\n"
+		"  1: Catmull-Rom - (5 taps) sample_catmullrom_rgba [default]\n"
+		"  2: Lanczos-2 - (9 taps) sample_lanczos2_rgba \n"
+		"  3: Lanczos-3 - (25 taps) sample_lanczos3_rgba \n"
+		"  4: Lanczos-4 - (49 taps) sample_lanczos4_rgba \n"
+		"  5: FSR EASU - (12 taps) sample_easu_same \n"
         "---\n"
 		"UI_DEBUG\n"
 		"  0: No optional temporal toggles or debug UI; depth rejection and color clamping are enabled.\n"

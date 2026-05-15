@@ -1,28 +1,28 @@
-# Whitelist: ignore everything, then opt paths back in.
-# Git quirk: you must un-ignore each directory from repo root down to a file;
-# use "parent/*" between steps so only the branches you negate stay tracked.
+# Python / Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-*
+# Exclude Python source scripts and environment tools
+*.py
+misc/config.json
+misc/requirements.txt
+misc/sampling_example_images/
+misc/output/resample_vis/
 
-# --- repo root ---
-!.gitignore
-!/README.md
-!/LICENSE.md
-!/LICENSE
-!/LICENCE.md
+# OS & IDE Trash
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.bak
+*.tmp
+*.log
 
-# --- Shaders/Shades (all .fx / .fxh here) ---
-!/Shaders/
-Shaders/*
-!/Shaders/Shades/
-Shaders/Shades/*
-!Shaders/Shades/**
+# Note: Shaders (*.fx, *.fxh) and folder 'misc/output' are tracked by default.
 
-# --- misc: only clip_vis SVGs (not scripts/config under misc/) ---
-!/misc/
-misc/*
-!misc/output/
-misc/output/*
-!misc/output/clip_vis/
-misc/output/clip_vis/*
-!misc/output/clip_vis/*.svg
