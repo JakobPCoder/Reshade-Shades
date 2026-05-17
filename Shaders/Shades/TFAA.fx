@@ -18,12 +18,14 @@
 	#define UI_DEBUG 0
 #endif
 
-#ifndef TFAA_RECTIFY_COLOR_SPACE
-	#define TFAA_RECTIFY_COLOR_SPACE 2
-#endif
+
 
 #ifndef TFAA_SAMPLING_METHOD
 	#define TFAA_SAMPLING_METHOD 1
+#endif
+
+#ifndef TFAA_RECTIFY_COLOR_SPACE
+	#define TFAA_RECTIFY_COLOR_SPACE 2
 #endif
 
 #ifndef TFAA_RECTIFY_OP
@@ -251,11 +253,11 @@ float4 sampleHistory(sampler2D historySampler, float2 texcoord)
 #elif TFAA_SAMPLING_METHOD == 1
     return sample_catmullrom_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 2
-    return sample_lanczos2_rgba(historySampler, texcoord);
+    return sample_lanczos2_basic_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 3
-    return sample_lanczos3_rgba(historySampler, texcoord);
+    return sample_lanczos3_basic_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 4
-    return sample_lanczos4_rgba(historySampler, texcoord);
+    return sample_lanczos4_basic_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 5
     return sample_easu_same(historySampler, texcoord);
 #else
@@ -346,7 +348,7 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
     static const int samples = 9;
 
     static const float2 nOffsets[samples] = {
-		float2(-0.7,-0.7), float2(0, -1),  float2(0.7, -0.7),
+		float2(-1.0,-1.0), float2(0, -1),  float2(1.0, -1.0),
         float2(-1, 0),     float2(0, 0),  float2(1, 0),
         float2(-0.7, 0.7), float2(0, 1), float2(0.7, 0.7)
 	};
@@ -356,12 +358,17 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
 
     int closestDepthIndex = 4;
 
-    float4 minimumCvt = 2;
-    float4 maximumCvt = -1;
+    float minNeighborDepth = 2;
+
+#if !TFAA_NEED_KDOP_SLABS
+    float3 minimumRectify = 2;
+    float3 maximumRectify = -1;
+#endif
 
 #if TFAA_RECTIFY_OP == 2
     float3 neighborSum = 0;
 #endif
+
 #if TFAA_RECTIFY_OP == 1
     float3 cvtCache[samples];
 #endif
@@ -380,31 +387,39 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
     for (int i = 0; i < samples; i++)
     {
         float4 rgba = tex2Dlod(smpInCurBackup, texcoord + (nOffsets[i] * ReShade::PixelSize), 0);
-        float4 cvt = float4(TFAA_RGB_TO_RECTIFY(rgba.rgb), rgba.a);
+        float3 cvtRgb = TFAA_RGB_TO_RECTIFY(rgba.rgb);
 
-        if (rgba.a < minimumCvt.a)
+        if (rgba.a < minNeighborDepth)
             closestDepthIndex = i;
+        minNeighborDepth = min(minNeighborDepth, rgba.a);
 
-        minimumCvt = min(minimumCvt, cvt);
-        maximumCvt = max(maximumCvt, cvt);
+#if !TFAA_NEED_KDOP_SLABS
+        minimumRectify = min(minimumRectify, cvtRgb);
+        maximumRectify = max(maximumRectify, cvtRgb);
+#endif
 
 #if TFAA_RECTIFY_OP == 2
-        neighborSum += cvt.rgb;
+        neighborSum += cvtRgb;
 #endif
 #if TFAA_RECTIFY_OP == 1
-        cvtCache[i] = cvt.rgb;
+        cvtCache[i] = cvtRgb;
 #endif
 
 #if TFAA_NEED_KDOP_SLABS
         [unroll]
         for (int a = 0; a < TFAA_KDOP_AXIS_LIMIT; ++a)
         {
-            float p = dot(cvt.rgb, TFAA_KDOP_AXES[a]);
+            float p = dot(cvtRgb, TFAA_KDOP_AXES[a]);
             kdopMin[a] = min(kdopMin[a], p);
             kdopMax[a] = max(kdopMax[a], p);
         }
 #endif
     }
+
+#if TFAA_NEED_KDOP_SLABS
+    float3 minimumRectify = float3(kdopMin[0], kdopMin[1], kdopMin[2]);
+    float3 maximumRectify = float3(kdopMax[0], kdopMax[1], kdopMax[2]);
+#endif
 
     float2 motion = Deferred::get_motion(texcoord + (nOffsets[closestDepthIndex] * ReShade::PixelSize));
 
@@ -414,6 +429,7 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
     float lastDepth = tex2Dlod(smpDepthBackup, lastSamplePos, 0).r;
 
     float3 sampleExpCvt = TFAA_RGB_TO_RECTIFY(sampleExp.rgb);
+
 #if TFAA_RECTIFY_OP == 1
     float nearestDist = 1e10;
     float3 nearestAnchor = cvtColorCur.rgb;
@@ -429,11 +445,11 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
     }
 #endif
 
-    float localContrast = saturate(pow(length(maximumCvt.rgb - minimumCvt.rgb), 0.75));
+    float localContrast = saturate(pow(length(maximumRectify - minimumRectify), 0.75));
     float speed         = length(motion);
     float speedFactor   = 1.0 - pow(saturate(speed * 10), 0.75);
 
-    float depthDelta = saturate(minimumCvt.a - lastDepth);
+    float depthDelta = saturate(minNeighborDepth - lastDepth);
     depthDelta = saturate(pow(depthDelta, 4) - 0.0000001);
     float depthMask =  saturate(1.0 - (depthDelta * 10000000));
 
@@ -446,27 +462,29 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
     weight = clamp(weight * speedFactor * saturate(localContrast + 0.75) * depthMask, 0.0, 0.99);
 
     float3 sampleExpClamped = sampleExp.rgb;
+
 #if UI_DEBUG
     if (UI_CLAMPING)
 #endif
     {
         float3 rectified;
         #if TFAA_RECTIFY_OP == 0
-            rectified = clamp(sampleExpCvt, minimumCvt.rgb, maximumCvt.rgb);
+            rectified = clamp(sampleExpCvt, minimumRectify, maximumRectify);
         #else
-            #if TFAA_RECTIFY_OP == 1
+            if TFAA_RECTIFY_OP == 1
                 float3 rectifyAnchor = nearestAnchor;
             #elif TFAA_RECTIFY_OP == 2
                 float3 rectifyAnchor = neighborSum / float(samples);
             #elif TFAA_RECTIFY_OP == 3
-                float3 rectifyAnchor = (minimumCvt.rgb + maximumCvt.rgb) * 0.5;
+                float3 rectifyAnchor = (minimumRectify + maximumRectify) * 0.5;
             #else
                 float3 rectifyAnchor = cvtColorCur.rgb;
             #endif
+
             #if TFAA_NEED_KDOP_SLABS
                 rectified = ClipRayKDOP(sampleExpCvt, rectifyAnchor, kdopMin, kdopMax);
             #else
-                rectified = ClipRayAABB(sampleExpCvt, rectifyAnchor, minimumCvt.rgb, maximumCvt.rgb);
+                rectified = ClipRayAABB(sampleExpCvt, rectifyAnchor, minimumRectify, maximumRectify);
             #endif
         #endif
         sampleExpClamped = TFAA_RECTIFY_TO_RGB(rectified);
@@ -541,6 +559,14 @@ technique TFAA
 		"Temporal component of TAA to use with (after) spatial anti-aliasing techniques.\n"
 		"Requires motion vectors (e.g. LAUNCHPAD.fx).\n\n"
 		"---\n"
+        "TFAA_SAMPLING_METHOD - filter used when sampling reprojected history (LINEAR history sampler).\n"
+		"  0: bilinear - (1 tap) tex2Dlod\n"
+		"  1: Catmull-Rom - (5 taps) sample_catmullrom_rgba [default]\n"
+		"  2: Lanczos-2 - (16 taps) sample_lanczos2_basic_rgba \n"
+		"  3: Lanczos-3 - (36 taps) sample_lanczos3_basic_rgba \n"
+		"  4: Lanczos-4 - (64 taps) sample_lanczos4_basic_rgba \n"
+		"  5: FSR EASU - (12 taps) sample_easu_same \n"
+        "---\n"
         "TFAA_RECTIFY_COLOR_SPACE - Color space in which the history is rectified.\n"
 		"  0: RGB (identity; loosest bounds)\n"
 		"  1: YCbCr norm\n"
@@ -548,10 +574,10 @@ technique TFAA
 		"---\n"
         "TFAA_RECTIFY_OP - rectification applied to historical color (0→4: generally stabler/softer clipping → sharper)\n"
 		"  0: CLAMP - always AABB in rectify space (per-channel min/max of the 3x3 neighborhood). TFAA_RECTIFY_SHAPE is ignored.\n"
-		"  1: CLIP_NEAREST - ray from neighbor sample closest to history in rectify space [default]\n"
+		"  1: CLIP_NEAREST - ray from neighbor sample closest to history in rectify space\n"
 		"  2: CLIP_MEAN - ray from nine-tap arithmetic mean in rectify space\n"
 		"  3: CLIP_CENTROID - ray from per-channel AABB midpoint (min+max)/2 in rectify space\n"
-		"  4: CLIP_CURRENT - ray from current pixel (center 3x3 tap)\n"
+		"  4: CLIP_CURRENT - ray from current pixel (center 3x3 tap) [default]\n"
 		"---\n"
 		"TFAA_RECTIFY_SHAPE - k-DOP hull for CLIP ops (1-4) only; no effect when TFAA_RECTIFY_OP is 0 (CLAMP).\n"
 		"  0: AABB - axis-aligned bounds (principal axes only)\n"
@@ -559,14 +585,7 @@ technique TFAA
 		"  2: 18-DOP - nine axes box+edges\n"
 		"  3: 26-DOP - thirteen axes box+edges+corners\n"
         "---\n"
-		"TFAA_SAMPLING_METHOD - filter used when sampling reprojected history (LINEAR history sampler).\n"
-		"  0: bilinear - (1 tap) tex2Dlod\n"
-		"  1: Catmull-Rom - (5 taps) sample_catmullrom_rgba [default]\n"
-		"  2: Lanczos-2 - (9 taps) sample_lanczos2_rgba \n"
-		"  3: Lanczos-3 - (25 taps) sample_lanczos3_rgba \n"
-		"  4: Lanczos-4 - (49 taps) sample_lanczos4_rgba \n"
-		"  5: FSR EASU - (12 taps) sample_easu_same \n"
-        "---\n"
+
 		"UI_DEBUG\n"
 		"  0: No optional temporal toggles or debug UI; depth rejection and color clamping are enabled.\n"
 		"  1: Enables debug UI.\n\n"
