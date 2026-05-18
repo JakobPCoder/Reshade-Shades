@@ -21,6 +21,7 @@ If reshade is alredy installed for that game you can install the shaders manuall
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [Reshade](https://reshade.me/) shader.
 
 <!-- TFAA_EXMAPLE_START -->
+<p style="margin:0 0 8px 0;"><strong>Capture:</strong> <code>1</code></p>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
 <th width="18%" style="width:18%;"></th>
@@ -29,15 +30,44 @@ If reshade is alredy installed for that game you can install the shaders manuall
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;">None</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_none.png" alt="1 — none" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_tfaa.png" alt="1 — TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_none.png" alt="1 - none" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_tfaa.png" alt="1 - TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;">SMAA</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa.png" alt="1 — SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa+tfaa.png" alt="1 — SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa.png" alt="1 - SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa+tfaa.png" alt="1 - SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 </table>
+
+<details style="margin-top:8px;">
+
+<summary><strong>Show more examples</strong> - click to expand</summary>
+
+
+
+<p style="margin:0 0 8px 0;"><strong>Capture:</strong> <code>2</code></p>
+<table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<tr>
+<th width="18%" style="width:18%;"></th>
+<th width="41%" style="width:41%;">Without TFAA</th>
+<th width="41%" style="width:41%;">With TFAA</th>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">None</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_none.gif" alt="2 - none" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_tfaa.gif" alt="2 - TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">SMAA</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_smaa.gif" alt="2 - SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_smaa+tfaa.gif" alt="2 - SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+</table>
+
+
+
+</details>
 <!-- TFAA_EXMAPLE_END -->
 
 
@@ -64,17 +94,17 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 |  |  |  |  |  |
 |---|---|---|---|---|
 | **`TFAA_SAMPLING_METHOD`** | **Value** | **Setting** | **Samples** | **Description** |
-|  | `0` | **BILINEAR** | 1-tap |  Hardware bilinear (`tex2Dlod`, 1 tap) on the history buffer (LINEAR history sampler). |
-| *default* | `1` | **CATMULLROM** | 5-tap | Catmull–Rom reconstruction. |
-|  | `2` | **LANCZOS2** | 16-tap | Lanczos-2 |
-|  | `3` | **LANCZOS3** | 36-tap | Lanczos-3 |
-|  | `4` | **LANCZOS4** | 64-tap | Lanczos-4 |
-|  | `5` | **FSR EASU** | 12-tap | AMD FidelityFX EASU edge-adaptive |
+|  | `0` | **BILINEAR** | 1-tap |  Hardware bilinear tap |
+| *default* | `1` | **CATMULLROM** | 5-tap | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
+|  | `2` | **LANCZOS2** | 16-tap | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+|  | `3` | **LANCZOS3** | 36-tap | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+|  | `4` | **LANCZOS4** | 64-tap | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+|  | `5` | **FSR EASU** | 12-tap | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
 |  |  |  |  |  |
-| **`TFAA_RECTIFY_COLOR_SPACE`** | **Value** | **Setting** |  | **Description** |
-|  | `0` | RGB |  | Identity; loosest bounds |
-|  | `1` | YCbCr |  | Normalized axes to [0,1] |
-| *default* | `2` | YCoCg |  | Normalized axis to [0,1] | 
+| **`TFAA_RECTIFY_COLOR_SPACE`** | **Value** | **Setting** | **Channels** | **Description** |
+|  | `0` | RGB | **R**: Red (display primary).<br>**G**: Green (display primary).<br>**B**: Blue (display primary). | No color transform (identity); loosest rectification bounds. |
+|  | `1` | YCbCr | **Y**: Luma (brightness).<br>**Cb**: Chroma as **B-Y** (blue minus luma).<br>**Cr**: Chroma as **R-Y** (red minus luma). | Broadcast TV / JPEG standard (ITU-R BT.601). Cb and Cr are defined relative to Y but are not fully decorrelated from each other - some residual correlation (leakage) remains between the two chroma axes. Chrominance axes normalized to [0,1]. |
+| *default* | `2` | YCoCg | **Y**: Luma (brightness).<br>**Co**: Chroma: **(R-B)/2** - deviation toward orange/red vs. cyan.<br>**Cg**: Chroma: **G/2 - (R+B)/4** - deviation toward green vs. magenta. | Video codec research (Malvar & Sullivan, 2003). Uses a simple integer transform (additions and bit-shifts only) that achieves near-complete decorrelation between Co and Cg - no leakage between chroma axes. Chrominance axes normalized to [0,1]. | 
 |  |  |  |  |  |
 | **`TFAA_RECTIFY_OP`** | **Value** | **Setting** |  | **Description** |  |
 |  | `0` | **CLAMP** |  | Clamp history to the AABB. (**`TFAA_RECTIFY_SHAPE`** is ignored). |  |
@@ -84,10 +114,10 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 | *default* | `4` | **CLIP_CURRENT** |  | Ray clip towards the **current** pixel. |  |
 |  |  |  |  |  |
 | **`TFAA_RECTIFY_SHAPE`** | **Value** | **Setting** |  | **Description** |  |
-|  | `0` | **AABB** |  | 3-axis bounding box — classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
-| *default* | `1` | **14-DOP** |  | 7-axis — bounding box + corners |  |
-|  | `2` | **18-DOP** |  | 9-axis — bounding box + edges |  |
-|  | `3` | **26-DOP** |  | 13-axis — bounding box + edges + corners |  |
+|  | `0` | **AABB** |  | 3-axis bounding box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
+| *default* | `1` | **14-DOP** |  | 7-axis - bounding box + corners |  |
+|  | `2` | **18-DOP** |  | 9-axis - bounding box + edges |  |
+|  | `3` | **26-DOP** |  | 13-axis - bounding box + edges + corners |  |
 |  |  |  |  |  |
 
 
@@ -159,7 +189,7 @@ Below you can see some examples of how the differnt sampling methods behave when
 
 <details style="margin-top:8px;">
 
-<summary><strong>Show more examples</strong> — click to expand</summary>
+<summary><strong>Show more examples</strong> - click to expand</summary>
 
 
 
@@ -283,15 +313,15 @@ Below you can see some examples of how the differnt sampling methods behave when
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
 <img src="./misc/output/clip_vis/key_neighborhood_dark.svg" alt="Neighborhood 3×3 sample grid" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 <img src="./misc/output/clip_vis/key_history_dark.svg" alt="History sample swatch" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
-<img src="./misc/output/clip_vis/key_clipped_clamp_dark.svg" alt="Rectified RGB swatches — CLAMP" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
+<img src="./misc/output/clip_vis/key_clipped_clamp_dark.svg" alt="Rectified RGB swatches - CLAMP" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 </div>
 
 
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
-<img src="./misc/output/clip_vis/key_clipped_clip_nearest_dark.svg" alt="Rectified RGB swatches — CLIP_NEAREST" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
-<img src="./misc/output/clip_vis/key_clipped_clip_mean_dark.svg" alt="Rectified RGB swatches — CLIP_MEAN" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
-<img src="./misc/output/clip_vis/key_clipped_clip_centroid_dark.svg" alt="Rectified RGB swatches — CLIP_CENTROID" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
-<img src="./misc/output/clip_vis/key_clipped_clip_current_dark.svg" alt="Rectified RGB swatches — CLIP_CURRENT" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
+<img src="./misc/output/clip_vis/key_clipped_clip_nearest_dark.svg" alt="Rectified RGB swatches - CLIP_NEAREST" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
+<img src="./misc/output/clip_vis/key_clipped_clip_mean_dark.svg" alt="Rectified RGB swatches - CLIP_MEAN" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
+<img src="./misc/output/clip_vis/key_clipped_clip_centroid_dark.svg" alt="Rectified RGB swatches - CLIP_CENTROID" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
+<img src="./misc/output/clip_vis/key_clipped_clip_current_dark.svg" alt="Rectified RGB swatches - CLIP_CURRENT" style="max-width:min(200px,100%);width:auto;height:auto;display:block;" />
 </div>
 
 
@@ -330,7 +360,7 @@ Ray-clip from the **neighbor tap closest to history** in rectify space (Euclidea
 </table>
 
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
 <th width="25%">AABB</th><th width="25%">14-DOP</th><th width="25%">18-DOP</th><th width="25%">26-DOP</th>
@@ -370,7 +400,7 @@ Ray-clip from the **nine-tap arithmetic mean** of the neighborhood in rectify sp
 </table>
 
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
 <th width="25%">AABB</th><th width="25%">14-DOP</th><th width="25%">18-DOP</th><th width="25%">26-DOP</th>
@@ -410,7 +440,7 @@ Ray-clip from the per-channel **AABB midpoint** `(min+max)/2` in rectify space (
 </table>
 
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
 <th width="25%">AABB</th><th width="25%">14-DOP</th><th width="25%">18-DOP</th><th width="25%">26-DOP</th>
@@ -450,7 +480,7 @@ Ray-clip from the **center tap** (current UV) toward history; this is the in-rep
 </table>
 
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
 <th width="25%">AABB</th><th width="25%">14-DOP</th><th width="25%">18-DOP</th><th width="25%">26-DOP</th>
