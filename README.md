@@ -17,9 +17,31 @@ If reshade is alredy installed for that game you can install the shaders manuall
 # Shaders *`.fx`*
 
 ## **TFAA**.*fx*
+### **What it is**
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [Reshade](https://reshade.me/) shader.
 
-### How it works
+<!-- TFAA_EXMAPLE_START -->
+<table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<tr>
+<th width="18%" style="width:18%;"></th>
+<th width="41%" style="width:41%;">Without TFAA</th>
+<th width="41%" style="width:41%;">With TFAA</th>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">None</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_none.png" alt="1 — none" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_tfaa.png" alt="1 — TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">SMAA</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa.png" alt="1 — SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa+tfaa.png" alt="1 — SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+</table>
+<!-- TFAA_EXMAPLE_END -->
+
+
+### **How it works**
 The most basic verion of temporal filters as in TFAA or in well known industry solutions like Filmic SMAA T1x consists of the following steps:
 1. **History data** is [sampled](#history-resampling) for each pixel using the velocity buffer and accumulated history buffer.
 2. **Validate** that history data is plausible and **reject** if not.
@@ -30,14 +52,13 @@ The most basic verion of temporal filters as in TFAA or in well known industry s
 5. **Writing Data** of either the blendend data or the new data only into the history buffer.
 
 
-
-### Dependencies
+### **Dependencies**
  - The **depth buffer** being available and configured correctly. (Check via DisplayDepth.fx)
  - [LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx) being 
  installed with all its dependencies. (Just installl the IMMERSE shader pack when installing Reshade.)
  - Some **spatial anti-aliasing** method being run either ingame or via Reshade **before TFAA**.
 
-### Preprocessor controls in **`TFAA.fx`**. 
+### **Preprocessor controls in `TFAA.fx`**. 
 These Settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
 
 |  |  |  |  |  |

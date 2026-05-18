@@ -160,14 +160,6 @@ uniform int UI_DEBUG_MODE <
 
 
 
-texture texDepthIn : DEPTH;
-sampler smpDepthIn {
-    Texture = texDepthIn;
-    MipFilter = Linear;
-    MinFilter = Linear;
-    MagFilter = Linear;
-};
-
 texture texInCur : COLOR;
 sampler smpInCur {
     Texture   = texInCur;
@@ -265,23 +257,6 @@ float4 sampleHistory(sampler2D historySampler, float2 texcoord)
 #endif
 }
 
-float getDepth(float2 texcoord)
-{
-    float depth = tex2Dlod(smpDepthIn, texcoord, 0).x;
-
-    #if RESHADE_DEPTH_INPUT_IS_REVERSED
-        depth = 1.0 - depth;
-    #endif
-
-    const float N = 1.0;
-
-    float factor = RESHADE_DEPTH_LINEARIZATION_FAR_PLANE * 0.1;
-
-    depth /= factor - depth * (factor - N);
-
-    return depth;
-}
-
 float3 ClipRayAABB(float3 history, float3 anchor, float3 bMin, float3 bMax)
 {
     float3 dir = history - anchor;
@@ -338,7 +313,7 @@ namespace Deferred
 
 float4 PassSaveCur(float4 position : SV_Position, float2 texcoord : TEXCOORD) : SV_Target0
 {
-    float depthOnly = getDepth(texcoord);
+    float depthOnly = ReShade::GetLinearizedDepth(texcoord);
 
     return float4(tex2Dlod(smpInCur, texcoord, 0).rgb, depthOnly);
 }
@@ -522,7 +497,7 @@ void PassSavePost(float4 position : SV_Position, float2 texcoord : TEXCOORD, out
 {
     lastExpOut = tex2Dlod(smpExpColor, texcoord, 0);
 
-    depthOnly = getDepth(texcoord);
+    depthOnly = ReShade::GetLinearizedDepth(texcoord);
 }
 
 float4 PassSharp(float4 position : SV_Position, float2 texcoord : TEXCOORD ) : SV_Target
