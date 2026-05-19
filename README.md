@@ -72,33 +72,33 @@ The most basic verion of temporal filters as in TFAA or in well known industry s
 ### **Preprocessor controls in `TFAA.fx`**. 
 These Settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
 
-|  |  |  |  |  |  |  |
-|---|---|---|---|---|---|---|
-| [**`TFAA_SAMPLING_METHOD`**](#history-resampling) | [**Value**]() | [**Setting**]() | [**Samples**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
-|           | `0` | **BILINEAR** | 1-tap | *Ass* (1/5) | *Great* (5/5) | Hardware bilinear tap |
-| *default* | `1` | **CATMULLROM** | 5-tap | *Ok* (3/5) | *Good* (4/5) | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
-|           | `2` | **LANCZOS2** | 16-tap | *Ok* (3/5) | *Ok* (3/5) | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-|           | `3` | **LANCZOS3** | 36-tap | *Good* (4/5) | *Bad* (2/5) | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-|           | `4` | **LANCZOS4** | 64-tap | *Great* (5/5) | *Ass* (1/5) | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-|           | `5` | **FSR EASU** | 12-tap | *Broken* (1/5) | *Ass* (1/5) | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
+|  |  |  |  |  |  |
+|---|---|---|---|---|---|
+| [**`TFAA_SAMPLING_METHOD`**](#history-resampling) | [**Setting**]() | [**Samples**]() | [**Sharpness**]() | [**Performance**]() | [**Description**]() |
+| `0` | **BILINEAR** | 1-tap | *Ass* (1/5) | *Great* (5/5) | Hardware bilinear tap |
+| **`1`** *default* | **CATMULLROM** | 5-tap | *Ok* (3/5) | *Good* (4/5) | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
+| `2` | **LANCZOS2** | 16-tap | *Ok* (3/5) | *Ok* (3/5) | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+| `3` | **LANCZOS3** | 36-tap | *Good* (4/5) | *Bad* (2/5) | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+| `4` | **LANCZOS4** | 64-tap | *Great* (5/5) | *Ass* (1/5) | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+| `5` | **FSR EASU** | 12-tap | *Broken* (1/5) | *Ass* (1/5) | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
 |  |  |  |  |  |
-| [**`TFAA_RECTIFY_COLOR_SPACE`**](#color-rectification-visualization) | [**Value**]() | [**Setting**]() | [**Channel**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
-|           | `0` | RGB | **R**: Red.<br>**G**: Green.<br>**B**: Blue. | *Bad* (2/5) | *Great* (5/5) | No color transform (identity); loosest rectification bounds. Most blurring and most color deviation artifacts.|
-|           | `1` | YCbCr | **Y**: BT.601 luma.<br>**Cb**: blue-yellow axis.<br>**Cr**: red-cyan axi. | *Good* (4/5) | *Good* (4/5) | ITU-R BT.601 / JPEG-style full-range chroma scales (not broadcast limited-range packing). Chrominance more correlated across axes than YCoCg; rectify path stores Cb/Cr with **+0.5** offset so all axes are in [0,1].
-| *default* | `2` | YCoCg | **Y**: (R+2G+B)/4 luma.<br>**Co**: orange-cyan axis.<br>**Cg**: green-magenta axis. | *Great* (5/5) | *Good* (4/5) | Malvar & Sullivan (2003 YCoCg); orthogonal chroma, more decorrelated than YCbCr. Shader uses the linear-float form here (papers show integer-shift variants); rectify path stores Co/Cg with **+0.5** offset so all axes are in [0,1]. | 
+| [**`TFAA_RECTIFY_COLOR_SPACE`**](#color-rectification-visualization) | [**Setting**]() | [**Channel**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
+| `0` | RGB | **R**: Red.<br>**G**: Green.<br>**B**: Blue. | *Bad* (2/5) | *Great* (5/5) | No color transform (identity); loosest rectification bounds. Most blurring and most color deviation artifacts.|
+| `1` | YCbCr | **Y**: BT.601 luma.<br>**Cb**: blue-yellow axis.<br>**Cr**: red-cyan axi. | *Good* (4/5) | *Good* (4/5) | ITU-R BT.601 / JPEG-style full-range chroma scales (not broadcast limited-range packing). Chrominance more correlated across axes than YCoCg; rectify path stores Cb/Cr with **+0.5** offset so all axes are in [0,1].
+| **`2`** *default* | YCoCg | **Y**: (R+2G+B)/4 luma.<br>**Co**: orange-cyan axis.<br>**Cg**: green-magenta axis. | *Great* (5/5) | *Good* (4/5) | Malvar & Sullivan (2003 YCoCg); orthogonal chroma, more decorrelated than YCbCr. Shader uses the linear-float form here (papers show integer-shift variants); rectify path stores Co/Cg with **+0.5** offset so all axes are in [0,1]. | 
 |  |  |  |  |  |
-| [**`TFAA_RECTIFY_OP`**](#history-rectification) | [**Value**]() | [**Setting**]() | [**Stability**]() | [**Ghosting**]() | [**Performance**]() | [**Description**]() |
-|           | `0` | **CLAMP**         | *Ok* (3/5)    | *Bad* (2/5)   | *Great* (5/5)  | Clamp history to the AABB. (**`TFAA_RECTIFY_SHAPE`** is ignored). |  |
-|           | `1` | **CLIP_NEAREST**  | *Great* (5/5) | *Ok* (3/5)   | *Ok* (3/5)     | Ray clip towards neighborhood sample **closest** to history in rectification space. |  |
-|           | `2` | **CLIP_MEAN**     | *Good* (4/5)    | *Good* (4/5)   |  *Ok* (3/5)  | Ray clip towards the nine-tap arithmetic **average**. |  |
-|           | `3` | **CLIP_CENTROID** | *Good* (4/5)    | *Good* (4/5)   |  *Ok* (3/5)  | Ray clip towards the per-channel **midpoint** `(min+max)/2`. |  |
-| *default* | `4` | **CLIP_CURRENT**  | *Good* (4/5)    | *Great* (5/5) |  *Good* (4/5) | Ray clip towards the **current** pixel. |  |
+| [**`TFAA_RECTIFY_OP`**](#history-rectification) | [**Setting**]() | [**Stability**]() | [**Ghosting**]() | [**Performance**]() | [**Description**]() |
+| `0` | **CLAMP**         | *Ok* (3/5)    | *Bad* (2/5)   | *Great* (5/5)  | Clamp history to the AABB. (**`TFAA_RECTIFY_SHAPE`** is ignored). |  |
+| `1` | **CLIP_NEAREST**  | *Great* (5/5) | *Ok* (3/5)   | *Ok* (3/5)     | Ray clip towards neighborhood sample **closest** to history in rectification space. |  |
+| `2` | **CLIP_MEAN**     | *Good* (4/5)    | *Good* (4/5)   |  *Ok* (3/5)  | Ray clip towards the nine-tap arithmetic **average**. |  |
+| `3` | **CLIP_CENTROID** | *Good* (4/5)    | *Good* (4/5)   |  *Ok* (3/5)  | Ray clip towards the per-channel **midpoint** `(min+max)/2`. |  |
+| **`4`** *default* | **CLIP_CURRENT**  | *Good* (4/5)    | *Great* (5/5) |  *Good* (4/5) | Ray clip towards the **current** pixel. |  |
 |  |  |  |  |  |
-| [**`TFAA_RECTIFY_SHAPE`**](#history-rectification) | [**Value**]() | [**Setting**]() | [**Shape**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
-|           | `0` | **AABB** | **3**-axis<br>**6**-faces<br>Box |  |  | 3-axis bounding box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
-| *default* | `1` | **14-DOP** | **7**-axis<br>**14**-faces<br>Box with cut corners |  |  | 7-axis - bounding box + corners |  |
-|           | `2` | **18-DOP** | **9**-axis<br>**18**-faces<br>Box with cut edges |  |  | 9-axis - bounding box + edges |  |
-|           | `3` | **26-DOP** | **13**-axis<br>**26**-faces<br>Box with cut corners and edges |  |  | 13-axis - bounding box + edges + corners |  |
+| [**`TFAA_RECTIFY_SHAPE`**](#history-rectification) | [**Setting**]() | [**Shape**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
+| `0` | **AABB** | **3**-axis<br>**6**-faces<br>Box |  |  | 3-axis bounding box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
+| **`1`** *default* | **14-DOP** | **7**-axis<br>**14**-faces<br>Box with cut corners |  |  | 7-axis - bounding box + corners |  |
+| `2` | **18-DOP** | **9**-axis<br>**18**-faces<br>Box with cut edges |  |  | 9-axis - bounding box + edges |  |
+| `3` | **26-DOP** | **13**-axis<br>**26**-faces<br>Box with cut corners and edges |  |  | 13-axis - bounding box + edges + corners |  |
 |  |  |  |  |  |
 
 
