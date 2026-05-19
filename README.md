@@ -20,55 +20,50 @@ If reshade is alredy installed for that game you can install the shaders manuall
 ### **What it is**
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [Reshade](https://reshade.me/) shader.
 
-<!-- TFAA_EXMAPLE_START -->
+<!-- TFAA_EXMAPLE_VIDEO_START -->
+<p style="margin:0 0 8px 0;"><img src="./misc/videos/1_smaa.webp" alt="1 — SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></p>
+<p style="margin:0 0 8px 0;"><img src="./misc/videos/1_smaa+tfaa.webp" alt="1 — SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></p>
+<p style="margin:12px 0 0 0;text-align:center;font-size:0.9em;font-style:italic;color:#666;">Top: SMAA<span style="display:inline-block;margin:0 0.85em;color:#aaa;">·</span>Bottom: SMAA + TFAA</p>
+<!-- TFAA_EXMAPLE_VIDEO_END -->
+
+
+<!-- TFAA_EXMAPLE_Images_START -->
 <p style="margin:0 0 8px 0;"><strong>Capture:</strong> <code>1</code></p>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
-<th width="18%" style="width:18%;"></th>
-<th width="41%" style="width:41%;">Without TFAA</th>
-<th width="41%" style="width:41%;">With TFAA</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_none.png" alt="1 — NONE" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa.png" alt="1 — SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">None</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_none.png" alt="1 - none" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_tfaa.png" alt="1 - TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-</tr>
-<tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">SMAA</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa.png" alt="1 - SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa+tfaa.png" alt="1 - SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_tfaa.png" alt="1 — TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa+tfaa.png" alt="1 — SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 </table>
+<p style="margin:12px 0 0 0;text-align:center;font-size:0.9em;font-style:italic;color:#666;">Top left: NONE<span style="display:inline-block;margin:0 0.85em;color:#aaa;">·</span>Top right: SMAA<span style="display:inline-block;margin:0 0.85em;color:#aaa;">·</span>Bottom left: TFAA<span style="display:inline-block;margin:0 0.85em;color:#aaa;">·</span>Bottom right: SMAA + TFAA</p>
 
 <details style="margin-top:8px;">
 
-<summary><strong>Show more examples</strong> - click to expand</summary>
+<summary><strong>Show more examples</strong> — click to expand</summary>
 
 
 
 <p style="margin:0 0 8px 0;"><strong>Capture:</strong> <code>2</code></p>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
-<th width="18%" style="width:18%;"></th>
-<th width="41%" style="width:41%;">Without TFAA</th>
-<th width="41%" style="width:41%;">With TFAA</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_none.gif" alt="2 — NONE" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_smaa.gif" alt="2 — SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">None</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_none.gif" alt="2 - none" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_tfaa.gif" alt="2 - TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-</tr>
-<tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;">SMAA</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_smaa.gif" alt="2 - SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_smaa+tfaa.gif" alt="2 - SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_tfaa.gif" alt="2 — TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/2_smaa+tfaa.gif" alt="2 — SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 </table>
+<p style="margin:12px 0 0 0;text-align:center;font-size:0.9em;font-style:italic;color:#666;">Top left: NONE<span style="display:inline-block;margin:0 0.85em;color:#aaa;">·</span>Top right: SMAA<span style="display:inline-block;margin:0 0.85em;color:#aaa;">·</span>Bottom left: TFAA<span style="display:inline-block;margin:0 0.85em;color:#aaa;">·</span>Bottom right: SMAA + TFAA</p>
 
 
 
 </details>
-<!-- TFAA_EXMAPLE_END -->
+<!-- TFAA_EXMAPLE_Images_END -->
 
 
 ### **How it works**
@@ -91,33 +86,33 @@ The most basic verion of temporal filters as in TFAA or in well known industry s
 ### **Preprocessor controls in `TFAA.fx`**. 
 These Settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
 
+|  |  |  |  |  |  |  |
+|---|---|---|---|---|---|---|
+| [**`TFAA_SAMPLING_METHOD`**](#history-resampling) | [**Value**]() | [**Setting**]() | [**Samples**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
+|           | `0` | **BILINEAR** | 1-tap | *Ass* (1/5) | *Insane* (5/5) | Hardware bilinear tap |
+| *default* | `1` | **CATMULLROM** | 5-tap | *Good* (3/5) | *Great* (4/5) | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
+|           | `2` | **LANCZOS2** | 16-tap | *Good* (3/5) | *Good* (3/5) | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+|           | `3` | **LANCZOS3** | 36-tap | *Great* (4/5) | *Ok* (2/5) | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+|           | `4` | **LANCZOS4** | 64-tap | *Insane* (5/5) | *Ass* (1/5) | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) |
+|           | `5` | **FSR EASU** | 12-tap | *Broken* (1/5) | *Ass* (1/5) | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
 |  |  |  |  |  |
-|---|---|---|---|---|
-| **`TFAA_SAMPLING_METHOD`** | **Value** | **Setting** | **Samples** | **Description** |
-|  | `0` | **BILINEAR** | 1-tap |  Hardware bilinear tap |
-| *default* | `1` | **CATMULLROM** | 5-tap | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
-|  | `2` | **LANCZOS2** | 16-tap | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-|  | `3` | **LANCZOS3** | 36-tap | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-|  | `4` | **LANCZOS4** | 64-tap | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-|  | `5` | **FSR EASU** | 12-tap | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
+| [**`TFAA_RECTIFY_COLOR_SPACE`**](#color-rectification-visualization) | [**Value**]() | [**Setting**]() | [**Channel**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
+|           | `0` | RGB | **R**: Red.<br>**G**: Green.<br>**B**: Blue. | *Ok* (2/5) | *Insane* (5/5) | No color transform (identity); loosest rectification bounds. Most blurring and most color deviation artifacts.|
+|           | `1` | YCbCr | **Y**: BT.601 luma.<br>**Cb**: blue-yellow axis.<br>**Cr**: red-cyan axi. | *Great* (4/5) | *Great* (4/5) | ITU-R BT.601 / JPEG-style full-range chroma scales (not broadcast limited-range packing). Chrominance more correlated across axes than YCoCg; rectify path stores Cb/Cr with **+0.5** offset so all axes are in [0,1].
+| *default* | `2` | YCoCg | **Y**: (R+2G+B)/4 luma.<br>**Co**: orange-cyan axis.<br>**Cg**: green-magenta axis. | *Insane* (5/5) | *Great* (4/5) | Malvar & Sullivan (2003 YCoCg); orthogonal chroma, more decorrelated than YCbCr. Shader uses the linear-float form here (papers show integer-shift variants); rectify path stores Co/Cg with **+0.5** offset so all axes are in [0,1]. | 
 |  |  |  |  |  |
-| **`TFAA_RECTIFY_COLOR_SPACE`** | **Value** | **Setting** | **Channels** | **Description** |
-|  | `0` | RGB | **R**: Red (display primary).<br>**G**: Green (display primary).<br>**B**: Blue (display primary). | No color transform (identity); loosest rectification bounds. |
-|  | `1` | YCbCr | **Y**: Luma (brightness).<br>**Cb**: Chroma as **B-Y** (blue minus luma).<br>**Cr**: Chroma as **R-Y** (red minus luma). | Broadcast TV / JPEG standard (ITU-R BT.601). Cb and Cr are defined relative to Y but are not fully decorrelated from each other - some residual correlation (leakage) remains between the two chroma axes. Chrominance axes normalized to [0,1]. |
-| *default* | `2` | YCoCg | **Y**: Luma (brightness).<br>**Co**: Chroma: **(R-B)/2** - deviation toward orange/red vs. cyan.<br>**Cg**: Chroma: **G/2 - (R+B)/4** - deviation toward green vs. magenta. | Video codec research (Malvar & Sullivan, 2003). Uses a simple integer transform (additions and bit-shifts only) that achieves near-complete decorrelation between Co and Cg - no leakage between chroma axes. Chrominance axes normalized to [0,1]. | 
+| [**`TFAA_RECTIFY_OP`**](#history-rectification) | [**Value**]() | [**Setting**]() |  | [**Quality**]() | [**Performance**]() | [**Description**]() |
+|           | `0` | **CLAMP** |  |  |  | Clamp history to the AABB. (**`TFAA_RECTIFY_SHAPE`** is ignored). |  |
+|           | `1` | **CLIP_NEAREST** |  |  |  | Ray clip towards neighborhood sample **closest** to history in rectification space. |  |
+|           | `2` | **CLIP_MEAN** |  |  |  | Ray clip towards the nine-tap arithmetic **average**. |  |
+|           | `3` | **CLIP_CENTROID** |  |  |  | Ray clip towards the per-channel **midpoint** `(min+max)/2`. |  |
+| *default* | `4` | **CLIP_CURRENT** |  |  |  | Ray clip towards the **current** pixel. |  |
 |  |  |  |  |  |
-| **`TFAA_RECTIFY_OP`** | **Value** | **Setting** |  | **Description** |  |
-|  | `0` | **CLAMP** |  | Clamp history to the AABB. (**`TFAA_RECTIFY_SHAPE`** is ignored). |  |
-|  | `1` | **CLIP_NEAREST** |  | Ray clip towards neighborhood sample **closest** to history in rectification space. |  |
-|  | `2` | **CLIP_MEAN** |  | Ray clip towards the nine-tap arithmetic **average**. |  |
-|  | `3` | **CLIP_CENTROID** |  | Ray clip towards the per-channel **midpoint** `(min+max)/2`. |  |
-| *default* | `4` | **CLIP_CURRENT** |  | Ray clip towards the **current** pixel. |  |
-|  |  |  |  |  |
-| **`TFAA_RECTIFY_SHAPE`** | **Value** | **Setting** |  | **Description** |  |
-|  | `0` | **AABB** |  | 3-axis bounding box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
-| *default* | `1` | **14-DOP** |  | 7-axis - bounding box + corners |  |
-|  | `2` | **18-DOP** |  | 9-axis - bounding box + edges |  |
-|  | `3` | **26-DOP** |  | 13-axis - bounding box + edges + corners |  |
+| [**`TFAA_RECTIFY_SHAPE`**](#history-rectification) | [**Value**]() | [**Setting**]() | [**Shape**]() | [**Quality**]() | [**Performance**]() | [**Description**]() |
+|           | `0` | **AABB** | **3**-axis **6**-faces Box |  |  | 3-axis bounding box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
+| *default* | `1` | **14-DOP** | **7**-axis **14**-faces DOP |  |  | 7-axis - bounding box + corners |  |
+|           | `2` | **18-DOP** | **9**-axis **18**-faces DOP |  |  | 9-axis - bounding box + edges |  |
+|           | `3` | **26-DOP** | **13**-axis **26**-faces DOP |  |  | 13-axis - bounding box + edges + corners |  |
 |  |  |  |  |  |
 
 

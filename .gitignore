@@ -14,6 +14,21 @@ misc/requirements.txt
 misc/sampling_example_images/
 # (Note: misc/output/ is tracked for README images)
 
+# Video sources & editor projects (README uses .webp / .gif / .png in misc/videos/, misc/images/)
+*.mov
+*.mp4
+*.m4v
+*.avi
+*.mkv
+*.webm
+*.wmv
+*.flv
+*.mpeg
+*.mpg
+*.ogv
+*.3gp
+*.vproj
+
 # OS & IDE Trash
 .DS_Store
 Thumbs.db
