@@ -63,29 +63,19 @@
     #define TFAA_INV_SQRT3 0.57735027
     #define TFAA_INV_SQRT2 0.70710678
 
-#if TFAA_KDOP_AXIS_LIMIT == 13
-    static const float3 TFAA_KDOP_AXES[TFAA_KDOP_AXIS_LIMIT] = {
-        float3(1, 0, 0), float3(0, 1, 0), float3(0, 0, 1),
-        float3(1, 1, 1) * TFAA_INV_SQRT3, float3(1, -1, 1) * TFAA_INV_SQRT3,
-        float3(1, 1, -1) * TFAA_INV_SQRT3, float3(1, -1, -1) * TFAA_INV_SQRT3,
-        float3(1, 1, 0) * TFAA_INV_SQRT2, float3(1, -1, 0) * TFAA_INV_SQRT2,
-        float3(1, 0, 1) * TFAA_INV_SQRT2, float3(1, 0, -1) * TFAA_INV_SQRT2,
-        float3(0, 1, 1) * TFAA_INV_SQRT2, float3(0, 1, -1) * TFAA_INV_SQRT2
-    };
-#elif TFAA_KDOP_AXIS_LIMIT == 7
-    static const float3 TFAA_KDOP_AXES[TFAA_KDOP_AXIS_LIMIT] = {
-        float3(1, 0, 0), float3(0, 1, 0), float3(0, 0, 1),
-        float3(1, 1, 1) * TFAA_INV_SQRT3, float3(1, -1, 1) * TFAA_INV_SQRT3,
-        float3(1, 1, -1) * TFAA_INV_SQRT3, float3(1, -1, -1) * TFAA_INV_SQRT3
-    };
-#elif TFAA_KDOP_AXIS_LIMIT == 9
-    static const float3 TFAA_KDOP_AXES[TFAA_KDOP_AXIS_LIMIT] = {
-        float3(1, 0, 0), float3(0, 1, 0), float3(0, 0, 1),
-        float3(1, 1, 0) * TFAA_INV_SQRT2, float3(1, -1, 0) * TFAA_INV_SQRT2,
-        float3(1, 0, 1) * TFAA_INV_SQRT2, float3(1, 0, -1) * TFAA_INV_SQRT2,
-        float3(0, 1, 1) * TFAA_INV_SQRT2, float3(0, 1, -1) * TFAA_INV_SQRT2
-    };
+    struct KDOPSlabs
+    {
+#if TFAA_RECTIFY_SHAPE == 1 || TFAA_RECTIFY_SHAPE == 3
+        float4 diagMin;
+        float4 diagMax;
 #endif
+#if TFAA_RECTIFY_SHAPE == 2 || TFAA_RECTIFY_SHAPE == 3
+        float4 edge1Min;
+        float4 edge1Max;
+        float2 edge2Min;
+        float2 edge2Max;
+#endif
+    };
 #endif
 
 
@@ -261,33 +251,96 @@ float3 ClipRayAABB(float3 history, float3 anchor, float3 bMin, float3 bMax)
 {
     float3 dir = history - anchor;
     float3 edge = (dir > 0.0) ? (bMax - anchor) : (bMin - anchor);
-    float3 t = saturate(edge / (dir + 1e-7));
+
+    float3 dirSafe = (abs(dir) < 1e-7) ? 1.0 : dir;
+    float3 t = (abs(dir) < 1e-7) ? 1.0 : saturate(edge / dirSafe);
+
     float clipRatio = min(t.x, min(t.y, t.z));
     return anchor + dir * clipRatio;
 }
 
 #if TFAA_NEED_KDOP_SLABS
-float3 ClipRayKDOP(float3 history, float3 anchor, float minE[TFAA_KDOP_AXIS_LIMIT], float maxE[TFAA_KDOP_AXIS_LIMIT])
+
+#if TFAA_RECTIFY_SHAPE == 1 || TFAA_RECTIFY_SHAPE == 3
+float4 ProjectDiag(float3 c)
 {
-	float3 rayDir = history - anchor;
-	float minT = 1.0;
+    float x_plus_z = c.x + c.z;
+    float x_minus_z = c.x - c.z;
+    return float4(
+        x_plus_z + c.y,
+        x_plus_z - c.y,
+        x_minus_z + c.y,
+        x_minus_z - c.y
+    ) * TFAA_INV_SQRT3;
+}
+#endif
 
-	[unroll]
-	for (int a = 0; a < TFAA_KDOP_AXIS_LIMIT; ++a)
-	{
-		float originProj = dot(anchor, TFAA_KDOP_AXES[a]);
-		float dirProj = dot(rayDir, TFAA_KDOP_AXES[a]);
+#if TFAA_RECTIFY_SHAPE == 2 || TFAA_RECTIFY_SHAPE == 3
+void ProjectEdge(float3 c, out float4 edge1, out float2 edge2)
+{
+    edge1 = float4(
+        c.x + c.y,
+        c.x - c.y,
+        c.x + c.z,
+        c.x - c.z
+    ) * TFAA_INV_SQRT2;
+    edge2 = float2(c.y + c.z, c.y - c.z) * TFAA_INV_SQRT2;
+}
+#endif
 
-		if (abs(dirProj) > 1e-7)
-		{
-			float t = (dirProj > 0.0)
-				? (maxE[a] - originProj) / dirProj
-				: (minE[a] - originProj) / dirProj;
-			minT = min(minT, max(0.0, t));
-		}
-	}
+void InitKDOPSlabs(out KDOPSlabs slabs)
+{
+#if TFAA_RECTIFY_SHAPE == 1 || TFAA_RECTIFY_SHAPE == 3
+    slabs.diagMin = 1e10;
+    slabs.diagMax = -1e10;
+#endif
+#if TFAA_RECTIFY_SHAPE == 2 || TFAA_RECTIFY_SHAPE == 3
+    slabs.edge1Min = 1e10;
+    slabs.edge1Max = -1e10;
+    slabs.edge2Min = 1e10;
+    slabs.edge2Max = -1e10;
+#endif
+}
 
-	return anchor + rayDir * minT;
+float3 ClipRayKDOP(float3 history, float3 anchor, float3 aabbMin, float3 aabbMax, KDOPSlabs slabs)
+{
+    float3 rayDir = history - anchor;
+    float minT = 1.0;
+
+    float3 edge = (rayDir > 0.0) ? (aabbMax - anchor) : (aabbMin - anchor);
+    float3 dirSafe = (abs(rayDir) < 1e-7) ? 1.0 : rayDir;
+    float3 t = (abs(rayDir) < 1e-7) ? 1.0 : saturate(edge / dirSafe);
+    minT = min(minT, min(t.x, min(t.y, t.z)));
+
+#if TFAA_RECTIFY_SHAPE == 1 || TFAA_RECTIFY_SHAPE == 3
+    float4 diagDir = ProjectDiag(rayDir);
+    float4 diagAnchor = ProjectDiag(anchor);
+    float4 diagEdge = (diagDir > 0.0) ? (slabs.diagMax - diagAnchor) : (slabs.diagMin - diagAnchor);
+    float4 diagDirSafe = (abs(diagDir) < 1e-7) ? 1.0 : diagDir;
+    float4 diagT = (abs(diagDir) < 1e-7) ? 1.0 : saturate(diagEdge / diagDirSafe);
+    minT = min(minT, min(min(diagT.x, diagT.y), min(diagT.z, diagT.w)));
+#endif
+
+#if TFAA_RECTIFY_SHAPE == 2 || TFAA_RECTIFY_SHAPE == 3
+    float4 edge1Dir;
+    float2 edge2Dir;
+    ProjectEdge(rayDir, edge1Dir, edge2Dir);
+    float4 edge1Anchor;
+    float2 edge2Anchor;
+    ProjectEdge(anchor, edge1Anchor, edge2Anchor);
+
+    float4 edge1Edge = (edge1Dir > 0.0) ? (slabs.edge1Max - edge1Anchor) : (slabs.edge1Min - edge1Anchor);
+    float4 edge1DirSafe = (abs(edge1Dir) < 1e-7) ? 1.0 : edge1Dir;
+    float4 edge1T = (abs(edge1Dir) < 1e-7) ? 1.0 : saturate(edge1Edge / edge1DirSafe);
+    minT = min(minT, min(min(edge1T.x, edge1T.y), min(edge1T.z, edge1T.w)));
+
+    float2 edge2Edge = (edge2Dir > 0.0) ? (slabs.edge2Max - edge2Anchor) : (slabs.edge2Min - edge2Anchor);
+    float2 edge2DirSafe = (abs(edge2Dir) < 1e-7) ? 1.0 : edge2Dir;
+    float2 edge2T = (abs(edge2Dir) < 1e-7) ? 1.0 : saturate(edge2Edge / edge2DirSafe);
+    minT = min(minT, min(edge2T.x, edge2T.y));
+#endif
+
+    return anchor + rayDir * minT;
 }
 #endif
 
@@ -323,10 +376,10 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
     static const int samples = 9;
 
     static const float2 nOffsets[samples] = {
-		float2(-1.0,-1.0), float2(0, -1),  float2(1.0, -1.0),
-        float2(-1, 0),     float2(0, 0),  float2(1, 0),
-        float2(-0.7, 0.7), float2(0, 1), float2(0.7, 0.7)
-	};
+        float2(-1.0, -1.0), float2(0.0, -1.0), float2(1.0, -1.0),
+        float2(-1.0,  0.0), float2(0.0,  0.0), float2(1.0,  0.0),
+        float2(-1.0,  1.0), float2(0.0,  1.0), float2(1.0,  1.0)
+    };
 
     float4 sampleCur = tex2Dlod(smpInCurBackup, texcoord, 0);
     float4 cvtColorCur = float4(TFAA_RGB_TO_RECTIFY(sampleCur.rgb), sampleCur.a);
@@ -335,10 +388,8 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
 
     float minNeighborDepth = 2;
 
-#if !TFAA_NEED_KDOP_SLABS
-    float3 minimumRectify = 2;
-    float3 maximumRectify = -1;
-#endif
+    float3 minimumRectify = 1e10;
+    float3 maximumRectify = -1e10;
 
 #if TFAA_RECTIFY_OP == 2
     float3 neighborSum = 0;
@@ -349,14 +400,8 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
 #endif
 
 #if TFAA_NEED_KDOP_SLABS
-    float kdopMin[TFAA_KDOP_AXIS_LIMIT];
-    float kdopMax[TFAA_KDOP_AXIS_LIMIT];
-    [unroll]
-    for (int kd = 0; kd < TFAA_KDOP_AXIS_LIMIT; ++kd)
-    {
-        kdopMin[kd] = 1e10;
-        kdopMax[kd] = -1e10;
-    }
+    KDOPSlabs slabs;
+    InitKDOPSlabs(slabs);
 #endif
 
     for (int i = 0; i < samples; i++)
@@ -368,10 +413,8 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
             closestDepthIndex = i;
         minNeighborDepth = min(minNeighborDepth, rgba.a);
 
-#if !TFAA_NEED_KDOP_SLABS
         minimumRectify = min(minimumRectify, cvtRgb);
         maximumRectify = max(maximumRectify, cvtRgb);
-#endif
 
 #if TFAA_RECTIFY_OP == 2
         neighborSum += cvtRgb;
@@ -381,20 +424,22 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
 #endif
 
 #if TFAA_NEED_KDOP_SLABS
-        [unroll]
-        for (int a = 0; a < TFAA_KDOP_AXIS_LIMIT; ++a)
-        {
-            float p = dot(cvtRgb, TFAA_KDOP_AXES[a]);
-            kdopMin[a] = min(kdopMin[a], p);
-            kdopMax[a] = max(kdopMax[a], p);
-        }
+#if TFAA_RECTIFY_SHAPE == 1 || TFAA_RECTIFY_SHAPE == 3
+        float4 diag = ProjectDiag(cvtRgb);
+        slabs.diagMin = min(slabs.diagMin, diag);
+        slabs.diagMax = max(slabs.diagMax, diag);
+#endif
+#if TFAA_RECTIFY_SHAPE == 2 || TFAA_RECTIFY_SHAPE == 3
+        float4 edge1;
+        float2 edge2;
+        ProjectEdge(cvtRgb, edge1, edge2);
+        slabs.edge1Min = min(slabs.edge1Min, edge1);
+        slabs.edge1Max = max(slabs.edge1Max, edge1);
+        slabs.edge2Min = min(slabs.edge2Min, edge2);
+        slabs.edge2Max = max(slabs.edge2Max, edge2);
+#endif
 #endif
     }
-
-#if TFAA_NEED_KDOP_SLABS
-    float3 minimumRectify = float3(kdopMin[0], kdopMin[1], kdopMin[2]);
-    float3 maximumRectify = float3(kdopMax[0], kdopMax[1], kdopMax[2]);
-#endif
 
     float2 motion = Deferred::get_motion(texcoord + (nOffsets[closestDepthIndex] * ReShade::PixelSize));
 
@@ -446,18 +491,19 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
         #if TFAA_RECTIFY_OP == 0
             rectified = clamp(sampleExpCvt, minimumRectify, maximumRectify);
         #else
-            if TFAA_RECTIFY_OP == 1
-                float3 rectifyAnchor = nearestAnchor;
+            float3 rectifyAnchor;
+            #if TFAA_RECTIFY_OP == 1
+                rectifyAnchor = nearestAnchor;
             #elif TFAA_RECTIFY_OP == 2
-                float3 rectifyAnchor = neighborSum / float(samples);
+                rectifyAnchor = neighborSum / float(samples);
             #elif TFAA_RECTIFY_OP == 3
-                float3 rectifyAnchor = (minimumRectify + maximumRectify) * 0.5;
+                rectifyAnchor = (minimumRectify + maximumRectify) * 0.5;
             #else
-                float3 rectifyAnchor = cvtColorCur.rgb;
+                rectifyAnchor = cvtColorCur.rgb;
             #endif
 
             #if TFAA_NEED_KDOP_SLABS
-                rectified = ClipRayKDOP(sampleExpCvt, rectifyAnchor, kdopMin, kdopMax);
+                rectified = ClipRayKDOP(sampleExpCvt, rectifyAnchor, minimumRectify, maximumRectify, slabs);
             #else
                 rectified = ClipRayAABB(sampleExpCvt, rectifyAnchor, minimumRectify, maximumRectify);
             #endif

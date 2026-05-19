@@ -17,7 +17,7 @@ DEFINE_VARIANTS(copy, (sampler source, float2 texcoord), COPY)
 
 float3 rgb_to_ycbcr(float3 rgb)
 {
-    float y  = 0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b;
+    float y  = dot(rgb, float3(0.299, 0.587, 0.114));
     float cb = (rgb.b - y) * 0.565;
     float cr = (rgb.r - y) * 0.713;
     return float3(y, cb, cr);
