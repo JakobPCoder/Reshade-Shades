@@ -535,10 +535,9 @@ Before we do this, we need to make sure
 7. AMD FidelityFX EASU https://github.com/GPUOpen-Effects/FidelityFX-FSR
 8. LAUNCHPAD https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx
 9. Reshade https://reshade.me/
-10. Filmic SMAA 1x https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf
-11. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
-12. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
-13. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
+10. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
+11. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
+12. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
 <!-- README_REFERENCES_END -->
 
 <!-- README_ASSETS_START -->
