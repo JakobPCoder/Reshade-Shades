@@ -98,7 +98,7 @@ uniform float UI_TEMPORAL_FILTER_STRENGTH <
     ui_step    = 0.01;
     ui_label   = "Temporal Filter Strength";
     ui_category= "Temporal Filter";
-    ui_tooltip = "Strength of the temporal blend between the current frame and history.";
+    ui_tooltip = "Strength of the temporal filter.";
 > = 0.5;
 
 uniform float UI_ADAPTIVE_SHARPEN <
@@ -108,7 +108,7 @@ uniform float UI_ADAPTIVE_SHARPEN <
     ui_step    = 0.01;
     ui_label   = "Adaptive Sharpening";
     ui_category= "Temporal Filter";
-    ui_tooltip = "Amount of adaptive sharpening applied after temporal filtering to cancel out temporal blurring where necessary.";
+    ui_tooltip = "Amount of adaptive sharpening applied to cancel out temporal blurring where necessary.";
 > = 0.5;
 
 uniform float UI_POST_SHARPEN <
@@ -118,7 +118,7 @@ uniform float UI_POST_SHARPEN <
     ui_step    = 0.01;
     ui_label   = "Post Sharpening";
     ui_category= "Temporal Filter";
-    ui_tooltip = "Amount of post-sharpening applied after temporal filtering to the whole image.";
+    ui_tooltip = "Amount of post-sharpening applied to the whole image.";
 > = 0.5;
 
 

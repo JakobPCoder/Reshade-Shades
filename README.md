@@ -1,10 +1,12 @@
 # Shades
-Shades is a collection of my updated ReShade shaders.
+Shades is a collection of my updated ReShade shaders. 
+For now only the TFAA.fx shader has been updated.
 
 <!-- README_TOC_START -->
 ## Table of contents
 
 - [Shades](#shades)
+  - [Dependencies](#dependencies)
   - [Installation](#installation)
     - [A. ReShade installer (SOON)](#a-reshade-installer-soon)
     - [B. Manual](#b-manual)
@@ -13,7 +15,6 @@ Shades is a collection of my updated ReShade shaders.
   - [Compatible Spatial Anti-Aliasing Methods](#compatible-spatial-anti-aliasing-methods)
   - [Examples of non-compatible Anti-Aliasing Methods](#examples-of-non-compatible-anti-aliasing-methods)
   - [How it works](#how-it-works)
-  - [Dependencies](#dependencies)
   - [Runtime Settings](#runtime-settings)
   - [Preprocessor Controls.](#preprocessor-controls)
   - [History Resampling](#history-resampling)
@@ -23,6 +24,13 @@ Shades is a collection of my updated ReShade shaders.
 - [References](#references)
 - [Figures and assets](#figures-and-assets)
 <!-- README_TOC_END -->
+
+## **Dependencies**
+- [ReShade](https://reshade.me/) being installed and configured correctly.
+- The **depth buffer** being available and configured correctly. (Check via DisplayDepth.fx)
+- [LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx) being installed with all its dependencies. (Just install the IMMERSE shader pack when installing ReShade.)
+- Some **spatial anti-aliasing** method being run either in-game or via ReShade **before TFAA**.
+
 
 ## **Installation**
 ### *A. ReShade installer* (SOON)
@@ -117,26 +125,20 @@ The most basic version of a temporal filter as in TFAA or in well-known industry
 4. **Blend** new frame data with the rectified history data.
 5. **Write** blended data to the history buffer.
 
-## **Dependencies**
- - The **depth buffer** being available and configured correctly. (Check via DisplayDepth.fx)
- - [LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx) being 
- installed with all its dependencies. (Just install the IMMERSE shader pack when installing ReShade.)
- - Some **spatial anti-aliasing** method being run either in-game or via ReShade **before TFAA**.
 
 ## **Runtime Settings**
 ReShade UI controls (runtime). Edit **Description** here, then run `py -3 misc/sync_tfaa_tooltip.py`.
 
 |  |  |  |  |
 |:-|:-|:-|:-|
-| [**`Control`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
 | [**`UI_TEMPORAL_FILTER_STRENGTH`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
-|  | *Temporal Filter Strength* | *0–1* | Strength of the temporal blend between the current frame and history. |
+|  | *Temporal Filter Strength* | *0–1* | Strength of the temporal filter.|
 |  |  |  |  |
 | [**`UI_ADAPTIVE_SHARPEN`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
-|  | *Adaptive Sharpening* | *0–1* | Amount of adaptive sharpening applied after temporal filtering to cancel out temporal blurring where necessary. |
+|  | *Adaptive Sharpening* | *0–1* | Amount of adaptive sharpening applied to cancel out temporal blurring where necessary. |
 |  |  |  |  |
 | [**`UI_POST_SHARPEN`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
-|  | *Post Sharpening* | *0–1* | Amount of post-sharpening applied after temporal filtering to the whole image. |
+|  | *Post Sharpening* | *0–1* | Amount of post-sharpening applied to the whole image. |
 |  |  |  |  |
 
 ## **Preprocessor Controls**. 
