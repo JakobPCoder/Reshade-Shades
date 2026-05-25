@@ -8,10 +8,10 @@ Shades is a collection of my updated Reshade shaders.
   - [Installation](#installation)
     - [A. ReShade installer (SOON)](#a-reshade-installer-soon)
     - [B. Manual](#b-manual)
-- [Shaders .fx](#shaders-fx)
 - [TFAA.fx](#tfaafx)
   - [What it is](#what-it-is)
   - [Compatible Spatial Anti-Aliasing Methods](#compatible-spatial-anti-aliasing-methods)
+  - [Examples of non compatible Anti-Aliasing Methods](#examples-of-non-compatible-anti-aliasing-methods)
   - [How it works](#how-it-works)
   - [Dependencies](#dependencies)
   - [Runtime Settings](#runtime-settings)
@@ -19,7 +19,10 @@ Shades is a collection of my updated Reshade shaders.
   - [History Resampling](#history-resampling)
   - [History Validation](#history-validation)
   - [History Rectification](#history-rectification)
+    - [Third-party code markers (dev shaders)](#third-party-code-markers-dev-shaders)
 - [LICENSE](#license)
+- [References](#references)
+- [Figures and assets](#figures-and-assets)
 <!-- README_TOC_END -->
 
 ## **Installation**
@@ -36,8 +39,6 @@ If reshade is alredy installed for that game you can install the shaders manuall
 2. Download the whole repo and drop the `/Shaders` and `/Textures` folders into the `./reshade-shaders` folder.
 3. In the reshade seettings add the `/Shaders/Shades` and `/Textures/Shades` folders to the "Texture Search Paths" and "Effect Search Paths" respectively.
 
-# Shaders .fx
-
 # **TFAA**.*fx*
 ## **What it is**
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [Reshade](https://reshade.me/) shader.
@@ -52,29 +53,38 @@ If reshade is alredy installed for that game you can install the shaders manuall
 </div>
 <!-- TFAA_EXMAPLE_VIDEO_END -->
 
-**TFAA**, or any temporal filter for that matter, does not smooth edges that are static on screen by itself. It only accumulates data over mulitple frames to produce a higher quality image.
-This means that static edges need a seperate, spatial anti-aliasing method to be applied to them. The great thing is, also moving edges profit from first being spatialy and than temporally anti-aliased.
+**TFAA** does not anti-alias static edges on its own. It only accumulates signal across frames to produce a cleaner, more stable image over time.
+That is why spatial anti-aliasing still matters. It handles edges that stay still on screen, and on motion the best order is spatial first, then **TFAA** to stabilize over time.
 
-Any ingame anti-aliasing method that does not destroy the access to the depth buffer and any Reshade anti-aliasing shader can be used in conjunction with TFAA.
+Pair **TFAA** with any in-game anti-aliasing that preserves depth buffer access, or with any spatial ReShade AA shader loaded before it in the chain.
 
 ## Compatible Spatial Anti-Aliasing Methods
 
+- ["Post Anti-Aliasing"]() Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
 - [FXAA](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf) Fast Approximate Anti-Aliasing
 - [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf) Morphological Anti-Aliasing
+- [CMAA](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) Conservative Morphological Anti-Aliasing
 - [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) Subpixel Morphological Anti-Aliasing. Only ones that do not already include a temporal component
     - These ones make sense to use with TFAA:
         - $\color{green}{\textsf{SMAA}}$ - *Orignal*
         - $\color{green}{\textsf{SMAA}}$ **1x** - *Same as "SMAA"*
     - These ones not:
-        - $\color{red}{\textsf{SMAA}}$ **s2x** - *2x Spatial supersampling*
+        - $\color{red}{\textsf{SMAA}}$ **s2x** - *2x Spatial supersampling* 
         - $\color{red}{\textsf{SMAA}}$ **t2x** - *2x Temporal supersampling*
         - $\color{red}{\textsf{SMAA}}$ **4x** - *2x Spatial + 2x Temporal supersampling*
         - $\color{red}{\textsf{Filmic SMAA}}$ **1x** - *1x Temporal Filtering*
         - $\color{red}{\textsf{Filmic SMAA}}$ **t2x** - *2x Temporal supersampling + temporal filtering*
         - $\color{red}{\textsf{Filmic SMAA}}$ **TU2x** - *2x Temporal Upsampling + temporal filtering*
         - $\color{red}{\textsf{Filmic SMAA}}$ **TU4x** - *4x Temporal Upsampling + temporal filtering*
-- [**CMAA**](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) Conservative Morphological Anti-Aliasing
-- [**"Post Anti-Aliasing"**]() Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
+
+
+## Examples of non compatible Anti-Aliasing Methods
+- $\color{red}{\textsf{MSAA}}$ Makes Depth buffer not stably accessible most of the times.
+- $\color{red}{\textsf{SSAA}}$ Makes Depth buffer not stably accessible most of the times.
+- $\color{red}{\textsf{NVIDIA DSR}}$ Always makes depth buffer have the wrong scale, often makes it jitter/not stably accessible.
+- $\color{red}{\textsf{TAA}}$ Alreedy includes temporal component. Jittering depth buffer, often makes it not stably accessible.
+- $\color{red}{\textsf{TUAA}}$  Alreedy includes temporal component. Jittering depth buffer, wrong scale, often makes it not stably accessible.
+- $\color{red}{\textsf{TXAA}}$ Same problems as MSAA and TAA Combined
 
 
 Below you can see how TFAA and SMAA can work together on edges in motion.
@@ -102,8 +112,8 @@ Below you can see how TFAA and SMAA can work together on edges in motion.
 
 ## **How it works**
 The most basic verion of a temporal filter as in TFAA or in well known industry solutions like Filmic SMAA T1x consists of the following steps:
-1. [**History data**](#history-resampling) is [sampled](#history-resampling) for each pixel using the **velocity buffer** and an accumulated **history buffer**.
-2. **Validatate** that history data is plausible and reject if not.
+1. [**History data** is sampled](#history-resampling) for each pixel using the **velocity buffer** and an accumulated **history buffer**.
+2. [**Validatate**](#history-validation) that history data is plausible and reject if not.
 3. [**Rectificy**](#history-rectification) history data to the neighborhood of the current frame.
 4. **Blend** new frame data with the rectified history data.
 5. **Write Data** blended data to the history buffer.
@@ -115,7 +125,20 @@ The most basic verion of a temporal filter as in TFAA or in well known industry 
  - Some **spatial anti-aliasing** method being run either ingame or via Reshade **before TFAA**.
 
 ## **Runtime Settings**
-| [**`TFAA_SAMPLING_METHOD`**] | |
+ReShade UI controls (runtime). Edit **Description** here, then run `py -3 misc/sync_tfaa_tooltip.py`.
+
+|  |  |  |  |
+|:-|:-|:-|:-|
+| [**`Control`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
+| [**`UI_TEMPORAL_FILTER_STRENGTH`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
+|  | *Temporal Filter Strength* | *0–1* | Strength of the temporal blend between the current frame and history (0 to 1). |
+|  |  |  |  |
+| [**`UI_ADAPTIVE_SHARPEN`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
+|  | *Adaptive Sharpening* | *0–1* | Amount of adaptive sharpening applied after temporal filtering to cancel out temporal blurring where necessary. |
+|  |  |  |  |
+| [**`UI_POST_SHARPEN`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
+|  | *Post Sharpening* | *0–1* | Amount of post-sharpening applied after temporal filtering to the whole image. |
+|  |  |  |  |
 
 ## **Preprocessor Controls**. 
 These Settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
@@ -158,9 +181,11 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 
 ## History Resampling
 
-When TFAA reads **history data**, the sample position will most likely sit at a **subpixel positon**. Depending on what method is used to interpolate between real data points, the results can vary greatly. Cheaper methods generally blur more, expensive methods tend to preserve more detail but might also introduce more artifacts.
+History is not read at integer pixel coordinates. After motion, the sample point usually falls between texels at a **subpixel offset**.
 
-Below you can see some examples of how the differnt sampling methods behave when sampling at subpixel positions **0.125**, **0.25**, and **0.5**.
+**Resampling** is how we fill in that in-between value, and the choice of filter sets the tradeoff. Lighter filters smooth more; heavier ones hold edges and fine detail at the risk of extra artifacts when the sample straddles discontinuities.
+
+The table below shows several filters at offsets 0.125, 0.25, and 0.5.
 
 
 
@@ -364,6 +389,8 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 </div>
 <!-- RECTIFICATION_BASICS_END -->
 
+
+
 <!-- RECTIFICATION_CLAMP_START -->
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
 <tr>
@@ -374,6 +401,17 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 </tr>
 </table>
 <!-- RECTIFICATION_CLAMP_END -->
+
+<!-- RECTIFICATION_CLIP_START -->
+<table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
+<tr>
+<th width="25%">None</th><th width="25%">RGB</th><th width="25%">YCbCr</th><th width="25%">YCoCg</th>
+</tr>
+<tr>
+<td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_norectify_dark.svg" alt="No rectification (baseline)" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td><td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/rgb_aabb_clip_current_dark.svg" alt="RGB rectify space clip current" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td><td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/ycbcr_aabb_clip_current_dark.svg" alt="YCbCr rectify space clip current" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td><td style="vertical-align:top;padding:4px;"><img src="./misc/output/clip_vis/ycocg_aabb_clip_current_dark.svg" alt="YCoCg rectify space clip current" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+</table>
+<!-- RECTIFICATION_CLIP_END -->
 
 <!-- RECTIFICATION_ALL_START -->
 <details style="margin-top:8px;">
@@ -526,6 +564,43 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 
 
 
+### Third-party code markers (dev shaders)
+
+Some shader sources under `Shaders/Shades/` wrap ported third-party code in paired markers.
+Use `//` line comments or `/* */` block comments. On `SHADES_LICENSE_BEGIN`, include:
+
+- `@author` — original licensor (e.g. AMD)
+- `@license` — license name (e.g. MIT License)
+- `@license_link` — URL to the license text
+- `@label` — optional component name (e.g. FidelityFX FSR EASU)
+
+Close the region with `SHADES_LICENSE_END`. Example:
+
+```hlsl
+// SHADES_LICENSE_BEGIN
+// @author AMD
+// @license MIT License
+// @license_link https://opensource.org/license/mit
+// @label FidelityFX CAS
+float4 crossWeight = …;
+// SHADES_LICENSE_END
+```
+
+Regenerate [LICENSE.md](./LICENSE.md) and refresh release copies:
+
+```powershell
+cd misc
+py -3 generate_license.py
+py -3 sync_dev.py
+```
+
+`generate_license.py` scans the sync include tree and writes third-party line ranges into LICENSE.md.
+`sync_dev.py` replaces dev markers with a readable attribution comment in shipped shaders stating how many lines below are under the third-party license (`@label`, `@author`, `@license` / `@license_link`).
+
+# LICENSE
+- License File: [LICENSE.md](./LICENSE.md)
+- Human-readable summary of the License: https://creativecommons.org/licenses/by-nc-nd/4.0/
+- Full legal code: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 <!-- README_REFERENCES_START -->
 ## References
@@ -538,10 +613,11 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 6. Lanczos-2 https://en.wikipedia.org/wiki/Lanczos_resampling
 7. AMD FidelityFX EASU https://github.com/GPUOpen-Effects/FidelityFX-FSR
 8. LAUNCHPAD https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx
-9. Reshade https://reshade.me/
-10. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
-11. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
-12. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
+9. https://opensource.org/license/mit
+10. Reshade https://reshade.me/
+11. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
+12. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
+13. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
 <!-- README_REFERENCES_END -->
 
 <!-- README_ASSETS_START -->
@@ -688,10 +764,3 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 | [`./misc/videos/1_smaa+tfaa.webp`](./misc/videos/1_smaa+tfaa.webp) | image |
 | [`./misc/videos/1_smaa.webp`](./misc/videos/1_smaa.webp) | image |
 <!-- README_ASSETS_END -->
-
-# LICENSE
-- License File: [LICENSE.md](./LICENSE.md)
-- Human-readable summary of the License: https://creativecommons.org/licenses/by-nc-nd/4.0/
-- Full legal code: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
-
-

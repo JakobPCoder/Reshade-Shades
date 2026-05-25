@@ -2,6 +2,40 @@
 
 **Attribution-NonCommercial-NoDerivatives 4.0 International** · official pages: [https://creativecommons.org/licenses/by-nc-nd/4.0/deed](https://creativecommons.org/licenses/by-nc-nd/4.0/deed) (deed) · [https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode) (legal code)
 
+<!-- LICENSE_THIRD_PARTY_START -->
+## Third-party code in this project
+
+Some parts of the shaders in this repository are derived from or incorporate third-party code and are licensed separately as follows.
+
+### MIT License — FidelityFX FSR RCAS (AMD)
+
+- **Author / licensor:** AMD
+- **License:** MIT License
+- **License link:** <https://opensource.org/license/mit>
+- **Portions:**
+  - `helpers.fxh` lines 156–211 — FidelityFX FSR RCAS
+
+### MIT License — FidelityFX FSR EASU (AMD)
+
+- **Author / licensor:** AMD
+- **License:** MIT License
+- **License link:** <https://opensource.org/license/mit>
+- **Portions:**
+  - `samplers.fxh` lines 158–366 — FidelityFX FSR EASU
+
+### MIT License — FidelityFX CAS (AMD)
+
+- **Author / licensor:** AMD
+- **License:** MIT License
+- **License link:** <https://opensource.org/license/mit>
+- **Portions:**
+  - `TFAA.fx` lines 766–769 — FidelityFX CAS
+
+---
+
+All other code in this project is licensed under the terms below.
+<!-- LICENSE_THIRD_PARTY_END -->
+
 ---
 
 ## Deed

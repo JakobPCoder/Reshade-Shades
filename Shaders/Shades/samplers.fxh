@@ -5,12 +5,8 @@
     License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/)
     https://creativecommons.org/licenses/by-nc/4.0/legalcode
 =============================================================================*/
-
 #pragma once
-
 #include "macros.fxh"
-
-
 #define DOWNSAMPLE_GAUSS_FIXED(T, S) \
     float2 texel_size = rcp(tex2Dsize(smp, 0)); \
     float2 offset = texel_size * 0.75; \
@@ -20,12 +16,7 @@
     result += tex2Dlod(smp, float4(texcoord + float2(-offset.x,  offset.y), 0.0, 0.0)).S; \
     result += tex2Dlod(smp, float4(texcoord + float2( offset.x,  offset.y), 0.0, 0.0)).S; \
     return result * 0.25;
-
 DEFINE_VARIANTS(downsample_gauss_fixed, (sampler smp, float2 texcoord), DOWNSAMPLE_GAUSS_FIXED)
-
-
-
-
 #define SAMPLE_CATMULLROM(T, S) \
      \
     int2 tex_size = tex2Dsize(source, 0); \
@@ -65,10 +56,7 @@ DEFINE_VARIANTS(downsample_gauss_fixed, (sampler smp, float2 texcoord), DOWNSAMP
      \
     float normfact = 1.0 / (1.0 - (f.x - f2.x) * (f.y - f2.y) * 0.25); \
     return max(0, ret * normfact);
-
 DEFINE_VARIANTS(sample_catmullrom, (sampler source, float2 texcoord), SAMPLE_CATMULLROM)
-
-
 float lanczos_sinc(float x)
 {
     const float eps = 1e-5;
@@ -77,14 +65,12 @@ float lanczos_sinc(float x)
     float pix = 3.14159265358979323846 * x;
     return sin(pix) / pix;
 }
-
 float lanczos_weight(float x, float a)
 {
     if (abs(x) >= a)
         return 0.0;
     return lanczos_sinc(x) * lanczos_sinc(x / a);
 }
-
 #define SAMPLE_LANCZOS_BASIC(T, S, A) \
     int2 tex_size_i = tex2Dsize(source, 0); \
     float2 tex_size = float2(tex_size_i); \
@@ -109,17 +95,13 @@ float lanczos_weight(float x, float a)
         wsum += w; \
     } \
     return acc * rcp(max(wsum, 1e-8));
-
 #define SAMPLE_LANCZOS2_BASIC(T, S) SAMPLE_LANCZOS_BASIC(T, S, 2)
 #define SAMPLE_LANCZOS3_BASIC(T, S) SAMPLE_LANCZOS_BASIC(T, S, 3)
 #define SAMPLE_LANCZOS4_BASIC(T, S) SAMPLE_LANCZOS_BASIC(T, S, 4)
-
 DEFINE_VARIANTS(sample_lanczos2_basic, (sampler source, float2 texcoord), SAMPLE_LANCZOS2_BASIC)
 DEFINE_VARIANTS(sample_lanczos3_basic, (sampler source, float2 texcoord), SAMPLE_LANCZOS3_BASIC)
 DEFINE_VARIANTS(sample_lanczos4_basic, (sampler source, float2 texcoord), SAMPLE_LANCZOS4_BASIC)
-
-
-
+/* SHADES_LICENSE_ATTRIBUTION The next 209 lines of code below were ported from, or are more than functionally equivalent to, FidelityFX FSR EASU by AMD and are licensed under MIT License (https://opensource.org/license/mit) only; the remainder of this file is not. */
 void _easu_tap(
     inout float3 aC, inout float aW,
     float2 off, float2 dir, float2 len,
@@ -128,20 +110,16 @@ void _easu_tap(
 ){
     float2 v = float2(dot(off, dir), dot(off, float2(-dir.y, dir.x)));
     v *= len;
-
     float d2 = min(dot(v, v), clp);
     float wB = 0.4 * d2 - 1.0;
     float wA = lob * d2 - 1.0;
     wB *= wB;
     wA *= wA;
     wB = 1.5625 * wB - 0.5625;
-
     float w = wB * wA;
     aC += c * w;
     aW += w;
 }
-
-
 void _easu_set(
     inout float2 dir, inout float len,
     float w,
@@ -153,7 +131,6 @@ void _easu_set(
     lenX = clamp(abs(dirX) / lenX, 0.0, 1.0);
     lenX *= lenX;
     len += lenX * w;
-
     float lenY = max(abs(lE - lC), abs(lC - lA));
     float dirY = lE - lA;
     dir.y += dirY * w;
@@ -161,29 +138,23 @@ void _easu_set(
     lenY *= lenY;
     len += lenY * w;
 }
-
-
 float4 sample_easu_p(sampler2D s, float2 uv, int2 srcSize, int2 dstSize)
 {
     float2 srcF = float2(srcSize);
     float2 dstF = float2(dstSize);
-
     float4 con0 = float4(srcF / dstF,  -0.5, -0.5);
     float4 con1 = float4( 1,  1,  1, -1) / srcF.xyxy;
     float4 con2 = float4(-1,  2,  1,  2) / srcF.xyxy;
     float4 con3 = float4( 0,  4,  0,  0) / srcF.xyxy;
-
     float2 ip = uv * dstF;
     float2 pp = ip * con0.xy + con0.zw;
     float2 fp = floor(pp);
     pp -= fp;
-
     float2 p0  = fp * con1.xy + con1.zw;
     float2 p1  = p0 + con2.xy;
     float2 p2  = p0 + con2.zw;
     float2 p3  = p0 + con3.xy;
     float4 off = float4(-0.5, 0.5, -0.5, 0.5) * con1.xxyy;
-
     float3 bC = tex2Dlod(s, float4(p0+off.xw,0,0)).rgb; float bL = bC.g+0.5*(bC.r+bC.b);
     float3 cC = tex2Dlod(s, float4(p0+off.yw,0,0)).rgb; float cL = cC.g+0.5*(cC.r+cC.b);
     float3 iC = tex2Dlod(s, float4(p1+off.xw,0,0)).rgb; float iL = iC.g+0.5*(iC.r+iC.b);
@@ -196,14 +167,12 @@ float4 sample_easu_p(sampler2D s, float2 uv, int2 srcSize, int2 dstSize)
     float3 gC = tex2Dlod(s, float4(p2+off.xz,0,0)).rgb; float gL = gC.g+0.5*(gC.r+gC.b);
     float3 oC = tex2Dlod(s, float4(p3+off.yz,0,0)).rgb; float oL = oC.g+0.5*(oC.r+oC.b);
     float3 nC = tex2Dlod(s, float4(p3+off.xz,0,0)).rgb; float nL = nC.g+0.5*(nC.r+nC.b);
-
     float2 dir = 0;
     float  len = 0;
     _easu_set(dir, len, (1.0-pp.x)*(1.0-pp.y), bL,eL,fL,gL,jL);
     _easu_set(dir, len,      pp.x *(1.0-pp.y), cL,fL,gL,hL,kL);
     _easu_set(dir, len, (1.0-pp.x)*     pp.y,  fL,iL,jL,kL,nL);
     _easu_set(dir, len,      pp.x *     pp.y,   gL,jL,kL,lL,oL);
-
     float2 dir2 = dir * dir;
     float  dirR = dir2.x + dir2.y;
     bool   zro  = dirR < (1.0 / 32768.0);
@@ -211,17 +180,14 @@ float4 sample_easu_p(sampler2D s, float2 uv, int2 srcSize, int2 dstSize)
     dirR  = zro ? 1.0 : dirR;
     dir.x = zro ? 1.0 : dir.x;
     dir  *= dirR;
-
     len = len * 0.5;
     len *= len;
     float  stretch = dot(dir, dir) / max(abs(dir.x), abs(dir.y));
     float2 len2    = float2(1.0 + (stretch - 1.0) * len, 1.0 - 0.5 * len);
     float  lob     = 0.5 - 0.29 * len;
     float  clp     = 1.0 / lob;
-
     float3 min4 = min(min(fC, gC), min(jC, kC));
     float3 max4 = max(max(fC, gC), max(jC, kC));
-
     float3 aC = 0;
     float  aW = 0;
     _easu_tap(aC,aW,float2( 0,-1)-pp,dir,len2,lob,clp,bC);
@@ -236,17 +202,12 @@ float4 sample_easu_p(sampler2D s, float2 uv, int2 srcSize, int2 dstSize)
     _easu_tap(aC,aW,float2( 1, 0)-pp,dir,len2,lob,clp,gC);
     _easu_tap(aC,aW,float2( 1, 2)-pp,dir,len2,lob,clp,oC);
     _easu_tap(aC,aW,float2( 0, 2)-pp,dir,len2,lob,clp,nC);
-
     return float4(min(max4, max(min4, aC / aW)), 1.0);
 }
-
-
 float4 sample_easu(sampler2D s, float2 uv, int2 dstSize)
 {
     return sample_easu_p(s, uv, tex2Dsize(s, 0), dstSize);
 }
-
-
 float4 sample_easu_same(sampler2D s, float2 uv)
 {
     int2 sz = tex2Dsize(s, 0);
