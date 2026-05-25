@@ -43,8 +43,8 @@ If reshade is alredy installed for that game you can install the shaders manuall
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [Reshade](https://reshade.me/) shader.
 
 <!-- TFAA_EXMAPLE_VIDEO_START -->
-<p style="margin:0 0 8px 0;"><img src="./misc/videos/1_smaa.webp" alt="1 — SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></p>
-<p style="margin:0 0 8px 0;"><img src="./misc/videos/1_smaa+tfaa.webp" alt="1 — SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></p>
+<p style="margin:0 0 8px 0;"><img src="./misc/videos/1_smaa.webp" alt="1 - SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></p>
+<p style="margin:0 0 8px 0;"><img src="./misc/videos/1_smaa+tfaa.webp" alt="1 - SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></p>
 <div align="center">
 
 *Top: SMAA · Bottom: SMAA + TFAA*
@@ -63,16 +63,16 @@ Any ingame anti-aliasing method that does not destroy the access to the depth bu
 - [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf) Morphological Anti-Aliasing
 - [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) Subpixel Morphological Anti-Aliasing. Only ones that do not already include a temporal component
     - These ones make sense to use with TFAA:
-        - $\color{green}{\textsf{SMAA}}$ — *Orignal*
-        - $\color{green}{\textsf{SMAA}}$ **1x** — *Same as "SMAA"*
+        - $\color{green}{\textsf{SMAA}}$ - *Orignal*
+        - $\color{green}{\textsf{SMAA}}$ **1x** - *Same as "SMAA"*
     - These ones not:
-        - $\color{red}{\textsf{SMAA}}$ **s2x** — *2x Spatial supersampling*
-        - $\color{red}{\textsf{SMAA}}$ **t2x** — *2x Temporal supersampling*
-        - $\color{red}{\textsf{SMAA}}$ **4x** — *2x Spatial + 2x Temporal supersampling*
-        - $\color{red}{\textsf{Filmic SMAA}}$ **1x** — *1x Temporal Filtering*
-        - $\color{red}{\textsf{Filmic SMAA}}$ **t2x** — *2x Temporal supersampling + temporal filtering*
-        - $\color{red}{\textsf{Filmic SMAA}}$ **TU2x** — *2x Temporal Upsampling + temporal filtering*
-        - $\color{red}{\textsf{Filmic SMAA}}$ **TU4x** — *4x Temporal Upsampling + temporal filtering*
+        - $\color{red}{\textsf{SMAA}}$ **s2x** - *2x Spatial supersampling*
+        - $\color{red}{\textsf{SMAA}}$ **t2x** - *2x Temporal supersampling*
+        - $\color{red}{\textsf{SMAA}}$ **4x** - *2x Spatial + 2x Temporal supersampling*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **1x** - *1x Temporal Filtering*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **t2x** - *2x Temporal supersampling + temporal filtering*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **TU2x** - *2x Temporal Upsampling + temporal filtering*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **TU4x** - *4x Temporal Upsampling + temporal filtering*
 - [**CMAA**](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) Conservative Morphological Anti-Aliasing
 - [**"Post Anti-Aliasing"**]() Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
 
@@ -88,13 +88,13 @@ Below you can see how TFAA and SMAA can work together on edges in motion.
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;">Without TFAA</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_none.png" alt="1 — NONE" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa.png" alt="1 — SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_none.png" alt="1 - NONE" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa.png" alt="1 - SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;">With TFAA</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_tfaa.png" alt="1 — TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa+tfaa.png" alt="1 — SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_tfaa.png" alt="1 - TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/images/1_smaa+tfaa.png" alt="1 - SMAA + TFAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 </table>
 <!-- TFAA_EXMAPLE_Images_END -->
@@ -181,11 +181,11 @@ Below you can see some examples of how the differnt sampling methods behave when
 <td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_bilinear_dx0p500_dy0p500.png" alt="Bilinear dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull–Rom<br />5 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p000_dy0p000.png" alt="Catmull–Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p125_dy0p125.png" alt="Catmull–Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p250_dy0p250.png" alt="Catmull–Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p500_dy0p500.png" alt="Catmull–Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p000_dy0p000.png" alt="Catmull-Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p125_dy0p125.png" alt="Catmull-Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p250_dy0p250.png" alt="Catmull-Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p500_dy0p500.png" alt="Catmull-Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 2<br />16 taps</th>
@@ -219,7 +219,7 @@ Below you can see some examples of how the differnt sampling methods behave when
 
 <details style="margin-top:8px;">
 
-<summary><strong>Show more examples</strong> — click to expand</summary>
+<summary><strong>Show more examples</strong> - click to expand</summary>
 
 
 
@@ -239,11 +239,11 @@ Below you can see some examples of how the differnt sampling methods behave when
 <td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_bilinear_dx0p500_dy0p500.png" alt="Bilinear dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull–Rom<br />5 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p000_dy0p000.png" alt="Catmull–Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p125_dy0p125.png" alt="Catmull–Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p250_dy0p250.png" alt="Catmull–Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p500_dy0p500.png" alt="Catmull–Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p000_dy0p000.png" alt="Catmull-Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p125_dy0p125.png" alt="Catmull-Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p250_dy0p250.png" alt="Catmull-Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p500_dy0p500.png" alt="Catmull-Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 2<br />16 taps</th>
@@ -291,11 +291,11 @@ Below you can see some examples of how the differnt sampling methods behave when
 <td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_bilinear_dx0p500_dy0p500.png" alt="Bilinear dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull–Rom<br />5 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p000_dy0p000.png" alt="Catmull–Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p125_dy0p125.png" alt="Catmull–Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p250_dy0p250.png" alt="Catmull–Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p500_dy0p500.png" alt="Catmull–Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p000_dy0p000.png" alt="Catmull-Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p125_dy0p125.png" alt="Catmull-Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p250_dy0p250.png" alt="Catmull-Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p500_dy0p500.png" alt="Catmull-Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 2<br />16 taps</th>
@@ -336,14 +336,18 @@ Below you can see some examples of how the differnt sampling methods behave when
 </br>
 
 ## History Validation
-After a sample from the history buffer is taken, we need to find out if it is plausible that this sample belongs to our pixel in the current frame.
-We do this primarily by checking for depth discontinuities and specifically disocclusion. This is important to avoid artifacts like ghosting.
-If a sample is considered to be invalid, it is discared completly and only the data from teh new frame is considered.
+Once we fetch a sample from the history buffer, we still cannot assume it belongs to this pixel in the current frame—the scene may have moved, depth may disagree, or disocclusion may have exposed objects that were not there before.
 
+Validation is the first gate before we reuse it: depth discontinuities and disocclusion checks decide whether that sample still plausibly matches this location. If it fails, the sample is discarded entirely and only the current frame contributes, which cuts ghosting when the history clearly comes from somewhere else.
 
 ## History Rectification
-After a potentialy valid history sample has been found, we alreedy know that we gonna blend it into the current frame data by some amount.
-Before we do this, we need to make sure
+Even when validation says a history sample probably belongs to this pixel, we still cannot be sure it actually does.
+We then have to choose how much to trust it: keep it as-is, or pull it toward what the surrounding image looks like now.
+Rectification is that compromise - it reins in doubtful history instead of accepting it unchanged.
+
+Tighter clamping and clipping yield a cleaner, sharper image with less ghosting and blur, but also less temporal stability, because plausible history that looks like an outlier gets pulled toward the neighborhood.
+With rectification disabled, more detail accumulates and the image stays smoother, at the cost of trails and smear when history is wrong.
+Different clip anchor targets bias that tradeoff differently (stability, temporal blur, sharpness, ghosting), which is why TFAA exposes several options.
 
 <!-- RECTIFICATION_BASICS_START -->
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
@@ -373,7 +377,7 @@ Before we do this, we need to make sure
 
 <!-- RECTIFICATION_ALL_START -->
 <details style="margin-top:8px;">
-<summary><strong>Show all rectification diagrams</strong> — click to expand</summary>
+<summary><strong>Show all rectification diagrams</strong> - click to expand</summary>
 
 <p style="margin:16px 0 8px;"><strong>CLIP_NEAREST</strong> (<code>TFAA_RECTIFY_OP</code> 1)</p>
 <p style="margin:8px 0 4px;"><strong>YCoCg</strong></p>
@@ -386,7 +390,7 @@ Before we do this, we need to make sure
 </tr>
 </table>
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 
 <p style="margin:12px 0 4px;"><strong>YCbCr</strong></p>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
@@ -421,7 +425,7 @@ Before we do this, we need to make sure
 </tr>
 </table>
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 
 <p style="margin:12px 0 4px;"><strong>YCbCr</strong></p>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
@@ -456,7 +460,7 @@ Before we do this, we need to make sure
 </tr>
 </table>
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 
 <p style="margin:12px 0 4px;"><strong>YCbCr</strong></p>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">
@@ -491,7 +495,7 @@ Before we do this, we need to make sure
 </tr>
 </table>
 <details style="margin-top:8px;">
-<summary><strong>YCbCr &amp; RGB</strong> — click to expand</summary>
+<summary><strong>YCbCr &amp; RGB</strong> - click to expand</summary>
 
 <p style="margin:12px 0 4px;"><strong>YCbCr</strong></p>
 <table width="100%" style="width:100%;table-layout:fixed;border-collapse:collapse;">

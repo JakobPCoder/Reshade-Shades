@@ -127,7 +127,7 @@ uniform float UI_POST_SHARPEN <
 uniform bool UI_CLAMPING <
     ui_type    = "checkbox";
     ui_label   = "Enable Color Rectification";
-    ui_tooltip = "When enabled, uses TFAA_RECTIFY_OP and TFAA_RECTIFY_SHAPE from the preprocessor. CLAMP (op 0) always uses AABB only; shape affects CLIP ops (1–4) only.";
+    ui_tooltip = "When enabled, uses TFAA_RECTIFY_OP and TFAA_RECTIFY_SHAPE from the preprocessor. CLAMP (op 0) always uses AABB only; shape affects CLIP ops (1-4) only.";
     ui_category= "Debug";
 > = true;
 
