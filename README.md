@@ -65,7 +65,7 @@ That is why spatial anti-aliasing still matters. It handles edges that stay stil
 
 Pair **TFAA** with any in-game anti-aliasing that preserves depth buffer access, or with any spatial ReShade AA shader loaded before it in the chain.
 
-## Compatible Spatial Anti-Aliasing Methods
+## Compatible Spatial Anti-Aliasing Methods (selection, non exclusive)
 
 - ["Post Anti-Aliasing"]() Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
 - [FXAA](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf) Fast Approximate Anti-Aliasing
