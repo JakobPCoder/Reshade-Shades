@@ -1,7 +1,43 @@
 # Shades
 Shades is a collection of my updated Reshade shaders.
 
-# Shaders *`.fx`*
+<!-- README_TOC_START -->
+## Table of contents
+
+- [Shades](#shades)
+  - [Installation](#installation)
+    - [A. ReShade installer (SOON)](#a-reshade-installer-soon)
+    - [B. Manual](#b-manual)
+- [Shaders .fx](#shaders-fx)
+- [TFAA.fx](#tfaafx)
+  - [What it is](#what-it-is)
+  - [Compatible Spatial Anti-Aliasing Methods](#compatible-spatial-anti-aliasing-methods)
+  - [How it works](#how-it-works)
+  - [Dependencies](#dependencies)
+  - [Runtime Settings](#runtime-settings)
+  - [Preprocessor Controls.](#preprocessor-controls)
+  - [History Resampling](#history-resampling)
+  - [History Validation](#history-validation)
+  - [History Rectification](#history-rectification)
+- [LICENSE](#license)
+<!-- README_TOC_END -->
+
+## **Installation**
+### *A. ReShade installer* (SOON)
+1. *Run the [Reshade](https://reshade.me/) installer.*
+2. *Select your target game.*
+3. *Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).*
+4. *If you already have Reshade installed for that game select: `Update ReShade and Effects`.*
+5. *Toggle the checkmark on `Shades`.*
+6. *Click on next or continue to install.*
+### B. Manual 
+If reshade is alredy installed for that game you can install the shaders manually by:
+1. Locating the games executable `.exe` file. Next to it you will find folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
+2. Download the whole repo and drop the `/Shaders` and `/Textures` folders into the `./reshade-shaders` folder.
+3. In the reshade seettings add the `/Shaders/Shades` and `/Textures/Shades` folders to the "Texture Search Paths" and "Effect Search Paths" respectively.
+
+# Shaders .fx
+
 # **TFAA**.*fx*
 ## **What it is**
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [Reshade](https://reshade.me/) shader.
@@ -21,7 +57,7 @@ This means that static edges need a seperate, spatial anti-aliasing method to be
 
 Any ingame anti-aliasing method that does not destroy the access to the depth buffer and any Reshade anti-aliasing shader can be used in conjunction with TFAA.
 
-### Compatible Spatial Anti-Aliasing Methods
+## Compatible Spatial Anti-Aliasing Methods
 
 - [FXAA](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf) Fast Approximate Anti-Aliasing
 - [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf) Morphological Anti-Aliasing
@@ -64,21 +100,6 @@ Below you can see how TFAA and SMAA can work together on edges in motion.
 <!-- TFAA_EXMAPLE_Images_END -->
 
 
-## **Installation**
-### *A. ReShade installer* (SOON)
-1. *Run the [Reshade](https://reshade.me/) installer.*
-2. *Select your target game.*
-3. *Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).*
-4. *If you already have Reshade installed for that game select: `Update ReShade and Effects`.*
-5. *Toggle the checkmark on `Shades`.*
-6. *Click on next or continue to install.*
-### B. Manual 
-If reshade is alredy installed for that game you can install the shaders manually by:
-1. Locating the games executable `.exe` file. Next to it you will find folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
-2. Download the whole repo and drop the `/Shaders` and `/Textures` folders into the `./reshade-shaders` folder.
-3. In the reshade seettings add the `/Shaders/Shades` and `/Textures/Shades` folders to the "Texture Search Paths" and "Effect Search Paths" respectively.
-
-
 ## **How it works**
 The most basic verion of a temporal filter as in TFAA or in well known industry solutions like Filmic SMAA T1x consists of the following steps:
 1. [**History data**](#history-resampling) is [sampled](#history-resampling) for each pixel using the **velocity buffer** and an accumulated **history buffer**.
@@ -93,7 +114,10 @@ The most basic verion of a temporal filter as in TFAA or in well known industry 
  installed with all its dependencies. (Just installl the IMMERSE shader pack when installing Reshade.)
  - Some **spatial anti-aliasing** method being run either ingame or via Reshade **before TFAA**.
 
-## **Preprocessor controls in `TFAA.fx`**. 
+## **Runtime Settings**
+| [**`TFAA_SAMPLING_METHOD`**] | |
+
+## **Preprocessor Controls**. 
 These Settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
 
 |  |  |  |  |
@@ -119,10 +143,10 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 | **CLIP_CURRENT**  | **`4`** |  | Ray clip towards the **current** pixel. |  |
 |  |  |  |
 | [**`TFAA_RECTIFY_SHAPE`**](#history-rectification) | [**Value**]() |  | [**Description**]() |
-| *AABB* | *`0`* |  | **3**-axis<br>**6**-faces<br>Box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
-| **14-DOP** | **`1`** |  | **7**-axis<br>**14**-faces<br>Box with cut corners |  |
-| *18-DOP* | *`2`* |  | **9**-axis<br>**18**-faces<br>Box with cut edges |  |
-| *26-DOP* | *`3`* |  | **13**-axis<br>**26**-faces<br>Box with cut corners and edges |
+| *AABB* | *`0`* |  | **3**-axis \| **6**-faces<br>Box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
+| **14-DOP** | **`1`** |  | **7**-axis \| **14** - faces \| Box with cut corners.<br> |  |
+| *18-DOP* | *`2`* |  | **9**-axis \| **18** - faces \| Box with cut edges.<br> |  |
+| *26-DOP* | *`3`* |  | **13**-axis \| **26** - faces\| Box with cut corners and edges.<br> |
 |_________________________________|______|_______________________|____________________________________________________________________|
 |  |  |  |
 
@@ -318,7 +342,8 @@ If a sample is considered to be invalid, it is discared completly and only the d
 
 
 ## History Rectification
-After a potentialy valid 
+After a potentialy valid history sample has been found, we alreedy know that we gonna blend it into the current frame data by some amount.
+Before we do this, we need to make sure
 
 <!-- RECTIFICATION_BASICS_START -->
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
@@ -497,6 +522,169 @@ After a potentialy valid
 
 
 
+
+<!-- README_REFERENCES_START -->
+## References
+
+1. [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+2. [https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode)
+3. [FXAA](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf)
+4. [bilinear](https://en.wikipedia.org/wiki/Bilinear_interpolation)
+5. [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline)
+6. [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling)
+7. [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)
+8. [LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx)
+9. [Reshade](https://reshade.me/)
+10. [$\color{red}{\textsf{Filmic SMAA}}$ **1x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf)
+11. [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf)
+12. [**CMAA**](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html)
+13. [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf)
+<!-- README_REFERENCES_END -->
+
+<!-- README_ASSETS_START -->
+## Figures and assets
+
+| Asset | Type |
+| ----- | ---- |
+| [`./LICENSE.md`](./LICENSE.md) | document |
+| [`./misc/images/1_none.png`](./misc/images/1_none.png) | image |
+| [`./misc/images/1_smaa+tfaa.png`](./misc/images/1_smaa+tfaa.png) | image |
+| [`./misc/images/1_smaa.png`](./misc/images/1_smaa.png) | image |
+| [`./misc/images/1_tfaa.png`](./misc/images/1_tfaa.png) | image |
+| [`./misc/output/clip_vis/key_clipped_clamp_dark.svg`](./misc/output/clip_vis/key_clipped_clamp_dark.svg) | diagram |
+| [`./misc/output/clip_vis/key_clipped_clip_centroid_dark.svg`](./misc/output/clip_vis/key_clipped_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/key_clipped_clip_current_dark.svg`](./misc/output/clip_vis/key_clipped_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/key_clipped_clip_mean_dark.svg`](./misc/output/clip_vis/key_clipped_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/key_clipped_clip_nearest_dark.svg`](./misc/output/clip_vis/key_clipped_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/key_history_dark.svg`](./misc/output/clip_vis/key_history_dark.svg) | diagram |
+| [`./misc/output/clip_vis/key_neighborhood_dark.svg`](./misc/output/clip_vis/key_neighborhood_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_14dop_clip_centroid_dark.svg`](./misc/output/clip_vis/rgb_14dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_14dop_clip_current_dark.svg`](./misc/output/clip_vis/rgb_14dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_14dop_clip_mean_dark.svg`](./misc/output/clip_vis/rgb_14dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_14dop_clip_nearest_dark.svg`](./misc/output/clip_vis/rgb_14dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_18dop_clip_centroid_dark.svg`](./misc/output/clip_vis/rgb_18dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_18dop_clip_current_dark.svg`](./misc/output/clip_vis/rgb_18dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_18dop_clip_mean_dark.svg`](./misc/output/clip_vis/rgb_18dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_18dop_clip_nearest_dark.svg`](./misc/output/clip_vis/rgb_18dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_26dop_clip_centroid_dark.svg`](./misc/output/clip_vis/rgb_26dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_26dop_clip_current_dark.svg`](./misc/output/clip_vis/rgb_26dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_26dop_clip_mean_dark.svg`](./misc/output/clip_vis/rgb_26dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_26dop_clip_nearest_dark.svg`](./misc/output/clip_vis/rgb_26dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_aabb_clamp_dark.svg`](./misc/output/clip_vis/rgb_aabb_clamp_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_aabb_clip_centroid_dark.svg`](./misc/output/clip_vis/rgb_aabb_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_aabb_clip_current_dark.svg`](./misc/output/clip_vis/rgb_aabb_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_aabb_clip_mean_dark.svg`](./misc/output/clip_vis/rgb_aabb_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_aabb_clip_nearest_dark.svg`](./misc/output/clip_vis/rgb_aabb_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/rgb_norectify_dark.svg`](./misc/output/clip_vis/rgb_norectify_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_14dop_clip_centroid_dark.svg`](./misc/output/clip_vis/ycbcr_14dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_14dop_clip_current_dark.svg`](./misc/output/clip_vis/ycbcr_14dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_14dop_clip_mean_dark.svg`](./misc/output/clip_vis/ycbcr_14dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_14dop_clip_nearest_dark.svg`](./misc/output/clip_vis/ycbcr_14dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_18dop_clip_centroid_dark.svg`](./misc/output/clip_vis/ycbcr_18dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_18dop_clip_current_dark.svg`](./misc/output/clip_vis/ycbcr_18dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_18dop_clip_mean_dark.svg`](./misc/output/clip_vis/ycbcr_18dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_18dop_clip_nearest_dark.svg`](./misc/output/clip_vis/ycbcr_18dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_26dop_clip_centroid_dark.svg`](./misc/output/clip_vis/ycbcr_26dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_26dop_clip_current_dark.svg`](./misc/output/clip_vis/ycbcr_26dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_26dop_clip_mean_dark.svg`](./misc/output/clip_vis/ycbcr_26dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_26dop_clip_nearest_dark.svg`](./misc/output/clip_vis/ycbcr_26dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_aabb_clamp_dark.svg`](./misc/output/clip_vis/ycbcr_aabb_clamp_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_aabb_clip_centroid_dark.svg`](./misc/output/clip_vis/ycbcr_aabb_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_aabb_clip_current_dark.svg`](./misc/output/clip_vis/ycbcr_aabb_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_aabb_clip_mean_dark.svg`](./misc/output/clip_vis/ycbcr_aabb_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycbcr_aabb_clip_nearest_dark.svg`](./misc/output/clip_vis/ycbcr_aabb_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_14dop_clip_centroid_dark.svg`](./misc/output/clip_vis/ycocg_14dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_14dop_clip_current_dark.svg`](./misc/output/clip_vis/ycocg_14dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_14dop_clip_mean_dark.svg`](./misc/output/clip_vis/ycocg_14dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_14dop_clip_nearest_dark.svg`](./misc/output/clip_vis/ycocg_14dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_18dop_clip_centroid_dark.svg`](./misc/output/clip_vis/ycocg_18dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_18dop_clip_current_dark.svg`](./misc/output/clip_vis/ycocg_18dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_18dop_clip_mean_dark.svg`](./misc/output/clip_vis/ycocg_18dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_18dop_clip_nearest_dark.svg`](./misc/output/clip_vis/ycocg_18dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_26dop_clip_centroid_dark.svg`](./misc/output/clip_vis/ycocg_26dop_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_26dop_clip_current_dark.svg`](./misc/output/clip_vis/ycocg_26dop_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_26dop_clip_mean_dark.svg`](./misc/output/clip_vis/ycocg_26dop_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_26dop_clip_nearest_dark.svg`](./misc/output/clip_vis/ycocg_26dop_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_aabb_clamp_dark.svg`](./misc/output/clip_vis/ycocg_aabb_clamp_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_aabb_clip_centroid_dark.svg`](./misc/output/clip_vis/ycocg_aabb_clip_centroid_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_aabb_clip_current_dark.svg`](./misc/output/clip_vis/ycocg_aabb_clip_current_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_aabb_clip_mean_dark.svg`](./misc/output/clip_vis/ycocg_aabb_clip_mean_dark.svg) | diagram |
+| [`./misc/output/clip_vis/ycocg_aabb_clip_nearest_dark.svg`](./misc/output/clip_vis/ycocg_aabb_clip_nearest_dark.svg) | diagram |
+| [`./misc/output/resample_vis/1/1_bilinear_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_bilinear_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_bilinear_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_bilinear_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_bilinear_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_bilinear_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_bilinear_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_bilinear_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_easu_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_easu_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_easu_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_easu_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_easu_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_easu_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_easu_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_easu_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos3_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_lanczos3_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos3_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_lanczos3_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos3_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_lanczos3_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos3_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_lanczos3_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos4_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_lanczos4_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos4_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_lanczos4_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos4_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_lanczos4_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos4_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_lanczos4_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_bilinear_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_bilinear_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_bilinear_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_bilinear_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_bilinear_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_bilinear_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_bilinear_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_bilinear_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_easu_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_easu_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_easu_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_easu_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_easu_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_easu_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_easu_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_easu_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos3_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_lanczos3_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos3_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_lanczos3_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos3_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_lanczos3_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos3_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_lanczos3_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos4_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_lanczos4_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos4_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_lanczos4_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos4_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_lanczos4_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos4_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_lanczos4_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_bilinear_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_bilinear_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_bilinear_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_bilinear_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_bilinear_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_bilinear_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_bilinear_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_bilinear_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_easu_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_easu_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_easu_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_easu_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_easu_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_easu_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_easu_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_easu_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos3_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_lanczos3_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos3_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_lanczos3_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos3_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_lanczos3_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos3_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_lanczos3_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos4_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_lanczos4_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos4_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_lanczos4_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos4_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_lanczos4_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos4_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_lanczos4_dx0p500_dy0p500.png) | image |
+| [`./misc/videos/1_smaa+tfaa.webp`](./misc/videos/1_smaa+tfaa.webp) | image |
+| [`./misc/videos/1_smaa.webp`](./misc/videos/1_smaa.webp) | image |
+<!-- README_ASSETS_END -->
 
 # LICENSE
 - License File: [LICENSE.md](./LICENSE.md)
