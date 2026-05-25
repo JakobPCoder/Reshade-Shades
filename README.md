@@ -128,7 +128,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 | *LANCZOS2* | *`2`* | 16-tap | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) |
 | *LANCZOS3* | *`3`* | 36-tap | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) |
 | *LANCZOS4* | *`4`* | 64-tap | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-| *FSR EASU* | *`5`* | 12-tap | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
+| *FSR EASU* ($\color{red}{\textsf{BROKEN}}$) | *`5`* | 12-tap | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
 |  |  |  |
 | [**`TFAA_RECTIFY_COLOR_SPACE`**](#color-rectification-visualization) | [**Value**]() | [**Channels**]() | [**Description**]() |
 | *RGB* | *`0`* | **R**: $\color{red}{\textsf{Red}}$<br>**G**: $\color{green}{\textsf{Green}}$<br>**B**: $\color{blue}{\textsf{Blue}}$ | No color transform (identity); loosest rectification bounds. Most blurring and most color deviation artifacts.|
@@ -526,19 +526,19 @@ Before we do this, we need to make sure
 <!-- README_REFERENCES_START -->
 ## References
 
-1. [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-2. [https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode)
-3. [FXAA](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf)
-4. [bilinear](https://en.wikipedia.org/wiki/Bilinear_interpolation)
-5. [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline)
-6. [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling)
-7. [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)
-8. [LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx)
-9. [Reshade](https://reshade.me/)
-10. [$\color{red}{\textsf{Filmic SMAA}}$ **1x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf)
-11. [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf)
-12. [**CMAA**](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html)
-13. [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf)
+1. https://creativecommons.org/licenses/by-nc-nd/4.0/
+2. https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+3. FXAA https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
+4. bilinear https://en.wikipedia.org/wiki/Bilinear_interpolation
+5. Catmull-Rom https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline
+6. Lanczos-2 https://en.wikipedia.org/wiki/Lanczos_resampling
+7. AMD FidelityFX EASU https://github.com/GPUOpen-Effects/FidelityFX-FSR
+8. LAUNCHPAD https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx
+9. Reshade https://reshade.me/
+10. Filmic SMAA 1x https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf
+11. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
+12. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
+13. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
 <!-- README_REFERENCES_END -->
 
 <!-- README_ASSETS_START -->
