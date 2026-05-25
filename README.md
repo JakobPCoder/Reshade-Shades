@@ -1,5 +1,5 @@
 # Shades
-Shades is a collection of my updated Reshade shaders.
+Shades is a collection of my updated ReShade shaders.
 
 <!-- README_TOC_START -->
 ## Table of contents
@@ -26,21 +26,21 @@ Shades is a collection of my updated Reshade shaders.
 
 ## **Installation**
 ### *A. ReShade installer* (SOON)
-1. *Run the [Reshade](https://reshade.me/) installer.*
+1. *Run the [ReShade](https://reshade.me/) installer.*
 2. *Select your target game.*
 3. *Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).*
-4. *If you already have Reshade installed for that game select: `Update ReShade and Effects`.*
+4. *If you already have ReShade installed for that game, select: `Update ReShade and Effects`.*
 5. *Toggle the checkmark on `Shades`.*
 6. *Click on next or continue to install.*
 ### B. Manual 
-If reshade is alredy installed for that game you can install the shaders manually by:
-1. Locating the games executable `.exe` file. Next to it you will find folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
+If ReShade is already installed for that game, you can install the shaders manually by:
+1. Locating the game's executable `.exe` file. Next to it you will find a folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
 2. Download the whole repo and drop the `/Shaders` and `/Textures` folders into the `./reshade-shaders` folder.
-3. In the reshade seettings add the `/Shaders/Shades` and `/Textures/Shades` folders to the "Texture Search Paths" and "Effect Search Paths" respectively.
+3. In the ReShade settings add the `/Shaders/Shades` and `/Textures/Shades` folders to the "Texture Search Paths" and "Effect Search Paths" respectively.
 
 # **TFAA**.*fx*
 ## **What it is**
-**TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [Reshade](https://reshade.me/) shader.
+**TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [ReShade](https://reshade.me/) shader.
 
 <!-- TFAA_EXMAPLE_VIDEO_START -->
 <p style="margin:0 0 8px 0;"><img src="./misc/videos/1_smaa.webp" alt="1 - SMAA" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></p>
@@ -65,9 +65,9 @@ Pair **TFAA** with any in-game anti-aliasing that preserves depth buffer access,
 - [CMAA](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) Conservative Morphological Anti-Aliasing
 - [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) Subpixel Morphological Anti-Aliasing. Only ones that do not already include a temporal component
     - These ones make sense to use with TFAA:
-        - $\color{green}{\textsf{SMAA}}$ - *Orignal*
+        - $\color{green}{\textsf{SMAA}}$ - *Original*
         - $\color{green}{\textsf{SMAA}}$ **1x** - *Same as "SMAA"*
-    - These ones not:
+    - These ones do not:
         - $\color{red}{\textsf{SMAA}}$ **s2x** - *2x Spatial supersampling* 
         - $\color{red}{\textsf{SMAA}}$ **t2x** - *2x Temporal supersampling*
         - $\color{red}{\textsf{SMAA}}$ **4x** - *2x Spatial + 2x Temporal supersampling*
@@ -77,13 +77,13 @@ Pair **TFAA** with any in-game anti-aliasing that preserves depth buffer access,
         - $\color{red}{\textsf{Filmic SMAA}}$ **TU4x** - *4x Temporal Upsampling + temporal filtering*
 
 
-## Examples of non compatible Anti-Aliasing Methods
-- $\color{red}{\textsf{MSAA}}$ Makes Depth buffer not stably accessible most of the times.
-- $\color{red}{\textsf{SSAA}}$ Makes Depth buffer not stably accessible most of the times.
-- $\color{red}{\textsf{NVIDIA DSR}}$ Always makes depth buffer have the wrong scale, often makes it jitter/not stably accessible.
-- $\color{red}{\textsf{TAA}}$ Alreedy includes temporal component. Jittering depth buffer, often makes it not stably accessible.
-- $\color{red}{\textsf{TUAA}}$  Alreedy includes temporal component. Jittering depth buffer, wrong scale, often makes it not stably accessible.
-- $\color{red}{\textsf{TXAA}}$ Same problems as MSAA and TAA Combined
+## Examples of non-compatible Anti-Aliasing Methods
+- $\color{red}{\textsf{MSAA}}$ Makes Depth buffer not stably accessible most of the time.
+- $\color{red}{\textsf{SSAA}}$ Makes Depth buffer not stably accessible most of the time.
+- $\color{red}{\textsf{NVIDIA DSR}}$ Always makes depth buffer have the wrong scale, often makes it jitter and is not stably accessible.
+- $\color{red}{\textsf{TAA}}$ Already includes temporal component. Jittering depth buffer, often makes it not stably accessible.
+- $\color{red}{\textsf{TUAA}}$ Already includes temporal component. Jittering depth buffer, wrong scale, often makes it not stably accessible.
+- $\color{red}{\textsf{TXAA}}$ Same problems as MSAA and TAA combined
 
 
 Below you can see how TFAA and SMAA can work together on edges in motion.
@@ -110,18 +110,18 @@ Below you can see how TFAA and SMAA can work together on edges in motion.
 
 
 ## **How it works**
-The most basic verion of a temporal filter as in TFAA or in well known industry solutions like Filmic SMAA T1x consists of the following steps:
+The most basic version of a temporal filter as in TFAA or in well-known industry solutions like Filmic SMAA T1x consists of the following steps:
 1. [**History data** is sampled](#history-resampling) for each pixel using the **velocity buffer** and an accumulated **history buffer**.
-2. [**Validatate**](#history-validation) that history data is plausible and reject if not.
-3. [**Rectificy**](#history-rectification) history data to the neighborhood of the current frame.
+2. [**Validate**](#history-validation) that history data is plausible and reject if not.
+3. [**Rectify**](#history-rectification) history data to the neighborhood of the current frame.
 4. **Blend** new frame data with the rectified history data.
-5. **Write Data** blended data to the history buffer.
+5. **Write** blended data to the history buffer.
 
 ## **Dependencies**
  - The **depth buffer** being available and configured correctly. (Check via DisplayDepth.fx)
  - [LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx) being 
- installed with all its dependencies. (Just installl the IMMERSE shader pack when installing Reshade.)
- - Some **spatial anti-aliasing** method being run either ingame or via Reshade **before TFAA**.
+ installed with all its dependencies. (Just install the IMMERSE shader pack when installing ReShade.)
+ - Some **spatial anti-aliasing** method being run either in-game or via ReShade **before TFAA**.
 
 ## **Runtime Settings**
 ReShade UI controls (runtime). Edit **Description** here, then run `py -3 misc/sync_tfaa_tooltip.py`.
@@ -140,7 +140,7 @@ ReShade UI controls (runtime). Edit **Description** here, then run `py -3 misc/s
 |  |  |  |  |
 
 ## **Preprocessor Controls**. 
-These Settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
+These settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
 
 |  |  |  |  |
 |:-|:-|:-|:-|
@@ -168,7 +168,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 | *AABB* | *`0`* |  | **3**-axis \| **6**-faces<br>Box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
 | **14-DOP** | **`1`** |  | **7**-axis \| **14** - faces \| Box with cut corners.<br> |  |
 | *18-DOP* | *`2`* |  | **9**-axis \| **18** - faces \| Box with cut edges.<br> |  |
-| *26-DOP* | *`3`* |  | **13**-axis \| **26** - faces\| Box with cut corners and edges.<br> |
+| *26-DOP* | *`3`* |  | **13**-axis \| **26** - faces \| Box with cut corners and edges.<br> |
 |  |  |  |
 
 
@@ -356,7 +356,7 @@ The table below shows several filters at offsets 0.125, 0.25, and 0.5.
 <!-- RESAMPLE_TABLE_END -->
 
 ---
-</br>
+<br>
 
 ## History Validation
 Once we fetch a sample from the history buffer, we still cannot assume it belongs to this pixel in the current frame—the scene may have moved, depth may disagree, or disocclusion may have exposed objects that were not there before.
