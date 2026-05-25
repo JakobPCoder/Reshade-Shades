@@ -19,7 +19,6 @@ Shades is a collection of my updated Reshade shaders.
   - [History Resampling](#history-resampling)
   - [History Validation](#history-validation)
   - [History Rectification](#history-rectification)
-    - [Third-party code markers (dev shaders)](#third-party-code-markers-dev-shaders)
 - [LICENSE](#license)
 - [References](#references)
 - [Figures and assets](#figures-and-assets)
@@ -131,7 +130,7 @@ ReShade UI controls (runtime). Edit **Description** here, then run `py -3 misc/s
 |:-|:-|:-|:-|
 | [**`Control`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
 | [**`UI_TEMPORAL_FILTER_STRENGTH`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
-|  | *Temporal Filter Strength* | *0–1* | Strength of the temporal blend between the current frame and history (0 to 1). |
+|  | *Temporal Filter Strength* | *0–1* | Strength of the temporal blend between the current frame and history. |
 |  |  |  |  |
 | [**`UI_ADAPTIVE_SHARPEN`**]() | [**Label**]() | [**Range**]() | [**Description**]() |
 |  | *Adaptive Sharpening* | *0–1* | Amount of adaptive sharpening applied after temporal filtering to cancel out temporal blurring where necessary. |
@@ -580,11 +579,10 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 6. Lanczos-2 https://en.wikipedia.org/wiki/Lanczos_resampling
 7. AMD FidelityFX EASU https://github.com/GPUOpen-Effects/FidelityFX-FSR
 8. LAUNCHPAD https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx
-9. https://opensource.org/license/mit
-10. Reshade https://reshade.me/
-11. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
-12. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
-13. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
+9. Reshade https://reshade.me/
+10. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
+11. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
+12. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
 <!-- README_REFERENCES_END -->
 
 <!-- README_ASSETS_START -->

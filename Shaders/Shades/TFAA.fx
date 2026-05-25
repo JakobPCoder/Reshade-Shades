@@ -98,7 +98,7 @@ uniform float UI_TEMPORAL_FILTER_STRENGTH <
     ui_step    = 0.01;
     ui_label   = "Temporal Filter Strength";
     ui_category= "Temporal Filter";
-    ui_tooltip = "Strength of the temporal blend between the current frame and history (0 to 1).";
+    ui_tooltip = "Strength of the temporal blend between the current frame and history.";
 > = 0.5;
 
 uniform float UI_ADAPTIVE_SHARPEN <
