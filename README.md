@@ -63,17 +63,17 @@ Any ingame anti-aliasing method that does not destroy the access to the depth bu
 - [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf) Morphological Anti-Aliasing
 - [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) Subpixel Morphological Anti-Aliasing. Only ones that do not already include a temporal component
     - These ones make sense to use with TFAA:
-        - $\color{green}{\textsf{SMAA}}$ - [*Orignal*](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf)
-        - $\color{green}{\textsf{SMAA}}$ [**1x**](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *Same as "SMAA"*
+        - $\color{green}{\textsf{SMAA}}$ — *Orignal*
+        - $\color{green}{\textsf{SMAA}}$ **1x** — *Same as "SMAA"*
     - These ones not:
-        - $\color{red}{\textsf{SMAA}}$ [**s2x**](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *2x Spatial supersampling*
-        - $\color{red}{\textsf{SMAA}}$ [**t2x**](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *2x Temporal supersampling*
-        - $\color{red}{\textsf{SMAA}}$ [**4x**](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *2x Spatial + 2x Temporal supersampling*
-        - $\color{red}{\textsf{Filmic SMAA}}$ [**1x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *1x Temporal Filtering*
-        - $\color{red}{\textsf{Filmic SMAA}}$ [**t2x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *2x Temporal supersampling + temporal filtering*
-        - $\color{red}{\textsf{Filmic SMAA}}$ [**TU2x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *2x Temporal Upsampling + temporal filtering*
-        - $\color{red}{\textsf{Filmic SMAA}}$ [**TU4x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *4x Temporal Upsampling + temporal filtering*
-- [**CMAA**](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) |  Conservative Morphological Anti-Aliasing
+        - $\color{red}{\textsf{SMAA}}$ **s2x** — *2x Spatial supersampling*
+        - $\color{red}{\textsf{SMAA}}$ **t2x** — *2x Temporal supersampling*
+        - $\color{red}{\textsf{SMAA}}$ **4x** — *2x Spatial + 2x Temporal supersampling*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **1x** — *1x Temporal Filtering*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **t2x** — *2x Temporal supersampling + temporal filtering*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **TU2x** — *2x Temporal Upsampling + temporal filtering*
+        - $\color{red}{\textsf{Filmic SMAA}}$ **TU4x** — *4x Temporal Upsampling + temporal filtering*
+- [**CMAA**](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) Conservative Morphological Anti-Aliasing
 - [**"Post Anti-Aliasing"**]() Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
 
 
@@ -147,7 +147,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 | **14-DOP** | **`1`** |  | **7**-axis \| **14** - faces \| Box with cut corners.<br> |  |
 | *18-DOP* | *`2`* |  | **9**-axis \| **18** - faces \| Box with cut edges.<br> |  |
 | *26-DOP* | *`3`* |  | **13**-axis \| **26** - faces\| Box with cut corners and edges.<br> |
-|_______________________________|______|______________________|__________________________________________________________|
+|_________________________________|______|_______________________|__________________________________________________________|
 |  |  |  |
 
 
