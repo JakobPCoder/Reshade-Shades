@@ -563,38 +563,6 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 
 
 
-### Third-party code markers (dev shaders)
-
-Some shader sources under `Shaders/Shades/` wrap ported third-party code in paired markers.
-Use `//` line comments or `/* */` block comments. On `SHADES_LICENSE_BEGIN`, include:
-
-- `@author` — original licensor (e.g. AMD)
-- `@license` — license name (e.g. MIT License)
-- `@license_link` — URL to the license text
-- `@label` — optional component name (e.g. FidelityFX FSR EASU)
-
-Close the region with `SHADES_LICENSE_END`. Example:
-
-```hlsl
-// SHADES_LICENSE_BEGIN
-// @author AMD
-// @license MIT License
-// @license_link https://opensource.org/license/mit
-// @label FidelityFX CAS
-float4 crossWeight = …;
-// SHADES_LICENSE_END
-```
-
-Regenerate [LICENSE.md](./LICENSE.md) and refresh release copies:
-
-```powershell
-cd misc
-py -3 generate_license.py
-py -3 sync_dev.py
-```
-
-`generate_license.py` scans the sync include tree and writes third-party line ranges into LICENSE.md.
-`sync_dev.py` replaces dev markers with a readable attribution comment in shipped shaders stating how many lines below are under the third-party license (`@label`, `@author`, `@license` / `@license_link`).
 
 # LICENSE
 - License File: [LICENSE.md](./LICENSE.md)
