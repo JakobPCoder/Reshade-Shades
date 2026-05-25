@@ -27,16 +27,16 @@ Any ingame anti-aliasing method that does not destroy the access to the depth bu
 - [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf) Morphological Anti-Aliasing
 - [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) Subpixel Morphological Anti-Aliasing. Only ones that do not already include a temporal component
     - These ones make sense to use with TFAA:
-        - $\color{green}{\textsf{SMAA}}$, 
-        - $\color{green}{\textsf{SMAA}}$ **1x**
-        - $\color{green}{\textsf{SMAA}}$ **s2x**
+        - [$\color{green}{\textsf{SMAA}}$](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *Orignal*
+        - [$\color{green}{\textsf{SMAA}}$ **1x**](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *Same as "SMAA"*
     - These ones not:
-        - $\color{red}{\textsf{SMAA}}$ **t2x**
-        - $\color{red}{\textsf{SMAA}}$ **4x**
-        - $\color{red}{\textsf{Filmic SMAA}}$ **t1x**
-        - $\color{red}{\textsf{Filmic SMAA}}$ **t2x**
-        - $\color{red}{\textsf{Filmic SMAA}}$ **TU2x**
-        - $\color{red}{\textsf{Filmic SMAA}}$ **TU4x**
+        - [$\color{red}{\textsf{SMAA}}$ **s2x**](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *2x Spatial supersampling*
+        - [$\color{red}{\textsf{SMAA}}$ **t2x**]((https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf)) - *2x Temporal supersampling*
+        - [$\color{red}{\textsf{SMAA}}$ **4x**](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) - *2x Spatial + 2x Temporal supersampling*
+        - [$\color{red}{\textsf{Filmic SMAA}}$ **1x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *1x Temporal Filtering*
+        - [$\color{red}{\textsf{Filmic SMAA}}$ **t2x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *2x Temporal supersampling + temporal filtering*
+        - [$\color{red}{\textsf{Filmic SMAA}}$ **TU2x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *2x Temporal Upsampling + temporal filtering*
+        - [$\color{red}{\textsf{Filmic SMAA}}$ **TU4x**](https://www.activision.com/cdn/research/Dynamic_Temporal_Antialiasing_and_Upsampling_in_Call_of_Duty_v4.pdf) - *4x Temporal Upsampling + temporal filtering*
 - [**CMAA**](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) |  Conservative Morphological Anti-Aliasing
 - [**"Post Anti-Aliasing"**]() Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
 
@@ -65,13 +65,13 @@ Below you can see how TFAA and SMAA can work together on edges in motion.
 
 
 ## **Installation**
-### A. ReShade installer
-1. Run the [Reshade](https://reshade.me/) installer.
-2. Select your target game.
-3. Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).
-4. If you already have Reshade installed for that game select: `Update ReShade and Effects`.
-5. Toggle the checkmark on `Shades`.
-6. Click on next or continue to install.
+### *A. ReShade installer* (SOON)
+1. *Run the [Reshade](https://reshade.me/) installer.*
+2. *Select your target game.*
+3. *Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).*
+4. *If you already have Reshade installed for that game select: `Update ReShade and Effects`.*
+5. *Toggle the checkmark on `Shades`.*
+6. *Click on next or continue to install.*
 ### B. Manual 
 If reshade is alredy installed for that game you can install the shaders manually by:
 1. Locating the games executable `.exe` file. Next to it you will find folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
@@ -81,9 +81,9 @@ If reshade is alredy installed for that game you can install the shaders manuall
 
 ## **How it works**
 The most basic verion of a temporal filter as in TFAA or in well known industry solutions like Filmic SMAA T1x consists of the following steps:
-1. **History data** is [sampled](#history-resampling) for each pixel using the **velocity buffer** and an accumulated **history buffer**.
+1. [**History data**](#history-resampling) is [sampled](#history-resampling) for each pixel using the **velocity buffer** and an accumulated **history buffer**.
 2. **Validatate** that history data is plausible and reject if not.
-3. **Rectificy** history data to the neighborhood of the current frame.
+3. [**Rectificy**](#history-rectification) history data to the neighborhood of the current frame.
 4. **Blend** new frame data with the rectified history data.
 5. **Write Data** blended data to the history buffer.
 
@@ -97,7 +97,7 @@ The most basic verion of a temporal filter as in TFAA or in well known industry 
 These Settings are implemented as preprocessor defines instead of runtime branching for performance reasons.
 
 |  |  |  |  |
-|---|---|---|---|
+|:-|:-|:-|:-|
 | [**`TFAA_SAMPLING_METHOD`**](#history-resampling) | [**Value**]() | [**Samples**]() | [**Description**]() |
 | *BILINEAR* | *`0`* | 1-tap | Hardware [bilinear](https://en.wikipedia.org/wiki/Bilinear_interpolation) tap |
 | **CATMULLROM** | **`1`** | 5-tap | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
@@ -107,22 +107,23 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 | *FSR EASU* | *`5`* | 12-tap | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
 |  |  |  |
 | [**`TFAA_RECTIFY_COLOR_SPACE`**](#color-rectification-visualization) | [**Value**]() | [**Channels**]() | [**Description**]() |
-| *RGB* | *`0`* | **R**: Red.<br>**G**: Green.<br>**B**: Blue. | No color transform (identity); loosest rectification bounds. Most blurring and most color deviation artifacts.|
-| *YCbCr* | *`1`* | **Y**: BT.601 luma.<br>**Cb**: blue-yellow axis.<br>**Cr**: red-cyan axi. | ITU-R BT.601 / JPEG-style full-range chroma scales (not broadcast limited-range packing). Chrominance more correlated acro ss axes than YCoCg; rectify path stores Cb/Cr with **+0.5** offset so all axes are in [0,1].
-| **YCoCg** | **`2`** | **Y**: (R+2G+B)/4 luma.<br>**Co**: orange-cyan axis.<br>**Cg**: green-magenta axis. | Malvar & Sullivan (2003 YCoCg); orthogonal chroma, more decorrelated than YCbCr. Shader uses the linear-float form here (papers show integer-shift variants); rectify path stores Co/Cg with **+0.5** offset so all axes are in [0,1]. | 
+| *RGB* | *`0`* | **R**: $\color{red}{\textsf{Red}}$<br>**G**: $\color{green}{\textsf{Green}}$<br>**B**: $\color{blue}{\textsf{Blue}}$ | No color transform (identity); loosest rectification bounds. Most blurring and most color deviation artifacts.|
+| *YCbCr* | *`1`* | **Y**: BT.601 **luma**<br>**Cb**: $\color{blue}{\textsf{blue}}$-$\color{yellow}{\textsf{yellow}}$<br>**Cr**: $\color{red}{\textsf{red}}$-$\color{cyan}{\textsf{cyan}}$ | ITU-R BT.601 / JPEG-style full-range chroma scales (not broadcast limited-range packing). Chrominance more correlated across axes than YCoCg. Rectify path stores Cb/Cr with **+0.5** offset so all axes are in [0,1]. |
+| **YCoCg** | **`2`** | **Y**: (R+2G+B)/4 **luma**<br>**Co**: $\color{orange}{\textsf{orange}}$-$\color{cyan}{\textsf{cyan}}$<br>**Cg**: $\color{green}{\textsf{green}}$-$\color{magenta}{\textsf{magenta}}$ | Malvar & Sullivan (2003 YCoCg); orthogonal chroma, more decorrelated than YCbCr. Rectify path stores Co/Cg with **+0.5** offset so all axes are in [0,1]. |
 |  |  |  |
-| [**`TFAA_RECTIFY_OP`**](#history-rectification) | [**Value**]() | [**Stability**]() | [**Description**]() |
-| *CLAMP*         | *`0`* | *Ok* (3/5)    | Clamp history to the AABB. (**`TFAA_RECTIFY_SHAPE`** is ignored). |  |
-| *CLIP_NEAREST*  | *`1`* | *Great* (**5/5**) | Ray clip towards neighborhood sample **closest** to history in rectification space. |  |
-| *CLIP_MEAN*     | *`2`* | *Ok* (3/5)    | Ray clip towards the nine-tap arithmetic **average**. |  |
-| *CLIP_CENTROID* | *`3`* | *Ok* (3/5)    | Ray clip towards the per-channel **midpoint** `(min+max)/2`. |  |
-| **CLIP_CURRENT**  | **`4`** | *Ok* (3/5)    | Ray clip towards the **current** pixel. |  |
+| [**`TFAA_RECTIFY_OP`**](#history-rectification) | [**Value**]() |  | [**Description**]() |
+| *CLAMP*         | *`0`* |   | Clamp history to the AABB. (**`TFAA_RECTIFY_SHAPE`** is ignored). |  |
+| *CLIP_NEAREST*  | *`1`* |  | Ray clip towards neighborhood sample **closest** to history in rectification space. |  |
+| *CLIP_MEAN*     | *`2`* |  | Ray clip towards the nine-tap arithmetic **average**. |  |
+| *CLIP_CENTROID* | *`3`* |  | Ray clip towards the per-channel **midpoint** `(min+max)/2`. |  |
+| **CLIP_CURRENT**  | **`4`** |  | Ray clip towards the **current** pixel. |  |
 |  |  |  |
-| [**`TFAA_RECTIFY_SHAPE`**](#history-rectification) | [**Value**]() | [**Shape**]() | [**Description**]() |
-| *AABB* | *`0`* | **3**-axis<br>**6**-faces<br>Box | 3-axis bounding box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
-| **14-DOP** | **`1`** | **7**-axis<br>**14**-faces<br>Box with cut corners | 7-axis - bounding box + corners |  |
-| *18-DOP* | *`2`* | **9**-axis<br>**18**-faces<br>Box with cut edges | 9-axis - bounding box + edges |  |
-| *26-DOP* | *`3`* | **13**-axis<br>**26**-faces<br>Box with cut corners and edges | 13-axis - bounding box + edges + corners |  |
+| [**`TFAA_RECTIFY_SHAPE`**](#history-rectification) | [**Value**]() |  | [**Description**]() |
+| *AABB* | *`0`* |  | **3**-axis<br>**6**-faces<br>Box - classic axis-aligned box used for clipping/clamping in common industry TAA solutions. |  |
+| **14-DOP** | **`1`** |  | **7**-axis<br>**14**-faces<br>Box with cut corners |  |
+| *18-DOP* | *`2`* |  | **9**-axis<br>**18**-faces<br>Box with cut edges |  |
+| *26-DOP* | *`3`* |  | **13**-axis<br>**26**-faces<br>Box with cut corners and edges |
+|_________________________________|______|_______________________|____________________________________________________________________|
 |  |  |  |
 
 
@@ -133,7 +134,7 @@ These Settings are implemented as preprocessor defines instead of runtime branch
 
 ## History Resampling
 
-When TFAA reads **history data**, the sample position will most likely sit at a **subpixel positon**. Depending on what method is used to sample, the results can vary greatly. Cheaper methods generally blur more, expensive methods tend to preserve more detail but might also introduce more artifacts.
+When TFAA reads **history data**, the sample position will most likely sit at a **subpixel positon**. Depending on what method is used to interpolate between real data points, the results can vary greatly. Cheaper methods generally blur more, expensive methods tend to preserve more detail but might also introduce more artifacts.
 
 Below you can see some examples of how the differnt sampling methods behave when sampling at subpixel positions **0.125**, **0.25**, and **0.5**.
 
@@ -310,7 +311,14 @@ Below you can see some examples of how the differnt sampling methods behave when
 ---
 </br>
 
+## History Validation
+After a sample from the history buffer is taken, we need to find out if it is plausible that this sample belongs to our pixel in the current frame.
+We do this primarily by checking for depth discontinuities and specifically disocclusion. This is important to avoid artifacts like ghosting.
+If a sample is considered to be invalid, it is discared completly and only the data from teh new frame is considered.
+
+
 ## History Rectification
+After a potentialy valid 
 
 <!-- RECTIFICATION_BASICS_START -->
 <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin:12px 0;">
