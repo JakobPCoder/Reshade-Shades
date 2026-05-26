@@ -1,11 +1,10 @@
 /*=============================================================================
-    TFAA (1.1.2)
+    TFAA (2.0)
     Temporal Filter Anti-Aliasing Shader
-    First published 2022 - Copyright, Jakob Wapenhensch
+    Copyright, Jakob Wapenhensch
     License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/)
     https://creativecommons.org/licenses/by-nc/4.0/legalcode
 =============================================================================*/
-
 
 
 #include "ReShadeUI.fxh"

@@ -12,7 +12,7 @@ For now only the TFAA.fx shader has been updated.
     - [B. Manual](#b-manual)
 - [TFAA.fx](#tfaafx)
   - [What it is](#what-it-is)
-  - [Compatible Spatial Anti-Aliasing Methods](#compatible-spatial-anti-aliasing-methods)
+  - [Compatible Spatial Anti-Aliasing Methods (selection, non exclusive)](#compatible-spatial-anti-aliasing-methods-selection-non-exclusive)
   - [Examples of non-compatible Anti-Aliasing Methods](#examples-of-non-compatible-anti-aliasing-methods)
   - [How it works](#how-it-works)
   - [Runtime Settings](#runtime-settings)

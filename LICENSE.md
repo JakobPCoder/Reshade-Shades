@@ -5,7 +5,7 @@
 <!-- LICENSE_THIRD_PARTY_START -->
 ## Third-party code in this project
 
-Some parts of the shaders in this repository are derived from or incorporate third-party code and are licensed separately as follows.
+Some parts of the shaders in this repositor   y are derived from or incorporate third-party code and are licensed separately as follows.
 
 ### MIT License — FidelityFX FSR RCAS (AMD)
 
@@ -13,7 +13,7 @@ Some parts of the shaders in this repository are derived from or incorporate thi
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `helpers.fxh` lines 156–211 — FidelityFX FSR RCAS
+  - `helpers.fxh` lines 83–121 — FidelityFX FSR RCAS
 
 ### MIT License — FidelityFX FSR EASU (AMD)
 
@@ -21,7 +21,7 @@ Some parts of the shaders in this repository are derived from or incorporate thi
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `samplers.fxh` lines 158–366 — FidelityFX FSR EASU
+  - `samplers.fxh` lines 128–259 — FidelityFX FSR EASU
 
 ### MIT License — FidelityFX CAS (AMD)
 
@@ -29,7 +29,7 @@ Some parts of the shaders in this repository are derived from or incorporate thi
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `TFAA.fx` lines 766–769 — FidelityFX CAS
+  - `TFAA.fx` lines 568–571 — FidelityFX CAS
 
 ---
 

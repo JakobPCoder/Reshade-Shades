@@ -119,7 +119,7 @@ DEFINE_VARIANTS(sample_lanczos3_basic, (sampler source, float2 texcoord), SAMPLE
 DEFINE_VARIANTS(sample_lanczos4_basic, (sampler source, float2 texcoord), SAMPLE_LANCZOS4_BASIC)
 
 
-/* SHADES_LICENSE_ATTRIBUTION The next 209 lines of code below were ported from, or are more than functionally equivalent to, FidelityFX FSR EASU by AMD and are licensed under MIT License (https://opensource.org/license/mit) only; the remainder of this file is not. */
+/* SHADES_LICENSE_ATTRIBUTION The next 132 lines of code below were ported from, or are more than functionally equivalent to, FidelityFX FSR EASU by AMD and are licensed under MIT License (https://opensource.org/license/mit) only; the remainder of this file is not. */
 
 void _easu_tap(
     inout float3 aC, inout float aW,
@@ -253,4 +253,5 @@ float4 sample_easu_same(sampler2D s, float2 uv)
     int2 sz = tex2Dsize(s, 0);
     return sample_easu_p(s, uv, sz, sz);
 }
+
 
