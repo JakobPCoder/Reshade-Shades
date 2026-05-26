@@ -46,7 +46,7 @@ If ReShade is already installed for that game, you can install the shaders manua
 2. Download the whole repo and drop the `/Shaders` and `/Textures` folders into the `./reshade-shaders` folder.
 3. In the ReShade settings add the `/Shaders/Shades` and `/Textures/Shades` folders to the "Texture Search Paths" and "Effect Search Paths" respectively.
 
-# **TFAA**.*fx*
+# **TFAA**.*fx*  *2.0*
 ## **What it is**
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [ReShade](https://reshade.me/) shader.
 
