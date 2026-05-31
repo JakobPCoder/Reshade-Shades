@@ -33,13 +33,13 @@ For now only the TFAA.fx shader has been updated.
 
 
 ## **Installation**
-### *A. ReShade installer* (SOON)
-1. *Run the [ReShade](https://reshade.me/) installer.*
-2. *Select your target game.*
-3. *Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).*
-4. *If you already have ReShade installed for that game, select: `Update ReShade and Effects`.*
-5. *Toggle the checkmark on `Shades`.*
-6. *Click on next or continue to install.*
+### A. ReShade installer
+1. Run the [ReShade](https://reshade.me/) installer.
+2. Select your target game.
+3. Select the correct rendering API (DirectX 9, 10, 11, 12, OpenGL or Vulkan).
+4. If you already have ReShade installed for that game, select: `Update ReShade and Effects`.
+5. Toggle the checkmark on `Shades`.
+6. Click on next or continue to install.
 ### B. Manual 
 If ReShade is already installed for that game, you can install the shaders manually by:
 1. Locating the game's executable `.exe` file. Next to it you will find a folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
