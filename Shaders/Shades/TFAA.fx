@@ -13,9 +13,6 @@
 #include "helpers.fxh"
 
 
-#ifndef UI_DEBUG
-	#define UI_DEBUG 0
-#endif
 
 
 
@@ -39,6 +36,9 @@
 	#define TFAA_MOTION_SOURCE 0
 #endif
 
+#ifndef UI_DEBUG
+	#define UI_DEBUG 0
+#endif
 
 #if TFAA_RECTIFY_SHAPE == 3
 	#define TFAA_KDOP_AXIS_LIMIT_BY_SHAPE 13
@@ -655,6 +655,11 @@ technique TFAA
 		"14-DOP           17 ax / 14 fc        Box with cut corners. [default]\n"
 		"18-DOP           29 ax / 18 fc        Box with cut edges.\n"
 		"26-DOP           313 ax / 26 fc       Box with cut corners and edges.\n"
+		"\n"
+		"TFAA_MOTION_SOURCE\n"
+		"LAUNCHPAD        0                    Uses MartysMods_LAUNCHPAD.fx\n"
+		"                                      [default]\n"
+		"LUMENITE_KERNEL   1                    Uses lumenite_Kernel.fx\n"
 		"\n"
 		"UI_DEBUG\n"
 		"off              0                    Depth rejection and color\n"

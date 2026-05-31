@@ -10,6 +10,7 @@ For now only the TFAA.fx shader has been updated.
   - [Installation](#installation)
     - [A. ReShade installer](#a-reshade-installer)
     - [B. Manual](#b-manual)
+    - [For both](#for-both)
 - [TFAA.fx 2.0](#tfaafx-20)
   - [What it is](#what-it-is)
   - [Compatible Spatial Anti-Aliasing Methods (selection, non exclusive)](#compatible-spatial-anti-aliasing-methods-selection-non-exclusive)
@@ -586,11 +587,12 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 5. Catmull-Rom https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline
 6. Lanczos-2 https://en.wikipedia.org/wiki/Lanczos_resampling
 7. AMD FidelityFX EASU https://github.com/GPUOpen-Effects/FidelityFX-FSR
-8. LAUNCHPAD https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx
-9. ReShade https://reshade.me/
-10. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
-11. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
-12. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
+8. iMMERSE LAUNCHPAD https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx
+9. Lumenite Kernel https://github.com/umar-afzaal/LumeniteFX/blob/mainline/Shaders/lumenite_Kernel.fx
+10. ReShade https://reshade.me/
+11. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
+12. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
+13. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
 <!-- README_REFERENCES_END -->
 
 <!-- README_ASSETS_START -->
