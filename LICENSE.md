@@ -5,7 +5,7 @@
 <!-- LICENSE_THIRD_PARTY_START -->
 ## Third-party code in this project
 
-Some parts of the shaders in this repositor   y are derived from or incorporate third-party code and are licensed separately as follows.
+Some parts of the shaders in this repository are derived from or incorporate third-party code and are licensed separately as follows.
 
 ### MIT License — FidelityFX FSR RCAS (AMD)
 
@@ -29,7 +29,7 @@ Some parts of the shaders in this repositor   y are derived from or incorporate 
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `TFAA.fx` lines 568–571 — FidelityFX CAS
+  - `TFAA.fx` lines 595–598 — FidelityFX CAS
 
 ---
 

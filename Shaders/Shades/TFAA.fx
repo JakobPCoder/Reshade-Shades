@@ -35,6 +35,10 @@
 	#define TFAA_RECTIFY_SHAPE 1
 #endif
 
+#ifndef TFAA_MOTION_SOURCE
+	#define TFAA_MOTION_SOURCE 0
+#endif
+
 
 #if TFAA_RECTIFY_SHAPE == 3
 	#define TFAA_KDOP_AXIS_LIMIT_BY_SHAPE 13
@@ -344,6 +348,7 @@ float3 ClipRayKDOP(float3 history, float3 anchor, float3 aabbMin, float3 aabbMax
 #endif
 
 
+#if TFAA_MOTION_SOURCE == 0
 namespace Deferred
 {
     texture MotionVectorsTex {
@@ -355,10 +360,33 @@ namespace Deferred
         Texture = MotionVectorsTex;
     };
 
-    float2 get_motion(float2 uv)
+    float2 get_motion_launchpad(float2 uv)
     {
         return tex2Dlod(sMotionVectorsTex, uv, 0).xy;
     }
+}
+#endif
+
+#if TFAA_MOTION_SOURCE == 1
+namespace Kernel
+{
+    texture2D tFlow { Width = BUFFER_WIDTH / 8; Height = BUFFER_HEIGHT / 8; Format = RG16F; };
+    sampler2D sFlow { Texture = tFlow; MagFilter = POINT; MinFilter = POINT; };
+
+    float2 get_motion_lumenite(float2 uv)
+    {
+        return tex2Dlod(Kernel::sFlow, float4(uv, 0, 0)).xy;
+    }
+}
+#endif
+
+float2 get_motion(float2 uv)
+{
+#if TFAA_MOTION_SOURCE == 0
+    return Deferred::get_motion_launchpad(uv);
+#else
+    return Kernel::get_motion_lumenite(uv);
+#endif
 }
 
 
@@ -440,7 +468,7 @@ float4 PassTemporalFilter(float4 position : SV_Position, float2 texcoord : TEXCO
 #endif
     }
 
-    float2 motion = Deferred::get_motion(texcoord + (nOffsets[closestDepthIndex] * ReShade::PixelSize));
+    float2 motion = get_motion(texcoord + (nOffsets[closestDepthIndex] * ReShade::PixelSize));
 
     float2 lastSamplePos = texcoord + motion;
 

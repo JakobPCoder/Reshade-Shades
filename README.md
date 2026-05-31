@@ -8,9 +8,9 @@ For now only the TFAA.fx shader has been updated.
 - [Shades](#shades)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
-    - [A. ReShade installer (SOON)](#a-reshade-installer-soon)
+    - [A. ReShade installer](#a-reshade-installer)
     - [B. Manual](#b-manual)
-- [TFAA.fx](#tfaafx)
+- [TFAA.fx 2.0](#tfaafx-20)
   - [What it is](#what-it-is)
   - [Compatible Spatial Anti-Aliasing Methods (selection, non exclusive)](#compatible-spatial-anti-aliasing-methods-selection-non-exclusive)
   - [Examples of non-compatible Anti-Aliasing Methods](#examples-of-non-compatible-anti-aliasing-methods)
@@ -28,7 +28,7 @@ For now only the TFAA.fx shader has been updated.
 ## **Dependencies**
 - [ReShade](https://reshade.me/) being installed and configured correctly.
 - The **depth buffer** being available and configured correctly. (Check via DisplayDepth.fx)
-- [LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx) being installed with all its dependencies. (Just install the IMMERSE shader pack when installing ReShade.)
+- [iMMERSE LAUNCHPAD](https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx) or [Lumenite Kernel](https://github.com/umar-afzaal/LumeniteFX/blob/mainline/Shaders/lumenite_Kernel.fx) being installed with all its dependencies. (Just install one of the two shader packs via the ReShade installer.)
 - Some **spatial anti-aliasing** method being run either in-game or via ReShade **before TFAA**.
 
 
@@ -45,6 +45,9 @@ If ReShade is already installed for that game, you can install the shaders manua
 1. Locating the game's executable `.exe` file. Next to it you will find a folder named `./reshade-shaders` with subfolders `/Shaders` and `/Textures`.
 2. Download the whole repo and drop the `/Shaders` and `/Textures` folders into the `./reshade-shaders` folder.
 3. In the ReShade settings add the `/Shaders/Shades` and `/Textures/Shades` folders to the "Texture Search Paths" and "Effect Search Paths" respectively.
+
+### For both
+Make sure either iMMERSE LAUNCHPAD or Lumenite Kernel is activated an ontop/before TFAA. Spatial anti-aliasing must be run before TFAA in the shader chain.
 
 # **TFAA**.*fx*  *2.0*
 ## **What it is**
@@ -172,7 +175,10 @@ These settings are implemented as preprocessor defines instead of runtime branch
 | *18-DOP* | *`2`* |  | **9**-axis \| **18** - faces \| Box with cut edges.<br> |  |
 | *26-DOP* | *`3`* |  | **13**-axis \| **26** - faces \| Box with cut corners and edges.<br> |
 |  |  |  |
-
+| [**`TFAA_MOTION_SOURCE`**](#how-it-works) | [**Value**]() |  | [**Description**]() |
+| **LAUNCHPAD**     | **`0`** |  | Uses MartysMods_LAUNCHPAD.fx [default] |
+| *LUMENITE_KERNEL* |  *`1`*  |  | Uses  lumenite_Kernel.fx |
+|  |  |  |
 
 
 
