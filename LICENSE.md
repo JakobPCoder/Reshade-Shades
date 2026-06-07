@@ -25,7 +25,7 @@ The following shader portions are licensed separately:
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `samplers.fxh` lines 427–635 — FidelityFX FSR EASU
+  - `samplers.fxh` lines 481–689 — FidelityFX FSR EASU
 
 ### MIT License — FidelityFX CAS (AMD)
 
