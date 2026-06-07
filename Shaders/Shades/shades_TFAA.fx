@@ -1,23 +1,20 @@
 /*=============================================================================
-    TFAA (2.0)
+    TFAA (2.0.1)
     Temporal Filter Anti-Aliasing Shader
     Copyright, Jakob Wapenhensch
-    License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/)
-    https://creativecommons.org/licenses/by-nc/4.0/legalcode
+    License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+    https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 =============================================================================*/
 
 
 #include "ReShadeUI.fxh"
 #include "ReShade.fxh"
-#include "samplers.fxh"
-#include "helpers.fxh"
-
-
-
+#include "shades_samplers.fxh"
+#include "shades_helpers.fxh"
 
 
 #ifndef TFAA_SAMPLING_METHOD
-	#define TFAA_SAMPLING_METHOD 1
+	#define TFAA_SAMPLING_METHOD 5
 #endif
 
 #ifndef TFAA_RECTIFY_COLOR_SPACE
@@ -236,17 +233,21 @@ float4 sampleHistory(sampler2D historySampler, float2 texcoord)
 #if TFAA_SAMPLING_METHOD == 0
     return tex2Dlod(historySampler, texcoord, 0);
 #elif TFAA_SAMPLING_METHOD == 1
-    return sample_catmullrom_rgba(historySampler, texcoord);
+    return sample_lanczos2_5tap_fast_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 2
-    return sample_lanczos2_basic_rgba(historySampler, texcoord);
+    return sample_lanczos2_9tap_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 3
-    return sample_lanczos3_basic_rgba(historySampler, texcoord);
+    return sample_lanczos3_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 4
-    return sample_lanczos4_basic_rgba(historySampler, texcoord);
+    return sample_lanczos4_rgba(historySampler, texcoord);
 #elif TFAA_SAMPLING_METHOD == 5
+    return sample_catmullrom_5tap_fast_rgba(historySampler, texcoord);
+#elif TFAA_SAMPLING_METHOD == 6
+    return sample_catmullrom_9tap_rgba(historySampler, texcoord);
+#elif TFAA_SAMPLING_METHOD == 7
     return sample_easu_same(historySampler, texcoord);
 #else
-    return sample_catmullrom_rgba(historySampler, texcoord);
+    return sample_lanczos2_5tap_fast_rgba(historySampler, texcoord);
 #endif
 }
 
@@ -346,6 +347,7 @@ float3 ClipRayKDOP(float3 history, float3 anchor, float3 aabbMin, float3 aabbMax
     return anchor + rayDir * minT;
 }
 #endif
+
 
 
 #if TFAA_MOTION_SOURCE == 0
@@ -606,66 +608,93 @@ technique TFAA
 		"Requires motion vectors (e.g. LAUNCHPAD.fx).\n"
 		"Preprocessor defines (no runtime branching):\n"
 		"\n"
-		"Name            Val  Info                  Description\n"
+		"                 Value  Samples                Description\n"
 		"------------------------------------------------------------------------\n"
 		"TFAA_SAMPLING_METHOD\n"
-		"BILINEAR         01-tap               Hardware bilinear tap\n"
-		"CATMULLROM       15-tap               Catmull-Rom [default]\n"
-		"LANCZOS2         216-tap              Lanczos-2\n"
-		"LANCZOS3         336-tap              Lanczos-3\n"
-		"LANCZOS4         464-tap              Lanczos-4\n"
-		"FSR EASU ()      512-tap              AMD FidelityFX EASU\n"
+		"BILINEAR         0      1-tap                  Hardware bilinear tap\n"
+		"LANCZOS2_5TAP    1      5-tap                  Lanczos-2 fast (corners\n"
+		"                                               omitted)\n"
+		"LANCZOS2_9TAP    2      9-tap                  Lanczos-2 full optimized\n"
+		"                                               merge\n"
+		"LANCZOS3         3      25-tap                 Lanczos-3 full optimized\n"
+		"                                               merge\n"
+		"LANCZOS4         4      49-tap                 Lanczos-4 full optimized\n"
+		"                                               merge\n"
+		"CATMULLROM_5TAP  5      5-tap                  Catmull-Rom fast (corners\n"
+		"                                               omitted) [default]\n"
+		"CATMULLROM_9TAP  6      9-tap                  Catmull-Rom\n"
+		"FSR EASU ()      7      12-tap                 AMD FidelityFX EASU\n"
 		"\n"
 		"TFAA_RECTIFY_COLOR_SPACE\n"
-		"RGB              0R, G, B             No color transform (identity);\n"
-		"                                      loosest rectification bounds. Most\n"
-		"                                      blurring and most color deviation\n"
-		"                                      artifacts.\n"
-		"YCbCr            1Y, Cb, Cr (+0.5)    ITU-R BT.601 / JPEG-style\n"
-		"                                      full-range chroma scales (not\n"
-		"                                      broadcast limited-range packing).\n"
-		"                                      Chrominance more correlated across\n"
-		"                                      axes than YCoCg. Rectify path\n"
-		"                                      stores Cb/Cr with +0.5 offset so\n"
-		"                                      all axes are in [0,1].\n"
-		"YCoCg            2Y, Co, Cg (+0.5)    Malvar & Sullivan (2003 YCoCg);\n"
-		"                                      orthogonal chroma, more\n"
-		"                                      decorrelated than YCbCr. Rectify\n"
-		"                                      path stores Co/Cg with +0.5 offset\n"
-		"                                      so all axes are in [0,1].\n"
-		"                                      [default]\n"
+		"RGB              0      R: G: B:               No color transform\n"
+		"                                               (identity); loosest\n"
+		"                                               rectification bounds.\n"
+		"                                               Most blurring and most\n"
+		"                                               color deviation\n"
+		"                                               artifacts. [default]\n"
+		"YCbCr            1      Y: BT.601 Cb: Cr:      ITU-R BT.601 / JPEG-style\n"
+		"                                               full-range chroma scales\n"
+		"                                               (not broadcast\n"
+		"                                               limited-range packing).\n"
+		"                                               Chrominance more\n"
+		"                                               correlated across axes\n"
+		"                                               than YCoCg. Rectify path\n"
+		"                                               stores Cb/Cr with +0.5\n"
+		"                                               offset so all axes are in\n"
+		"                                               [0,1]. [default]\n"
+		"YCoCg            2      Y: (R+2G+B)/4 Co: Cg:  Malvar & Sullivan (2003\n"
+		"                                               YCoCg); orthogonal\n"
+		"                                               chroma, more decorrelated\n"
+		"                                               than YCbCr. Rectify path\n"
+		"                                               stores Co/Cg with +0.5\n"
+		"                                               offset so all axes are in\n"
+		"                                               [0,1]. [default]\n"
 		"\n"
 		"TFAA_RECTIFY_OP\n"
-		"CLAMP            0                    Clamp history to the AABB.\n"
-		"                                      (TFAA_RECTIFY_SHAPE is ignored).\n"
-		"CLIP_NEAREST     1                    Ray clip towards neighborhood\n"
-		"                                      sample closest to history in\n"
-		"                                      rectification space.\n"
-		"CLIP_MEAN        2                    Ray clip towards the nine-tap\n"
-		"                                      arithmetic average.\n"
-		"CLIP_CENTROID    3                    Ray clip towards the per-channel\n"
-		"                                      midpoint (min+max)/2.\n"
-		"CLIP_CURRENT     4                    Ray clip towards the current\n"
-		"                                      pixel. [default]\n"
+		"CLAMP            0                             Clamp history to the\n"
+		"                                               AABB. (TFAA_RECTIFY_SHAPE\n"
+		"                                               is ignored). [default]\n"
+		"CLIP_NEAREST     1                             Ray clip towards\n"
+		"                                               neighborhood sample\n"
+		"                                               closest to history in\n"
+		"                                               rectification space.\n"
+		"                                               [default]\n"
+		"CLIP_MEAN        2                             Ray clip towards the\n"
+		"                                               nine-tap arithmetic\n"
+		"                                               average. [default]\n"
+		"CLIP_CENTROID    3                             Ray clip towards the\n"
+		"                                               per-channel midpoint\n"
+		"                                               (min+max)/2. [default]\n"
+		"CLIP_CURRENT     4                             Ray clip towards the\n"
+		"                                               current pixel. [default]\n"
 		"\n"
-		"TFAA_RECTIFY_SHAPE (CLIP ops 1-4 only; ignored when op=CLAMP)\n"
-		"AABB             03 ax / 6 fc         Box - classic axis-aligned box\n"
-		"                                      used for clipping/clamping in\n"
-		"                                      common industry TAA solutions.\n"
-		"14-DOP           17 ax / 14 fc        Box with cut corners. [default]\n"
-		"18-DOP           29 ax / 18 fc        Box with cut edges.\n"
-		"26-DOP           313 ax / 26 fc       Box with cut corners and edges.\n"
+		"TFAA_RECTIFY_SHAPE\n"
+		"AABB             0                             3-axis | 6-faces Box -\n"
+		"                                               classic axis-aligned box\n"
+		"                                               used for\n"
+		"                                               clipping/clamping in\n"
+		"                                               common industry TAA\n"
+		"                                               solutions. [default]\n"
+		"14-DOP           1                             7-axis | 14 - faces | Box\n"
+		"                                               with cut corners.\n"
+		"                                               [default]\n"
+		"18-DOP           2                             9-axis | 18 - faces | Box\n"
+		"                                               with cut edges. [default]\n"
+		"26-DOP           3                             13-axis | 26 - faces |\n"
+		"                                               Box with cut corners and\n"
+		"                                               edges. [default]\n"
 		"\n"
 		"TFAA_MOTION_SOURCE\n"
-		"LAUNCHPAD        0                    Uses MartysMods_LAUNCHPAD.fx\n"
-		"                                      [default]\n"
-		"LUMENITE_KERNEL   1                    Uses lumenite_Kernel.fx\n"
-		"\n"
+		"LAUNCHPAD        0                             Uses\n"
+		"                                               MartysMods_LAUNCHPAD.fx\n"
+		"                                               [default]\n"
+		"LUMENITE_KERNEL  1                             Uses lumenite_Kernel.fx\n"
 		"UI_DEBUG\n"
-		"off              0                    Depth rejection and color\n"
-		"                                      rectification always on\n"
-		"on               1                    Debug UI (toggle rectification /\n"
-		"                                      depth rejection)\n";
+		"off              0                             Depth rejection and color\n"
+		"                                               rectification always on\n"
+		"on               1                             Debug UI (toggle\n"
+		"                                               rectification / depth\n"
+		"                                               rejection)\n";
 >
 {
     pass PassSavePre

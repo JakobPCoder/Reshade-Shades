@@ -1,11 +1,15 @@
 # License
 
-**Attribution-NonCommercial-NoDerivatives 4.0 International** · official pages: [https://creativecommons.org/licenses/by-nc-nd/4.0/deed](https://creativecommons.org/licenses/by-nc-nd/4.0/deed) (deed) · [https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode) (legal code)
+**Shades** is a collection of ReShade shaders.
+
+Most of this project is licensed under **Attribution-NonCommercial-NoDerivatives 4.0 International** ([human-readable summary](https://creativecommons.org/licenses/by-nc-nd/4.0/deed) · [legal code](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode)).
+
+Some shader sections use third-party code under separate licenses; those portions are listed under [Third-party licenses](#third-party-licenses) below. Everything else is covered by the license text that follows.
 
 <!-- LICENSE_THIRD_PARTY_START -->
-## Third-party code in this project
+## Third-party licenses
 
-Some parts of the shaders in this repository are derived from or incorporate third-party code and are licensed separately as follows.
+The following shader portions are licensed separately:
 
 ### MIT License — FidelityFX FSR RCAS (AMD)
 
@@ -13,7 +17,7 @@ Some parts of the shaders in this repository are derived from or incorporate thi
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `helpers.fxh` lines 83–121 — FidelityFX FSR RCAS
+  - `helpers.fxh` lines 156–211 — FidelityFX FSR RCAS
 
 ### MIT License — FidelityFX FSR EASU (AMD)
 
@@ -21,7 +25,7 @@ Some parts of the shaders in this repository are derived from or incorporate thi
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `samplers.fxh` lines 128–259 — FidelityFX FSR EASU
+  - `samplers.fxh` lines 427–635 — FidelityFX FSR EASU
 
 ### MIT License — FidelityFX CAS (AMD)
 
@@ -29,11 +33,9 @@ Some parts of the shaders in this repository are derived from or incorporate thi
 - **License:** MIT License
 - **License link:** <https://opensource.org/license/mit>
 - **Portions:**
-  - `TFAA.fx` lines 595–598 — FidelityFX CAS
+  - `TFAA.fx` lines 807–810 — FidelityFX CAS
 
 ---
-
-All other code in this project is licensed under the terms below.
 <!-- LICENSE_THIRD_PARTY_END -->
 
 ---

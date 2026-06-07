@@ -1,6 +1,6 @@
 # Shades
 Shades is a collection of my updated ReShade shaders. 
-For now only the TFAA.fx shader has been updated.
+For now only the shades_TFAA.fx shader has been updated.
 
 <!-- README_TOC_START -->
 ## Table of contents
@@ -11,7 +11,7 @@ For now only the TFAA.fx shader has been updated.
     - [A. ReShade installer](#a-reshade-installer)
     - [B. Manual](#b-manual)
     - [For both](#for-both)
-- [TFAA.fx 2.0](#tfaafx-20)
+- [shades_TFAA.fx 2.0](#shadestfaafx-20)
   - [What it is](#what-it-is)
   - [Compatible Spatial Anti-Aliasing Methods (selection, non exclusive)](#compatible-spatial-anti-aliasing-methods-selection-non-exclusive)
   - [Examples of non-compatible Anti-Aliasing Methods](#examples-of-non-compatible-anti-aliasing-methods)
@@ -22,6 +22,9 @@ For now only the TFAA.fx shader has been updated.
   - [History Validation](#history-validation)
   - [History Rectification](#history-rectification)
 - [LICENSE](#license)
+  - [Changelog](#changelog)
+    - [2.0.1](#201)
+    - [2.0](#20)
 - [References](#references)
 - [Figures and assets](#figures-and-assets)
 <!-- README_TOC_END -->
@@ -50,7 +53,7 @@ If ReShade is already installed for that game, you can install the shaders manua
 ### For both
 Make sure either iMMERSE LAUNCHPAD or Lumenite Kernel is activated an ontop/before TFAA. Spatial anti-aliasing must be run before TFAA in the shader chain.
 
-# **TFAA**.*fx*  *2.0*
+# **shades_TFAA.fx**  *2.0*
 ## **What it is**
 **TFAA** is a purely temporal anti-aliasing component, used to get the closest thing to real temporal anti-aliasing possible in a [ReShade](https://reshade.me/) shader.
 
@@ -71,11 +74,11 @@ Pair **TFAA** with any in-game anti-aliasing that preserves depth buffer access,
 
 ## Compatible Spatial Anti-Aliasing Methods (selection, non exclusive)
 
-- ["Post Anti-Aliasing"]() Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
-- [FXAA](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf) Fast Approximate Anti-Aliasing
-- [MLAA](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf) Morphological Anti-Aliasing
-- [CMAA](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html) Conservative Morphological Anti-Aliasing
-- [SMAA](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) Subpixel Morphological Anti-Aliasing. Only ones that do not already include a temporal component
+- $\color{green}{\textsf{Post Anti-Aliasing}}$  Whatever is listed as *"Post Anti-Aliasing"* in the game's settings should work, as long as it does not have a temporal component.
+- $\color{green}{\textsf{FXAA}}$ [Fast Approximate Anti-Aliasing](https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf)
+- $\color{green}{\textsf{MLAA}}$ [Morphological Anti-Aliasing](https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf)
+- $\color{green}{\textsf{CMAA}}$ [Conservative Morphological Anti-Aliasing](https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html)
+- $\color{green}{\textsf{SMAA}}$ [Subpixel Morphological Anti-Aliasing](https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf) — Only ones that do not already include a temporal component
     - These ones make sense to use with TFAA:
         - $\color{green}{\textsf{SMAA}}$ - *Original*
         - $\color{green}{\textsf{SMAA}}$ **1x** - *Same as "SMAA"*
@@ -152,11 +155,13 @@ These settings are implemented as preprocessor defines instead of runtime branch
 |:-|:-|:-|:-|
 | [**`TFAA_SAMPLING_METHOD`**](#history-resampling) | [**Value**]() | [**Samples**]() | [**Description**]() |
 | *BILINEAR* | *`0`* | 1-tap | Hardware [bilinear](https://en.wikipedia.org/wiki/Bilinear_interpolation) tap |
-| **CATMULLROM** | **`1`** | 5-tap | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
-| *LANCZOS2* | *`2`* | 16-tap | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-| *LANCZOS3* | *`3`* | 36-tap | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-| *LANCZOS4* | *`4`* | 64-tap | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) |
-| *FSR EASU* ($\color{red}{\textsf{BROKEN}}$) | *`5`* | 12-tap | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR)  |
+| *LANCZOS2_5TAP* | *`1`* | 5-tap | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) fast (corners omitted) |
+| *LANCZOS2_9TAP* | *`2`* | 9-tap | [Lanczos-2](https://en.wikipedia.org/wiki/Lanczos_resampling) full optimized merge |
+| *LANCZOS3* | *`3`* | 25-tap | [Lanczos-3](https://en.wikipedia.org/wiki/Lanczos_resampling) full optimized merge |
+| *LANCZOS4* | *`4`* | 49-tap | [Lanczos-4](https://en.wikipedia.org/wiki/Lanczos_resampling) full optimized merge |
+| **CATMULLROM_5TAP** | **`5`** | 5-tap | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) fast (corners omitted)  |
+| *CATMULLROM_9TAP* | *`6`* | 9-tap | [Catmull-Rom](https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline) |
+| *FSR EASU* ($\color{red}{\textsf{BROKEN}}$) | *`7`* | 12-tap | [AMD FidelityFX EASU](https://github.com/GPUOpen-Effects/FidelityFX-FSR) |
 |  |  |  |
 | [**`TFAA_RECTIFY_COLOR_SPACE`**](#color-rectification-visualization) | [**Value**]() | [**Channels**]() | [**Description**]() |
 | *RGB* | *`0`* | **R**: $\color{red}{\textsf{Red}}$<br>**G**: $\color{green}{\textsf{Green}}$<br>**B**: $\color{blue}{\textsf{Blue}}$ | No color transform (identity); loosest rectification bounds. Most blurring and most color deviation artifacts.|
@@ -177,7 +182,7 @@ These settings are implemented as preprocessor defines instead of runtime branch
 | *26-DOP* | *`3`* |  | **13**-axis \| **26** - faces \| Box with cut corners and edges.<br> |
 |  |  |  |
 | [**`TFAA_MOTION_SOURCE`**](#how-it-works) | [**Value**]() |  | [**Description**]() |
-| **LAUNCHPAD**     | **`0`** |  | Uses MartysMods_LAUNCHPAD.fx [default] |
+| **LAUNCHPAD**     | **`0`** |  | Uses MartysMods_LAUNCHPAD.fx |
 | *LUMENITE_KERNEL* |  *`1`*  |  | Uses  lumenite_Kernel.fx |
 |  |  |  |
 
@@ -213,32 +218,46 @@ The table below shows several filters at offsets 0.125, 0.25, and 0.5.
 <td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_bilinear_dx0p500_dy0p500.png" alt="Bilinear dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom<br />5 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p000_dy0p000.png" alt="Catmull-Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p125_dy0p125.png" alt="Catmull-Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p250_dy0p250.png" alt="Catmull-Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_dx0p500_dy0p500.png" alt="Catmull-Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-2 5-tap<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p000_dy0p000.png" alt="Lanczos-2 5-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p125_dy0p125.png" alt="Lanczos-2 5-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p250_dy0p250.png" alt="Lanczos-2 5-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p500_dy0p500.png" alt="Lanczos-2 5-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 2<br />16 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_dx0p000_dy0p000.png" alt="Lanczos 2 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_dx0p125_dy0p125.png" alt="Lanczos 2 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_dx0p250_dy0p250.png" alt="Lanczos 2 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_dx0p500_dy0p500.png" alt="Lanczos 2 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-2 9-tap<br />9 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p000_dy0p000.png" alt="Lanczos-2 9-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p125_dy0p125.png" alt="Lanczos-2 9-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p250_dy0p250.png" alt="Lanczos-2 9-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p500_dy0p500.png" alt="Lanczos-2 9-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 3<br />36 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p000_dy0p000.png" alt="Lanczos 3 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p125_dy0p125.png" alt="Lanczos 3 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p250_dy0p250.png" alt="Lanczos 3 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p500_dy0p500.png" alt="Lanczos 3 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-3<br />25 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p000_dy0p000.png" alt="Lanczos-3 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p125_dy0p125.png" alt="Lanczos-3 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p250_dy0p250.png" alt="Lanczos-3 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos3_dx0p500_dy0p500.png" alt="Lanczos-3 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 4<br />64 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p000_dy0p000.png" alt="Lanczos 4 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p125_dy0p125.png" alt="Lanczos 4 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p250_dy0p250.png" alt="Lanczos 4 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p500_dy0p500.png" alt="Lanczos 4 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-4<br />49 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p000_dy0p000.png" alt="Lanczos-4 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p125_dy0p125.png" alt="Lanczos-4 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p250_dy0p250.png" alt="Lanczos-4 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_lanczos4_dx0p500_dy0p500.png" alt="Lanczos-4 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom 5-tap<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p000_dy0p000.png" alt="Catmull-Rom 5-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p125_dy0p125.png" alt="Catmull-Rom 5-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p250_dy0p250.png" alt="Catmull-Rom 5-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p500_dy0p500.png" alt="Catmull-Rom 5-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom 9-tap<br />9 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p000_dy0p000.png" alt="Catmull-Rom 9-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p125_dy0p125.png" alt="Catmull-Rom 9-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p250_dy0p250.png" alt="Catmull-Rom 9-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p500_dy0p500.png" alt="Catmull-Rom 9-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">FSR EASU<br />12 taps</th>
@@ -271,32 +290,46 @@ The table below shows several filters at offsets 0.125, 0.25, and 0.5.
 <td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_bilinear_dx0p500_dy0p500.png" alt="Bilinear dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom<br />5 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p000_dy0p000.png" alt="Catmull-Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p125_dy0p125.png" alt="Catmull-Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p250_dy0p250.png" alt="Catmull-Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_dx0p500_dy0p500.png" alt="Catmull-Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-2 5-tap<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p000_dy0p000.png" alt="Lanczos-2 5-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p125_dy0p125.png" alt="Lanczos-2 5-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p250_dy0p250.png" alt="Lanczos-2 5-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p500_dy0p500.png" alt="Lanczos-2 5-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 2<br />16 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_dx0p000_dy0p000.png" alt="Lanczos 2 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_dx0p125_dy0p125.png" alt="Lanczos 2 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_dx0p250_dy0p250.png" alt="Lanczos 2 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_dx0p500_dy0p500.png" alt="Lanczos 2 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-2 9-tap<br />9 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p000_dy0p000.png" alt="Lanczos-2 9-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p125_dy0p125.png" alt="Lanczos-2 9-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p250_dy0p250.png" alt="Lanczos-2 9-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p500_dy0p500.png" alt="Lanczos-2 9-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 3<br />36 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p000_dy0p000.png" alt="Lanczos 3 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p125_dy0p125.png" alt="Lanczos 3 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p250_dy0p250.png" alt="Lanczos 3 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p500_dy0p500.png" alt="Lanczos 3 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-3<br />25 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p000_dy0p000.png" alt="Lanczos-3 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p125_dy0p125.png" alt="Lanczos-3 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p250_dy0p250.png" alt="Lanczos-3 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos3_dx0p500_dy0p500.png" alt="Lanczos-3 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 4<br />64 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p000_dy0p000.png" alt="Lanczos 4 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p125_dy0p125.png" alt="Lanczos 4 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p250_dy0p250.png" alt="Lanczos 4 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p500_dy0p500.png" alt="Lanczos 4 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-4<br />49 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p000_dy0p000.png" alt="Lanczos-4 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p125_dy0p125.png" alt="Lanczos-4 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p250_dy0p250.png" alt="Lanczos-4 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_lanczos4_dx0p500_dy0p500.png" alt="Lanczos-4 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom 5-tap<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p000_dy0p000.png" alt="Catmull-Rom 5-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p125_dy0p125.png" alt="Catmull-Rom 5-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p250_dy0p250.png" alt="Catmull-Rom 5-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p500_dy0p500.png" alt="Catmull-Rom 5-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom 9-tap<br />9 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p000_dy0p000.png" alt="Catmull-Rom 9-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p125_dy0p125.png" alt="Catmull-Rom 9-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p250_dy0p250.png" alt="Catmull-Rom 9-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p500_dy0p500.png" alt="Catmull-Rom 9-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">FSR EASU<br />12 taps</th>
@@ -323,32 +356,46 @@ The table below shows several filters at offsets 0.125, 0.25, and 0.5.
 <td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_bilinear_dx0p500_dy0p500.png" alt="Bilinear dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom<br />5 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p000_dy0p000.png" alt="Catmull-Rom - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p125_dy0p125.png" alt="Catmull-Rom dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p250_dy0p250.png" alt="Catmull-Rom dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_dx0p500_dy0p500.png" alt="Catmull-Rom dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-2 5-tap<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p000_dy0p000.png" alt="Lanczos-2 5-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p125_dy0p125.png" alt="Lanczos-2 5-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p250_dy0p250.png" alt="Lanczos-2 5-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p500_dy0p500.png" alt="Lanczos-2 5-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 2<br />16 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_dx0p000_dy0p000.png" alt="Lanczos 2 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_dx0p125_dy0p125.png" alt="Lanczos 2 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_dx0p250_dy0p250.png" alt="Lanczos 2 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_dx0p500_dy0p500.png" alt="Lanczos 2 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-2 9-tap<br />9 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p000_dy0p000.png" alt="Lanczos-2 9-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p125_dy0p125.png" alt="Lanczos-2 9-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p250_dy0p250.png" alt="Lanczos-2 9-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p500_dy0p500.png" alt="Lanczos-2 9-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 3<br />36 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p000_dy0p000.png" alt="Lanczos 3 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p125_dy0p125.png" alt="Lanczos 3 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p250_dy0p250.png" alt="Lanczos 3 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p500_dy0p500.png" alt="Lanczos 3 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-3<br />25 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p000_dy0p000.png" alt="Lanczos-3 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p125_dy0p125.png" alt="Lanczos-3 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p250_dy0p250.png" alt="Lanczos-3 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos3_dx0p500_dy0p500.png" alt="Lanczos-3 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
-<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos 4<br />64 taps</th>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p000_dy0p000.png" alt="Lanczos 4 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p125_dy0p125.png" alt="Lanczos 4 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p250_dy0p250.png" alt="Lanczos 4 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
-<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p500_dy0p500.png" alt="Lanczos 4 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Lanczos-4<br />49 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p000_dy0p000.png" alt="Lanczos-4 - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p125_dy0p125.png" alt="Lanczos-4 dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p250_dy0p250.png" alt="Lanczos-4 dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_lanczos4_dx0p500_dy0p500.png" alt="Lanczos-4 dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom 5-tap<br />5 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p000_dy0p000.png" alt="Catmull-Rom 5-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p125_dy0p125.png" alt="Catmull-Rom 5-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p250_dy0p250.png" alt="Catmull-Rom 5-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p500_dy0p500.png" alt="Catmull-Rom 5-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+</tr>
+<tr>
+<th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">Catmull-Rom 9-tap<br />9 taps</th>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p000_dy0p000.png" alt="Catmull-Rom 9-tap - 0.0 offset" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p125_dy0p125.png" alt="Catmull-Rom 9-tap dx dy 0.125" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p250_dy0p250.png" alt="Catmull-Rom 9-tap dx dy 0.25" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
+<td valign="top" style="vertical-align:top;padding:4px;"><img src="./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p500_dy0p500.png" alt="Catmull-Rom 9-tap dx dy 0.5" width="100%" style="max-width:100%;height:auto;display:block;image-rendering:pixelated;" /></td>
 </tr>
 <tr>
 <th align="left" valign="middle" style="text-align:left;vertical-align:middle;white-space:normal;">FSR EASU<br />12 taps</th>
@@ -577,12 +624,31 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 - Human-readable summary of the License: https://creativecommons.org/licenses/by-nc-nd/4.0/
 - Full legal code: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
+## Changelog
+
+### 2.0.1
+#### General
+- Shades is now available via the ReShade installer.
+- Project license changed from **CC BY-NC 4.0** to **CC BY-NC-ND 4.0** ([deed](https://creativecommons.org/licenses/by-nc-nd/4.0/)).
+- Release shader files are prefixed with `shades_` (e.g. `shades_TFAA.fx`, `shades_samplers.fxh`).
+#### TFAA
+- Added support for Lumenite Kernel
+- Optimized Lanczos resampling kernels from **N²** to **(N−1)²** bilinear taps (same output as the naive reference; used for Lanczos-2 9-tap, Lanczos-3, and Lanczos-4).
+  - Lanczos 4 from 64 to 49 taps
+  - Lanczos 3 from 36 to 25 taps
+  - Lanczos 2 from 16 to 9 taps
+- Added **Lanczos-2 5-tap** fast path (cross pattern; corners omitted — **not** lossless vs full Lanczos-2).
+
+### 2.0
+
+- Re-release of the Shades / TFAA shader collection.
+
 <!-- README_REFERENCES_START -->
 ## References
 
 1. https://creativecommons.org/licenses/by-nc-nd/4.0/
 2. https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
-3. FXAA https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
+3. Fast Approximate Anti-Aliasing https://developer.download.nvidia.com/assets/gamedev/files/sdk/11/FXAA_WhitePaper.pdf
 4. bilinear https://en.wikipedia.org/wiki/Bilinear_interpolation
 5. Catmull-Rom https://en.wikipedia.org/wiki/Catmull%E2%80%93Rom_spline
 6. Lanczos-2 https://en.wikipedia.org/wiki/Lanczos_resampling
@@ -590,9 +656,9 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 8. iMMERSE LAUNCHPAD https://github.com/martymcmodding/iMMERSE/blob/main/Shaders/MartysMods_LAUNCHPAD.fx
 9. Lumenite Kernel https://github.com/umar-afzaal/LumeniteFX/blob/mainline/Shaders/lumenite_Kernel.fx
 10. ReShade https://reshade.me/
-11. MLAA https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
-12. CMAA https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
-13. SMAA https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
+11. Morphological Anti-Aliasing https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
+12. Conservative Morphological Anti-Aliasing https://www.intel.com/content/www/us/en/developer/articles/technical/conservative-morphological-anti-aliasing-20.html
+13. Subpixel Morphological Anti-Aliasing https://www.iryoku.com/smaa/downloads/SMAA-Enhanced-Subpixel-Morphological-Antialiasing.pdf
 <!-- README_REFERENCES_END -->
 
 <!-- README_ASSETS_START -->
@@ -668,18 +734,26 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 | [`./misc/output/resample_vis/1/1_bilinear_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_bilinear_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/1/1_bilinear_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_bilinear_dx0p250_dy0p250.png) | image |
 | [`./misc/output/resample_vis/1/1_bilinear_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_bilinear_dx0p500_dy0p500.png) | image |
-| [`./misc/output/resample_vis/1/1_catmullrom_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p000_dy0p000.png) | image |
-| [`./misc/output/resample_vis/1/1_catmullrom_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p125_dy0p125.png) | image |
-| [`./misc/output/resample_vis/1/1_catmullrom_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p250_dy0p250.png) | image |
-| [`./misc/output/resample_vis/1/1_catmullrom_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_catmullrom_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_catmullrom_5tap_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_catmullrom_9tap_dx0p500_dy0p500.png) | image |
 | [`./misc/output/resample_vis/1/1_easu_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_easu_dx0p000_dy0p000.png) | image |
 | [`./misc/output/resample_vis/1/1_easu_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_easu_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/1/1_easu_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_easu_dx0p250_dy0p250.png) | image |
 | [`./misc/output/resample_vis/1/1_easu_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_easu_dx0p500_dy0p500.png) | image |
-| [`./misc/output/resample_vis/1/1_lanczos2_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p000_dy0p000.png) | image |
-| [`./misc/output/resample_vis/1/1_lanczos2_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p125_dy0p125.png) | image |
-| [`./misc/output/resample_vis/1/1_lanczos2_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p250_dy0p250.png) | image |
-| [`./misc/output/resample_vis/1/1_lanczos2_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_lanczos2_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_lanczos2_5tap_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/1/1_lanczos2_9tap_dx0p500_dy0p500.png) | image |
 | [`./misc/output/resample_vis/1/1_lanczos3_dx0p000_dy0p000.png`](./misc/output/resample_vis/1/1_lanczos3_dx0p000_dy0p000.png) | image |
 | [`./misc/output/resample_vis/1/1_lanczos3_dx0p125_dy0p125.png`](./misc/output/resample_vis/1/1_lanczos3_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/1/1_lanczos3_dx0p250_dy0p250.png`](./misc/output/resample_vis/1/1_lanczos3_dx0p250_dy0p250.png) | image |
@@ -692,18 +766,26 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 | [`./misc/output/resample_vis/2/2_bilinear_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_bilinear_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/2/2_bilinear_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_bilinear_dx0p250_dy0p250.png) | image |
 | [`./misc/output/resample_vis/2/2_bilinear_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_bilinear_dx0p500_dy0p500.png) | image |
-| [`./misc/output/resample_vis/2/2_catmullrom_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p000_dy0p000.png) | image |
-| [`./misc/output/resample_vis/2/2_catmullrom_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p125_dy0p125.png) | image |
-| [`./misc/output/resample_vis/2/2_catmullrom_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p250_dy0p250.png) | image |
-| [`./misc/output/resample_vis/2/2_catmullrom_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_catmullrom_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_catmullrom_5tap_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_catmullrom_9tap_dx0p500_dy0p500.png) | image |
 | [`./misc/output/resample_vis/2/2_easu_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_easu_dx0p000_dy0p000.png) | image |
 | [`./misc/output/resample_vis/2/2_easu_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_easu_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/2/2_easu_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_easu_dx0p250_dy0p250.png) | image |
 | [`./misc/output/resample_vis/2/2_easu_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_easu_dx0p500_dy0p500.png) | image |
-| [`./misc/output/resample_vis/2/2_lanczos2_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p000_dy0p000.png) | image |
-| [`./misc/output/resample_vis/2/2_lanczos2_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p125_dy0p125.png) | image |
-| [`./misc/output/resample_vis/2/2_lanczos2_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p250_dy0p250.png) | image |
-| [`./misc/output/resample_vis/2/2_lanczos2_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_lanczos2_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_lanczos2_5tap_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/2/2_lanczos2_9tap_dx0p500_dy0p500.png) | image |
 | [`./misc/output/resample_vis/2/2_lanczos3_dx0p000_dy0p000.png`](./misc/output/resample_vis/2/2_lanczos3_dx0p000_dy0p000.png) | image |
 | [`./misc/output/resample_vis/2/2_lanczos3_dx0p125_dy0p125.png`](./misc/output/resample_vis/2/2_lanczos3_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/2/2_lanczos3_dx0p250_dy0p250.png`](./misc/output/resample_vis/2/2_lanczos3_dx0p250_dy0p250.png) | image |
@@ -716,18 +798,26 @@ Different clip anchor targets bias that tradeoff differently (stability, tempora
 | [`./misc/output/resample_vis/3/3_bilinear_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_bilinear_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/3/3_bilinear_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_bilinear_dx0p250_dy0p250.png) | image |
 | [`./misc/output/resample_vis/3/3_bilinear_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_bilinear_dx0p500_dy0p500.png) | image |
-| [`./misc/output/resample_vis/3/3_catmullrom_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p000_dy0p000.png) | image |
-| [`./misc/output/resample_vis/3/3_catmullrom_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p125_dy0p125.png) | image |
-| [`./misc/output/resample_vis/3/3_catmullrom_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p250_dy0p250.png) | image |
-| [`./misc/output/resample_vis/3/3_catmullrom_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_catmullrom_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_catmullrom_5tap_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_catmullrom_9tap_dx0p500_dy0p500.png) | image |
 | [`./misc/output/resample_vis/3/3_easu_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_easu_dx0p000_dy0p000.png) | image |
 | [`./misc/output/resample_vis/3/3_easu_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_easu_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/3/3_easu_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_easu_dx0p250_dy0p250.png) | image |
 | [`./misc/output/resample_vis/3/3_easu_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_easu_dx0p500_dy0p500.png) | image |
-| [`./misc/output/resample_vis/3/3_lanczos2_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p000_dy0p000.png) | image |
-| [`./misc/output/resample_vis/3/3_lanczos2_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p125_dy0p125.png) | image |
-| [`./misc/output/resample_vis/3/3_lanczos2_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p250_dy0p250.png) | image |
-| [`./misc/output/resample_vis/3/3_lanczos2_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_lanczos2_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_lanczos2_5tap_dx0p500_dy0p500.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p000_dy0p000.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p125_dy0p125.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p250_dy0p250.png) | image |
+| [`./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p500_dy0p500.png`](./misc/output/resample_vis/3/3_lanczos2_9tap_dx0p500_dy0p500.png) | image |
 | [`./misc/output/resample_vis/3/3_lanczos3_dx0p000_dy0p000.png`](./misc/output/resample_vis/3/3_lanczos3_dx0p000_dy0p000.png) | image |
 | [`./misc/output/resample_vis/3/3_lanczos3_dx0p125_dy0p125.png`](./misc/output/resample_vis/3/3_lanczos3_dx0p125_dy0p125.png) | image |
 | [`./misc/output/resample_vis/3/3_lanczos3_dx0p250_dy0p250.png`](./misc/output/resample_vis/3/3_lanczos3_dx0p250_dy0p250.png) | image |

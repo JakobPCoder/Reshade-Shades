@@ -1,0 +1,677 @@
+{
+  "repo": "JakobPCoder/Reshade-Shades",
+  "updated_at": "2026-06-07T00:02:50.756583Z",
+  "clones": [
+    {
+      "timestamp": "2026-05-21T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-22T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-23T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-24T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-25T00:00:00Z",
+      "count": 14,
+      "uniques": 11
+    },
+    {
+      "timestamp": "2026-05-26T00:00:00Z",
+      "count": 27,
+      "uniques": 17
+    },
+    {
+      "timestamp": "2026-05-27T00:00:00Z",
+      "count": 4,
+      "uniques": 4
+    },
+    {
+      "timestamp": "2026-05-28T00:00:00Z",
+      "count": 2,
+      "uniques": 2
+    },
+    {
+      "timestamp": "2026-05-29T00:00:00Z",
+      "count": 1,
+      "uniques": 1
+    },
+    {
+      "timestamp": "2026-05-30T00:00:00Z",
+      "count": 3,
+      "uniques": 3
+    },
+    {
+      "timestamp": "2026-05-31T00:00:00Z",
+      "count": 33,
+      "uniques": 17
+    },
+    {
+      "timestamp": "2026-06-01T00:00:00Z",
+      "count": 2,
+      "uniques": 2
+    },
+    {
+      "timestamp": "2026-06-02T00:00:00Z",
+      "count": 2,
+      "uniques": 2
+    },
+    {
+      "timestamp": "2026-06-03T00:00:00Z",
+      "count": 2,
+      "uniques": 1
+    },
+    {
+      "timestamp": "2026-06-04T00:00:00Z",
+      "count": 4,
+      "uniques": 2
+    },
+    {
+      "timestamp": "2026-06-05T00:00:00Z",
+      "count": 1,
+      "uniques": 1
+    }
+  ],
+  "views": [
+    {
+      "timestamp": "2026-05-21T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-22T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-23T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-24T00:00:00Z",
+      "count": 0,
+      "uniques": 0
+    },
+    {
+      "timestamp": "2026-05-25T00:00:00Z",
+      "count": 8,
+      "uniques": 2
+    },
+    {
+      "timestamp": "2026-05-26T00:00:00Z",
+      "count": 3,
+      "uniques": 2
+    },
+    {
+      "timestamp": "2026-05-27T00:00:00Z",
+      "count": 21,
+      "uniques": 5
+    },
+    {
+      "timestamp": "2026-05-28T00:00:00Z",
+      "count": 4,
+      "uniques": 2
+    },
+    {
+      "timestamp": "2026-05-29T00:00:00Z",
+      "count": 5,
+      "uniques": 4
+    },
+    {
+      "timestamp": "2026-05-30T00:00:00Z",
+      "count": 26,
+      "uniques": 15
+    },
+    {
+      "timestamp": "2026-05-31T00:00:00Z",
+      "count": 29,
+      "uniques": 14
+    },
+    {
+      "timestamp": "2026-06-01T00:00:00Z",
+      "count": 10,
+      "uniques": 9
+    },
+    {
+      "timestamp": "2026-06-02T00:00:00Z",
+      "count": 5,
+      "uniques": 4
+    },
+    {
+      "timestamp": "2026-06-03T00:00:00Z",
+      "count": 9,
+      "uniques": 6
+    },
+    {
+      "timestamp": "2026-06-04T00:00:00Z",
+      "count": 18,
+      "uniques": 14
+    },
+    {
+      "timestamp": "2026-06-05T00:00:00Z",
+      "count": 29,
+      "uniques": 14
+    }
+  ],
+  "referrers": [
+    {
+      "fetched_at": "2026-06-04T19:52:04.426777Z",
+      "items": [
+        {
+          "referrer": "github.com",
+          "count": 50,
+          "uniques": 22
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-05T13:52:27.875745Z",
+      "items": [
+        {
+          "referrer": "github.com",
+          "count": 58,
+          "uniques": 26
+        },
+        {
+          "referrer": "away.vk.com",
+          "count": 3,
+          "uniques": 3
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-06T17:57:28.990456Z",
+      "items": [
+        {
+          "referrer": "github.com",
+          "count": 59,
+          "uniques": 27
+        },
+        {
+          "referrer": "away.vk.com",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "referrer": "away.vk.ru",
+          "count": 1,
+          "uniques": 1
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-06T17:58:19.972307Z",
+      "items": [
+        {
+          "referrer": "github.com",
+          "count": 59,
+          "uniques": 27
+        },
+        {
+          "referrer": "away.vk.com",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "referrer": "away.vk.ru",
+          "count": 1,
+          "uniques": 1
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-06T17:58:37.830143Z",
+      "items": [
+        {
+          "referrer": "github.com",
+          "count": 59,
+          "uniques": 27
+        },
+        {
+          "referrer": "away.vk.com",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "referrer": "away.vk.ru",
+          "count": 1,
+          "uniques": 1
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-07T00:02:50.756583Z",
+      "items": [
+        {
+          "referrer": "github.com",
+          "count": 59,
+          "uniques": 27
+        },
+        {
+          "referrer": "away.vk.com",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "referrer": "away.vk.ru",
+          "count": 1,
+          "uniques": 1
+        }
+      ]
+    }
+  ],
+  "paths": [
+    {
+      "fetched_at": "2026-06-04T19:52:04.426777Z",
+      "items": [
+        {
+          "path": "/JakobPCoder/Reshade-Shades",
+          "title": "Overview",
+          "count": 69,
+          "uniques": 50
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders/Shades",
+          "title": "/tree/main/Shaders/Shades",
+          "count": 13,
+          "uniques": 8
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/TFAA.fx",
+          "title": "/blob/main/Shaders/Shades/TFAA.fx",
+          "count": 5,
+          "uniques": 5
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/README.md",
+          "title": "/blob/main/README.md",
+          "count": 5,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders",
+          "title": "/tree/main/Shaders",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/misc/videos/1_smaa.webp",
+          "title": "/blob/main/misc/videos/1_smaa.webp",
+          "count": 2,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main",
+          "title": "/tree/main",
+          "count": 2,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/misc",
+          "title": "/tree/main/misc",
+          "count": 2,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/helpers.fxh",
+          "title": "/blob/main/Shaders/Shades/helpers.fxh",
+          "count": 2,
+          "uniques": 1
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/macros.fxh",
+          "title": "/blob/main/Shaders/Shades/macros.fxh",
+          "count": 2,
+          "uniques": 1
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-05T13:52:27.875745Z",
+      "items": [
+        {
+          "path": "/JakobPCoder/Reshade-Shades",
+          "title": "Overview",
+          "count": 82,
+          "uniques": 61
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders/Shades",
+          "title": "/tree/main/Shaders/Shades",
+          "count": 16,
+          "uniques": 11
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/TFAA.fx",
+          "title": "/blob/main/Shaders/Shades/TFAA.fx",
+          "count": 5,
+          "uniques": 5
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/README.md",
+          "title": "/blob/main/README.md",
+          "count": 5,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main",
+          "title": "/tree/main",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders",
+          "title": "/tree/main/Shaders",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/misc",
+          "title": "/tree/main/misc",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/misc/videos/1_smaa.webp",
+          "title": "/blob/main/misc/videos/1_smaa.webp",
+          "count": 2,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/helpers.fxh",
+          "title": "/blob/main/Shaders/Shades/helpers.fxh",
+          "count": 2,
+          "uniques": 1
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/macros.fxh",
+          "title": "/blob/main/Shaders/Shades/macros.fxh",
+          "count": 2,
+          "uniques": 1
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-06T17:57:28.990456Z",
+      "items": [
+        {
+          "path": "/JakobPCoder/Reshade-Shades",
+          "title": "Overview",
+          "count": 101,
+          "uniques": 73
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders/Shades",
+          "title": "/tree/main/Shaders/Shades",
+          "count": 20,
+          "uniques": 13
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/TFAA.fx",
+          "title": "/blob/main/Shaders/Shades/TFAA.fx",
+          "count": 5,
+          "uniques": 5
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/README.md",
+          "title": "/blob/main/README.md",
+          "count": 5,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders",
+          "title": "/tree/main/Shaders",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/misc/videos/1_smaa.webp",
+          "title": "/blob/main/misc/videos/1_smaa.webp",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main",
+          "title": "/tree/main",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/misc",
+          "title": "/tree/main/misc",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/helpers.fxh",
+          "title": "/blob/main/Shaders/Shades/helpers.fxh",
+          "count": 3,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/macros.fxh",
+          "title": "/blob/main/Shaders/Shades/macros.fxh",
+          "count": 3,
+          "uniques": 2
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-06T17:58:19.972307Z",
+      "items": [
+        {
+          "path": "/JakobPCoder/Reshade-Shades",
+          "title": "Overview",
+          "count": 101,
+          "uniques": 73
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders/Shades",
+          "title": "/tree/main/Shaders/Shades",
+          "count": 20,
+          "uniques": 13
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/TFAA.fx",
+          "title": "/blob/main/Shaders/Shades/TFAA.fx",
+          "count": 5,
+          "uniques": 5
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/README.md",
+          "title": "/blob/main/README.md",
+          "count": 5,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders",
+          "title": "/tree/main/Shaders",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/misc/videos/1_smaa.webp",
+          "title": "/blob/main/misc/videos/1_smaa.webp",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main",
+          "title": "/tree/main",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/misc",
+          "title": "/tree/main/misc",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/helpers.fxh",
+          "title": "/blob/main/Shaders/Shades/helpers.fxh",
+          "count": 3,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/macros.fxh",
+          "title": "/blob/main/Shaders/Shades/macros.fxh",
+          "count": 3,
+          "uniques": 2
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-06T17:58:37.830143Z",
+      "items": [
+        {
+          "path": "/JakobPCoder/Reshade-Shades",
+          "title": "Overview",
+          "count": 101,
+          "uniques": 73
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders/Shades",
+          "title": "/tree/main/Shaders/Shades",
+          "count": 20,
+          "uniques": 13
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/TFAA.fx",
+          "title": "/blob/main/Shaders/Shades/TFAA.fx",
+          "count": 5,
+          "uniques": 5
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/README.md",
+          "title": "/blob/main/README.md",
+          "count": 5,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders",
+          "title": "/tree/main/Shaders",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/misc/videos/1_smaa.webp",
+          "title": "/blob/main/misc/videos/1_smaa.webp",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main",
+          "title": "/tree/main",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/misc",
+          "title": "/tree/main/misc",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/helpers.fxh",
+          "title": "/blob/main/Shaders/Shades/helpers.fxh",
+          "count": 3,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/macros.fxh",
+          "title": "/blob/main/Shaders/Shades/macros.fxh",
+          "count": 3,
+          "uniques": 2
+        }
+      ]
+    },
+    {
+      "fetched_at": "2026-06-07T00:02:50.756583Z",
+      "items": [
+        {
+          "path": "/JakobPCoder/Reshade-Shades",
+          "title": "Overview",
+          "count": 101,
+          "uniques": 73
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders/Shades",
+          "title": "/tree/main/Shaders/Shades",
+          "count": 20,
+          "uniques": 13
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/TFAA.fx",
+          "title": "/blob/main/Shaders/Shades/TFAA.fx",
+          "count": 5,
+          "uniques": 5
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/README.md",
+          "title": "/blob/main/README.md",
+          "count": 5,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/Shaders",
+          "title": "/tree/main/Shaders",
+          "count": 4,
+          "uniques": 4
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/misc/videos/1_smaa.webp",
+          "title": "/blob/main/misc/videos/1_smaa.webp",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main",
+          "title": "/tree/main",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/tree/main/misc",
+          "title": "/tree/main/misc",
+          "count": 3,
+          "uniques": 3
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/helpers.fxh",
+          "title": "/blob/main/Shaders/Shades/helpers.fxh",
+          "count": 3,
+          "uniques": 2
+        },
+        {
+          "path": "/JakobPCoder/Reshade-Shades/blob/main/Shaders/Shades/macros.fxh",
+          "title": "/blob/main/Shaders/Shades/macros.fxh",
+          "count": 3,
+          "uniques": 2
+        }
+      ]
+    }
+  ],
+  "stars": [
+    {
+      "timestamp": "2026-06-06T00:00:00Z",
+      "count": 8
+    },
+    {
+      "timestamp": "2026-06-07T00:00:00Z",
+      "count": 8
+    }
+  ]
+}

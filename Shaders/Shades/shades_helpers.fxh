@@ -1,12 +1,12 @@
 /*=============================================================================
-    helpers
+    helpers (2.0.1)
     Shader helper utilities and color space conversions for Shades shaders.
     Copyright, Jakob Wapenhensch
-    License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/)
-    https://creativecommons.org/licenses/by-nc/4.0/legalcode
+    License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+    https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 =============================================================================*/
 
-#include "macros.fxh"
+#include "shades_macros.fxh"
 
 #define COPY(T, S) \
     return tex2Dlod(source, float4(texcoord, 0, 0)).S;
@@ -74,7 +74,7 @@ float3 ycocg_norm_to_rgb(float3 ycocg_norm)
 }
 
 
-/* SHADES_LICENSE_ATTRIBUTION The next 39 lines of code below were ported from, or are more than functionally equivalent to, FidelityFX FSR RCAS by AMD and are licensed under MIT License (https://opensource.org/license/mit) only; the remainder of this file is not. */
+/* SHADES_LICENSE_ATTRIBUTION The next 56 lines of code below were ported from, or are more than functionally equivalent to, FidelityFX FSR RCAS by AMD and are licensed under MIT License (https://opensource.org/license/mit) only; the remainder of this file is not. */
 
 #define FSR_RCAS_LIMIT (0.25 - (1.0 / 16.0))
 
@@ -115,6 +115,5 @@ float4 sample_rcas(sampler2D s, float2 uv, float sharpness)
 
     return float4((lobe*(b+d+f+h) + e) / (4.0*lobe + 1.0), 1.0);
 }
-
 
 

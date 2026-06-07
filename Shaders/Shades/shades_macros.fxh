@@ -1,9 +1,9 @@
 /*=============================================================================
-    macros
+    macros (2.0.1)
     Shared preprocessor macros for Shades shaders.
     Copyright, Jakob Wapenhensch
-    License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/)
-    https://creativecommons.org/licenses/by-nc/4.0/legalcode
+    License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
+    https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 =============================================================================*/
 
 #pragma once
