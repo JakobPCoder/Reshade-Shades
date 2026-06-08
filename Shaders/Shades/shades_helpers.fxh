@@ -1,5 +1,5 @@
 /*=============================================================================
-    helpers (2.0.1)
+    helpers (2.0.2)
     Shader helper utilities and color space conversions for Shades shaders.
     Copyright, Jakob Wapenhensch
     License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)

@@ -1,5 +1,5 @@
 /*=============================================================================
-    macros (2.0.1)
+    macros (2.0.2)
     Shared preprocessor macros for Shades shaders.
     Copyright, Jakob Wapenhensch
     License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)

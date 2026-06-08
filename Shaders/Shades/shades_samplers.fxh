@@ -1,5 +1,5 @@
 /*=============================================================================
-    samplers (2.0.1)
+    samplers (2.0.2)
     Texture sampling and pyramid helpers for Shades shaders.
     Copyright, Jakob Wapenhensch
     License: CC BY-NC-ND 4.0 (https://creativecommons.org/licenses/by-nc-nd/4.0/)
@@ -186,6 +186,33 @@ DEFINE_VARIANTS(sample_lanczos3_36tap_basic, (sampler source, float2 texcoord), 
 DEFINE_VARIANTS(sample_lanczos4_64tap_basic, (sampler source, float2 texcoord), SAMPLE_LANCZOS4_64TAP_BASIC)
 
 
+#define SAMPLE_LANCZOS2_5TAP_FAST(T, S) \
+    int2 tex_size = tex2Dsize(source, 0); \
+    float2 pixel_coord = texcoord * tex_size; \
+    float2 nX = floor(pixel_coord - 0.5) + 0.5; \
+    float2 fx = pixel_coord - nX; \
+    float _a = 2.0; \
+    float2 w0 = float2(lanczos_weight(fx.x + 1.0, _a), lanczos_weight(fx.y + 1.0, _a)); \
+    float2 w1 = float2(lanczos_weight(fx.x, _a),       lanczos_weight(fx.y, _a)); \
+    float2 w2 = float2(lanczos_weight(fx.x - 1.0, _a), lanczos_weight(fx.y - 1.0, _a)); \
+    float2 w3 = float2(lanczos_weight(fx.x - 2.0, _a), lanczos_weight(fx.y - 2.0, _a)); \
+    float2 w12 = w1 + w2; \
+    float2 uvX0 = (nX - 1.0) / tex_size; \
+    float2 uvXC = (nX + w2 / w12) / tex_size; \
+    float2 uvX3 = uvX0 + 3.0 / tex_size; \
+    T ret = 0; \
+    float wsum = 0.0; \
+    float w; \
+    w = w12.x * w0.y;  ret += tex2Dlod(source, float4(uvXC.x, uvX0.y, 0, 0)).S * w; wsum += w; \
+    w = w0.x  * w12.y; ret += tex2Dlod(source, float4(uvX0.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w12.x * w12.y; ret += tex2Dlod(source, float4(uvXC.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w3.x  * w12.y; ret += tex2Dlod(source, float4(uvX3.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w12.x * w3.y;  ret += tex2Dlod(source, float4(uvXC.x, uvX3.y, 0, 0)).S * w; wsum += w; \
+    return max(0, ret / max(wsum, 1e-8));
+
+DEFINE_VARIANTS(sample_lanczos2_5tap_fast, (sampler source, float2 texcoord), SAMPLE_LANCZOS2_5TAP_FAST)
+
+
 #define SAMPLE_LANCZOS2_9TAP(T, S) \
     int2 tex_size = tex2Dsize(source, 0); \
     float2 pixel_coord = texcoord * tex_size; \
@@ -214,6 +241,52 @@ DEFINE_VARIANTS(sample_lanczos4_64tap_basic, (sampler source, float2 texcoord), 
     w = w0.x  * w3.y;  ret += tex2Dlod(source, float4(uvX0.x, uvX3.y, 0, 0)).S * w; wsum += w; \
     w = w3.x  * w3.y;  ret += tex2Dlod(source, float4(uvX3.x, uvX3.y, 0, 0)).S * w; wsum += w; \
     return max(0, ret / max(wsum, 1e-8));
+
+#define SAMPLE_LANCZOS3_21TAP_FAST(T, S) \
+    int2 tex_size = tex2Dsize(source, 0); \
+    float2 pixel_coord = texcoord * tex_size; \
+    float2 nX = floor(pixel_coord - 0.5) + 0.5; \
+    float2 fx = pixel_coord - nX; \
+    float _a = 3.0; \
+    float2 w0 = float2(lanczos_weight(fx.x + 2.0, _a), lanczos_weight(fx.y + 2.0, _a)); \
+    float2 w1 = float2(lanczos_weight(fx.x + 1.0, _a), lanczos_weight(fx.y + 1.0, _a)); \
+    float2 w2 = float2(lanczos_weight(fx.x, _a), lanczos_weight(fx.y, _a)); \
+    float2 w3 = float2(lanczos_weight(fx.x - 1.0, _a), lanczos_weight(fx.y - 1.0, _a)); \
+    float2 w4 = float2(lanczos_weight(fx.x - 2.0, _a), lanczos_weight(fx.y - 2.0, _a)); \
+    float2 w5 = float2(lanczos_weight(fx.x - 3.0, _a), lanczos_weight(fx.y - 3.0, _a)); \
+    float2 w23 = w2 + w3; \
+    float2 uvX0 = (nX - 2.0) / tex_size; \
+    float2 uvXC = (nX + w3 / w23) / tex_size; \
+    float2 uvX5 = uvX0 + 5.0 / tex_size; \
+    float2 uvX1 = (nX - 1.0) / tex_size; \
+    float2 uvX4 = (nX + 2.0) / tex_size; \
+    T ret = 0; \
+    float wsum = 0.0; \
+    float w; \
+    w = w1.x        * w0.y; ret += tex2Dlod(source, float4(uvX1.x, uvX0.y, 0, 0)).S * w; wsum += w; \
+    w = w23.x       * w0.y; ret += tex2Dlod(source, float4(uvXC.x, uvX0.y, 0, 0)).S * w; wsum += w; \
+    w = w4.x        * w0.y; ret += tex2Dlod(source, float4(uvX4.x, uvX0.y, 0, 0)).S * w; wsum += w; \
+    w = w0.x        * w1.y; ret += tex2Dlod(source, float4(uvX0.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w1.y; ret += tex2Dlod(source, float4(uvX1.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w23.x       * w1.y; ret += tex2Dlod(source, float4(uvXC.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w4.x        * w1.y; ret += tex2Dlod(source, float4(uvX4.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w1.y; ret += tex2Dlod(source, float4(uvX5.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w0.x        * w23.y; ret += tex2Dlod(source, float4(uvX0.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w23.y; ret += tex2Dlod(source, float4(uvX1.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w23.x       * w23.y; ret += tex2Dlod(source, float4(uvXC.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w4.x        * w23.y; ret += tex2Dlod(source, float4(uvX4.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w23.y; ret += tex2Dlod(source, float4(uvX5.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w0.x        * w4.y; ret += tex2Dlod(source, float4(uvX0.x, uvX4.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w4.y; ret += tex2Dlod(source, float4(uvX1.x, uvX4.y, 0, 0)).S * w; wsum += w; \
+    w = w23.x       * w4.y; ret += tex2Dlod(source, float4(uvXC.x, uvX4.y, 0, 0)).S * w; wsum += w; \
+    w = w4.x        * w4.y; ret += tex2Dlod(source, float4(uvX4.x, uvX4.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w4.y; ret += tex2Dlod(source, float4(uvX5.x, uvX4.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w5.y; ret += tex2Dlod(source, float4(uvX1.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w23.x       * w5.y; ret += tex2Dlod(source, float4(uvXC.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w4.x        * w5.y; ret += tex2Dlod(source, float4(uvX4.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    return max(0, ret / max(wsum, 1e-8));
+
+DEFINE_VARIANTS(sample_lanczos3_21tap_fast, (sampler source, float2 texcoord), SAMPLE_LANCZOS3_21TAP_FAST)
 
 #define SAMPLE_LANCZOS3_25TAP(T, S) \
     int2 tex_size = tex2Dsize(source, 0); \
@@ -264,6 +337,72 @@ DEFINE_VARIANTS(sample_lanczos4_64tap_basic, (sampler source, float2 texcoord), 
     return max(0, ret / max(wsum, 1e-8));
 
 DEFINE_VARIANTS(sample_lanczos3_25tap, (sampler source, float2 texcoord), SAMPLE_LANCZOS3_25TAP)
+
+#define SAMPLE_LANCZOS4_37TAP_FAST(T, S) \
+    int2 tex_size = tex2Dsize(source, 0); \
+    float2 pixel_coord = texcoord * tex_size; \
+    float2 nX = floor(pixel_coord - 0.5) + 0.5; \
+    float2 fx = pixel_coord - nX; \
+    float _a = 4.0; \
+    float2 w0 = float2(lanczos_weight(fx.x + 3.0, _a), lanczos_weight(fx.y + 3.0, _a)); \
+    float2 w1 = float2(lanczos_weight(fx.x + 2.0, _a), lanczos_weight(fx.y + 2.0, _a)); \
+    float2 w2 = float2(lanczos_weight(fx.x + 1.0, _a), lanczos_weight(fx.y + 1.0, _a)); \
+    float2 w3 = float2(lanczos_weight(fx.x, _a), lanczos_weight(fx.y, _a)); \
+    float2 w4 = float2(lanczos_weight(fx.x - 1.0, _a), lanczos_weight(fx.y - 1.0, _a)); \
+    float2 w5 = float2(lanczos_weight(fx.x - 2.0, _a), lanczos_weight(fx.y - 2.0, _a)); \
+    float2 w6 = float2(lanczos_weight(fx.x - 3.0, _a), lanczos_weight(fx.y - 3.0, _a)); \
+    float2 w7 = float2(lanczos_weight(fx.x - 4.0, _a), lanczos_weight(fx.y - 4.0, _a)); \
+    float2 w34 = w3 + w4; \
+    float2 uvX0 = (nX - 3.0) / tex_size; \
+    float2 uvXC = (nX + w4 / w34) / tex_size; \
+    float2 uvX7 = uvX0 + 7.0 / tex_size; \
+    float2 uvX1 = (nX - 2.0) / tex_size; \
+    float2 uvX2 = (nX - 1.0) / tex_size; \
+    float2 uvX5 = (nX + 2.0) / tex_size; \
+    float2 uvX6 = (nX + 3.0) / tex_size; \
+    T ret = 0; \
+    float wsum = 0.0; \
+    float w; \
+    w = w2.x        * w0.y; ret += tex2Dlod(source, float4(uvX2.x, uvX0.y, 0, 0)).S * w; wsum += w; \
+    w = w34.x       * w0.y; ret += tex2Dlod(source, float4(uvXC.x, uvX0.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w0.y; ret += tex2Dlod(source, float4(uvX5.x, uvX0.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w1.y; ret += tex2Dlod(source, float4(uvX1.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w2.x        * w1.y; ret += tex2Dlod(source, float4(uvX2.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w34.x       * w1.y; ret += tex2Dlod(source, float4(uvXC.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w1.y; ret += tex2Dlod(source, float4(uvX5.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w6.x        * w1.y; ret += tex2Dlod(source, float4(uvX6.x, uvX1.y, 0, 0)).S * w; wsum += w; \
+    w = w0.x        * w2.y; ret += tex2Dlod(source, float4(uvX0.x, uvX2.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w2.y; ret += tex2Dlod(source, float4(uvX1.x, uvX2.y, 0, 0)).S * w; wsum += w; \
+    w = w2.x        * w2.y; ret += tex2Dlod(source, float4(uvX2.x, uvX2.y, 0, 0)).S * w; wsum += w; \
+    w = w34.x       * w2.y; ret += tex2Dlod(source, float4(uvXC.x, uvX2.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w2.y; ret += tex2Dlod(source, float4(uvX5.x, uvX2.y, 0, 0)).S * w; wsum += w; \
+    w = w6.x        * w2.y; ret += tex2Dlod(source, float4(uvX6.x, uvX2.y, 0, 0)).S * w; wsum += w; \
+    w = w7.x        * w2.y; ret += tex2Dlod(source, float4(uvX7.x, uvX2.y, 0, 0)).S * w; wsum += w; \
+    w = w0.x        * w34.y; ret += tex2Dlod(source, float4(uvX0.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w34.y; ret += tex2Dlod(source, float4(uvX1.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w2.x        * w34.y; ret += tex2Dlod(source, float4(uvX2.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w34.x       * w34.y; ret += tex2Dlod(source, float4(uvXC.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w34.y; ret += tex2Dlod(source, float4(uvX5.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w6.x        * w34.y; ret += tex2Dlod(source, float4(uvX6.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w7.x        * w34.y; ret += tex2Dlod(source, float4(uvX7.x, uvXC.y, 0, 0)).S * w; wsum += w; \
+    w = w0.x        * w5.y; ret += tex2Dlod(source, float4(uvX0.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w5.y; ret += tex2Dlod(source, float4(uvX1.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w2.x        * w5.y; ret += tex2Dlod(source, float4(uvX2.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w34.x       * w5.y; ret += tex2Dlod(source, float4(uvXC.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w5.y; ret += tex2Dlod(source, float4(uvX5.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w6.x        * w5.y; ret += tex2Dlod(source, float4(uvX6.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w7.x        * w5.y; ret += tex2Dlod(source, float4(uvX7.x, uvX5.y, 0, 0)).S * w; wsum += w; \
+    w = w1.x        * w6.y; ret += tex2Dlod(source, float4(uvX1.x, uvX6.y, 0, 0)).S * w; wsum += w; \
+    w = w2.x        * w6.y; ret += tex2Dlod(source, float4(uvX2.x, uvX6.y, 0, 0)).S * w; wsum += w; \
+    w = w34.x       * w6.y; ret += tex2Dlod(source, float4(uvXC.x, uvX6.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w6.y; ret += tex2Dlod(source, float4(uvX5.x, uvX6.y, 0, 0)).S * w; wsum += w; \
+    w = w6.x        * w6.y; ret += tex2Dlod(source, float4(uvX6.x, uvX6.y, 0, 0)).S * w; wsum += w; \
+    w = w2.x        * w7.y; ret += tex2Dlod(source, float4(uvX2.x, uvX7.y, 0, 0)).S * w; wsum += w; \
+    w = w34.x       * w7.y; ret += tex2Dlod(source, float4(uvXC.x, uvX7.y, 0, 0)).S * w; wsum += w; \
+    w = w5.x        * w7.y; ret += tex2Dlod(source, float4(uvX5.x, uvX7.y, 0, 0)).S * w; wsum += w; \
+    return max(0, ret / max(wsum, 1e-8));
+
+DEFINE_VARIANTS(sample_lanczos4_37tap_fast, (sampler source, float2 texcoord), SAMPLE_LANCZOS4_37TAP_FAST)
 
 #define SAMPLE_LANCZOS4_49TAP(T, S) \
     int2 tex_size = tex2Dsize(source, 0); \
@@ -354,31 +493,7 @@ DEFINE_VARIANTS(sample_lanczos2, (sampler source, float2 texcoord), SAMPLE_LANCZ
 DEFINE_VARIANTS(sample_lanczos3, (sampler source, float2 texcoord), SAMPLE_LANCZOS3)
 DEFINE_VARIANTS(sample_lanczos4, (sampler source, float2 texcoord), SAMPLE_LANCZOS4)
 
-#define SAMPLE_LANCZOS2_5TAP_FAST(T, S) \
-    int2 tex_size = tex2Dsize(source, 0); \
-    float2 pixel_coord = texcoord * tex_size; \
-    float2 nX = floor(pixel_coord - 0.5) + 0.5; \
-    float2 fx = pixel_coord - nX; \
-    float _a = 2.0; \
-    float2 w0 = float2(lanczos_weight(fx.x + 1.0, _a), lanczos_weight(fx.y + 1.0, _a)); \
-    float2 w1 = float2(lanczos_weight(fx.x, _a),       lanczos_weight(fx.y, _a)); \
-    float2 w2 = float2(lanczos_weight(fx.x - 1.0, _a), lanczos_weight(fx.y - 1.0, _a)); \
-    float2 w3 = float2(lanczos_weight(fx.x - 2.0, _a), lanczos_weight(fx.y - 2.0, _a)); \
-    float2 w12 = w1 + w2; \
-    float2 uvX0 = (nX - 1.0) / tex_size; \
-    float2 uvXC = (nX + w2 / w12) / tex_size; \
-    float2 uvX3 = uvX0 + 3.0 / tex_size; \
-    T ret = 0; \
-    float wsum = 0.0; \
-    float w; \
-    w = w12.x * w0.y;  ret += tex2Dlod(source, float4(uvXC.x, uvX0.y, 0, 0)).S * w; wsum += w; \
-    w = w0.x  * w12.y; ret += tex2Dlod(source, float4(uvX0.x, uvXC.y, 0, 0)).S * w; wsum += w; \
-    w = w12.x * w12.y; ret += tex2Dlod(source, float4(uvXC.x, uvXC.y, 0, 0)).S * w; wsum += w; \
-    w = w3.x  * w12.y; ret += tex2Dlod(source, float4(uvX3.x, uvXC.y, 0, 0)).S * w; wsum += w; \
-    w = w12.x * w3.y;  ret += tex2Dlod(source, float4(uvXC.x, uvX3.y, 0, 0)).S * w; wsum += w; \
-    return max(0, ret / max(wsum, 1e-8));
 
-DEFINE_VARIANTS(sample_lanczos2_5tap_fast, (sampler source, float2 texcoord), SAMPLE_LANCZOS2_5TAP_FAST)
 
 
 
