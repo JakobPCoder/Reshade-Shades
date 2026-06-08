@@ -10,6 +10,7 @@ __pycache__/
 # Exclude Python source scripts and environment tools
 *.py
 misc/config.json
+misc/idea.md
 misc/requirements.txt
 misc/sampling_example_images/
 # (Note: misc/output/ is tracked for README images)
